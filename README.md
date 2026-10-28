@@ -156,11 +156,13 @@ React as a peer dependency to avoid duplicate React copies.
 
 Releases use semantic-release based on
 [`ravileal/semantic-release`](https://github.com/ravileal/semantic-release).
-Pushes to `main` publish a new version to npm and create a GitHub release with a
-`release-*` tag. The npm automation token is stored as `NPM_TOKEN`.
+The release workflow is initially manual (`workflow_dispatch`) so it cannot fail
+before the npm automation token exists. Add the `NPM_TOKEN` repository secret,
+publish the first `0.1.0` and tag `release-0.1.0`, then enable the `push` trigger
+on `main` in `.github/workflows/release.yml`.
 
-The first `0.1.0` can be published manually and tagged `release-0.1.0`; after
-that, semantic-release takes over.
+The semantic-release config uses the `release-${version}` tag format in
+production, matching the reference template.
 
 ## Development
 
