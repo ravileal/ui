@@ -103,25 +103,87 @@ export function Example() {
 
 ## Components
 
-- `Avatar`
+**Actions and feedback**
+
+- `Button`, `IconButton`
+- `Spinner`, `ProgressBar`
+- `Alert`
+- `Badge`, `Chip`
+- `ToastProvider`, `useToast`
+
+**Forms**
+
+- `TextInput`, `Textarea`
+- `FormField`
+- `Switch`
+- `Slider`
+- `SearchInput`
 - `Checkbox`, `Radio`
-- `ColorPicker`
-- `ConfirmModal`, `Modal`
-- `CopyValue`
-- `DatePicker`
-- `Dropdown`
-- `InlineEditorCard`
-- `ListScreen`, `ListCard`, `ListRow`, `ListSearch`, `ListEmptyState`
-- `MonthSelector`
 - `NumberStepper`
+- `Dropdown`
+- `Combobox`
+- `DatePicker`
+- `MonthSelector`
+- `ColorPicker`
+
+**Layout and navigation**
+
+- `Card`, `CardHeader`, `CardBody`, `CardFooter`, `Section`
+- `EmptyState`
+- `PageHeader`
+- `ListScreen`, `ListCard`, `ListRow`, `ListSearch`, `ListEmptyState`
+- `Tabs`, `SegmentedControl`
+- `DropdownMenu` (also exported as `Menu`)
+- `Drawer` (also exported as `Sheet`)
+- `DataTable`
+- `FileUpload` (also exported as `Dropzone`)
+
+**Overlays and utilities**
+
+- `Modal`, `ConfirmModal`
+- `Tooltip`
+- `Avatar`
+- `CopyValue`
+- `InlineEditorCard`
 - `RowActions`
 - `Skeleton`, `SkeletonStatus`, `PageSkeleton`, `PageHeaderSkeleton`, `SearchSkeleton`, `ListCardSkeleton`, `DetailRowsSkeleton`
-- `Tooltip`
+- `Portal`
+- `VisuallyHidden`
 
 Every component exports its prop types. `CopyValue` accepts `formatValue` and
 `copyValue` so the consumer owns currency/locale formatting. `MonthSelector`
 accepts its month list as `options`. `DatePicker` accepts `locale`, weekday
 labels and navigation labels. `ColorPicker` accepts a `labels` object.
+`Button` accepts `variant` (`primary`, `secondary`, `ghost`, `danger`), `size`
+and `loading`.
+
+```tsx
+import { useState } from 'react';
+import { Button, FormField, Switch, TextInput, ToastProvider, useToast } from '@ravileal/ui';
+
+function SettingsForm() {
+  const [checked, setChecked] = useState(true);
+  const { showToast } = useToast();
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <FormField label="Partner name" hint="Shown in reports" required>
+        <TextInput />
+      </FormField>
+      <Switch checked={checked} onChange={setChecked} label="Monthly summary" />
+      <Button onClick={() => showToast({ title: 'Saved', tone: 'success' })}>Save</Button>
+    </div>
+  );
+}
+
+export function Settings() {
+  return (
+    <ToastProvider>
+      <SettingsForm />
+    </ToastProvider>
+  );
+}
+```
 
 ## Next.js
 
