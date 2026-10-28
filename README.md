@@ -2,6 +2,9 @@
 
 Reusable React UI primitives with a themeable CSS-variable design system.
 
+- Repository: https://github.com/ravileal/ui
+- Storybook: https://ravileal.github.io/ui/
+
 The library is intentionally small and domain-agnostic. It contains the
 presentational primitives used by `couple-finance` and other personal React
 projects. Finance-specific screens and components stay in their application.
