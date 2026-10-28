@@ -1,0 +1,204 @@
+import type { CSSProperties, ReactNode } from 'react';
+
+export interface ListScreenProps {
+  title: string;
+  subtitle: string;
+  action?: { label: string; onClick: () => void };
+  children: ReactNode;
+  testId?: string;
+  maxWidth?: number;
+  className?: string;
+  style?: CSSProperties;
+}
+
+/**
+ * Shell for list/configuration screens: scroll page, title/subtitle header and
+ * an optional primary action on the right. The content is fully customizable.
+ */
+export function ListScreen({
+  title,
+  subtitle,
+  action,
+  children,
+  testId,
+  maxWidth = 700,
+  className,
+  style,
+}: ListScreenProps) {
+  return (
+    <div
+      style={{ height: '100%', overflowY: 'auto', padding: '28px 32px', ...style }}
+      className={`ui-scroll-y${className ? ` ${className}` : ''}`}
+    >
+      <div style={{ maxWidth, margin: '0 auto' }} data-testid={testId}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            marginBottom: 24,
+          }}
+        >
+          <div>
+            <h1
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                color: 'var(--ui-text)',
+                letterSpacing: '-0.5px',
+              }}
+            >
+              {title}
+            </h1>
+            <p style={{ color: 'var(--ui-text-2)', fontSize: 13, marginTop: 2 }}>{subtitle}</p>
+          </div>
+          {action && (
+            <button
+              type="button"
+              onClick={action.onClick}
+              style={{
+                padding: '9px 16px',
+                borderRadius: 8,
+                background: 'var(--ui-accent)',
+                color: 'var(--ui-on-accent)',
+                fontWeight: 600,
+                fontSize: 13,
+                cursor: 'pointer',
+                border: 'none',
+                flexShrink: 0,
+              }}
+            >
+              {action.label}
+            </button>
+          )}
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/** Card that hosts an inline list (rows + embedded editors). */
+export function ListCard({
+  children,
+  testId,
+  className,
+  style,
+}: {
+  children: ReactNode;
+  testId?: string;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <div
+      data-testid={testId}
+      className={className}
+      style={{
+        background: 'var(--ui-surface)',
+        border: '1px solid var(--ui-border)',
+        borderRadius: 12,
+        overflow: 'hidden',
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Row wrapper with the shared spacing/hover and optional divider. */
+export function ListRow({
+  children,
+  style,
+  className,
+  borderBottom = true,
+}: {
+  children: ReactNode;
+  style?: CSSProperties;
+  className?: string;
+  borderBottom?: boolean;
+}) {
+  return (
+    <div
+      className={className}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '13px 20px',
+        gap: 12,
+        borderBottom: borderBottom ? '1px solid var(--ui-border)' : 'none',
+        ...style,
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--ui-surface-2)')}
+      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Search input used above the lists. */
+export function ListSearch({
+  ariaLabel,
+  placeholder,
+  value,
+  onChange,
+  className,
+  style,
+}: {
+  ariaLabel: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <input
+      aria-label={ariaLabel}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={className}
+      style={{
+        padding: '9px 12px',
+        borderRadius: 8,
+        border: '1px solid var(--ui-border)',
+        background: 'var(--ui-surface)',
+        color: 'var(--ui-text)',
+        fontSize: 13,
+        outline: 'none',
+        width: '100%',
+        marginBottom: 16,
+        ...style,
+      }}
+    />
+  );
+}
+
+/** Centered empty state inside a ListCard. */
+export function ListEmptyState({
+  children,
+  className,
+  style,
+}: {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <div
+      className={className}
+      style={{
+        padding: 32,
+        textAlign: 'center',
+        color: 'var(--ui-text-3)',
+        fontSize: 13,
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
