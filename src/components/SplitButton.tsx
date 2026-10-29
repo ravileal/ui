@@ -39,7 +39,9 @@ export default function SplitButton({
 }: SplitButtonProps) {
   return (
     <div
-      className={['ui-split-button', className].filter(Boolean).join(' ')}
+      className={['ui-split-button', `ui-split-button--${variant}`, className]
+        .filter(Boolean)
+        .join(' ')}
       style={style}
     >
       <Button
