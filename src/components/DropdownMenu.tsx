@@ -34,6 +34,10 @@ export interface DropdownMenuProps {
   align?: 'start' | 'end';
   className?: string;
   style?: CSSProperties;
+  /** Extra classes for the trigger button (used by SplitButton). */
+  triggerClassName?: string;
+  triggerStyle?: CSSProperties;
+  disabled?: boolean;
 }
 
 function isItem(entry: DropdownMenuEntry): entry is DropdownMenuItem {
@@ -47,6 +51,9 @@ export function DropdownMenu({
   align = 'start',
   className,
   style,
+  triggerClassName,
+  triggerStyle,
+  disabled = false,
 }: DropdownMenuProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -118,12 +125,17 @@ export function DropdownMenu({
       <button
         ref={triggerRef}
         type="button"
-        className="ui-menu-trigger"
+        className={['ui-menu-trigger', triggerClassName].filter(Boolean).join(' ')}
+        style={triggerStyle}
         aria-label={ariaLabel}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={open ? menuId : undefined}
-        onClick={() => (open ? close() : setOpen(true))}
+        disabled={disabled}
+        onClick={() => {
+          if (disabled) return;
+          open ? close() : setOpen(true);
+        }}
         onKeyDown={onTriggerKeyDown}
       >
         {trigger}

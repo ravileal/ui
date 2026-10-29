@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Button, { IconButton } from './Button';
+import SplitButton from './SplitButton';
 import ProgressBar from './ProgressBar';
 import Spinner from './Spinner';
 
@@ -29,6 +30,29 @@ export const Buttons: Story = {
           <span aria-hidden="true">⚙</span>
         </IconButton>
       </div>
+    </div>
+  ),
+};
+
+export const SplitButtons: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+      <SplitButton
+        label="Add"
+        leadingIcon={<span aria-hidden="true">+</span>}
+        onPrimary={() => {}}
+        ariaLabel="More add options"
+        items={[
+          { id: 'manual', label: 'Add manually', icon: <span aria-hidden="true">✎</span> },
+        ]}
+      />
+      <SplitButton
+        variant="secondary"
+        label="Export"
+        onPrimary={() => {}}
+        ariaLabel="More export options"
+        items={[{ id: 'csv', label: 'Export CSV' }]}
+      />
     </div>
   ),
 };

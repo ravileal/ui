@@ -64,6 +64,8 @@ export { Badge, Chip } from './components/Badge';
 export type { BadgeProps, BadgeVariant, ChipProps } from './components/Badge';
 
 export { default as Button, IconButton } from './components/Button';
+export { default as SplitButton } from './components/SplitButton';
+export type { SplitButtonProps } from './components/SplitButton';
 export type { ButtonProps, ButtonSize, ButtonVariant, IconButtonProps } from './components/Button';
 
 export { Card, CardBody, CardFooter, CardHeader, Section } from './components/Card';
