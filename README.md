@@ -32,8 +32,9 @@ layout for Next.js):
 import '@ravileal/ui/styles.css';
 ```
 
-The stylesheet is wrapped in `@layer ravileal-ui` and does not ship a global
-reset or a font. Add your own reset/typography if needed.
+The stylesheet does not ship a global reset or a font. Classes are prefixed with
+`ui-` and tokens with `--ui-`, so a consumer reset (`* { margin: 0; padding: 0 }`)
+does not erase component spacing. Add your own typography if needed.
 
 ## Theme
 
