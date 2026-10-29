@@ -134,7 +134,8 @@ export function DropdownMenu({
         disabled={disabled}
         onClick={() => {
           if (disabled) return;
-          open ? close() : setOpen(true);
+          if (open) close();
+          else setOpen(true);
         }}
         onKeyDown={onTriggerKeyDown}
       >
