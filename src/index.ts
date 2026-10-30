@@ -4,6 +4,14 @@ export { default as Avatar } from './components/Avatar';
 export type { AvatarProps } from './components/Avatar';
 
 export { default as Checkbox } from './components/Checkbox';
+export { default as CodeViewer } from './components/CodeViewer';
+export type { CodeViewerLine, CodeViewerProps } from './components/CodeViewer';
+export { default as IssueList } from './components/IssueList';
+export type { IssueListItem, IssueListProps } from './components/IssueList';
+export { default as RegexField } from './components/RegexField';
+export type { RegexFieldProps, RegexPreset } from './components/RegexField';
+export { default as StatCard } from './components/StatCard';
+export type { StatCardProps } from './components/StatCard';
 export type { CheckboxProps } from './components/Checkbox';
 
 export { ColorPicker } from './components/ColorPicker';
@@ -104,7 +112,50 @@ export { default as Portal } from './components/Portal';
 export type { PortalProps } from './components/Portal';
 
 export { default as ProgressBar } from './components/ProgressBar';
-export type { ProgressBarProps } from './components/ProgressBar';
+export type { ProgressBarProps, ProgressTone } from './components/ProgressBar';
+
+export { default as ProgressStatusPanel } from './components/ProgressStatusPanel';
+export type {
+  ProgressStatus,
+  ProgressStatusItem,
+  ProgressStatusPanelProps,
+} from './components/ProgressStatusPanel';
+
+export { default as BulkActionBar } from './components/BulkActionBar';
+export type { BulkActionBarAction, BulkActionBarProps } from './components/BulkActionBar';
+
+export { default as FormModal, ModalFooter } from './components/FormModal';
+export type { FormModalProps, ModalFooterProps } from './components/FormModal';
+
+export { default as MonthCalendar } from './components/MonthCalendar';
+export type {
+  MonthCalendarEvent,
+  MonthCalendarLabels,
+  MonthCalendarProps,
+  MonthCalendarRangeProps,
+  MonthCalendarViewProps,
+} from './components/MonthCalendar';
+
+export { default as Sidebar } from './components/Sidebar';
+export type { SidebarBrand, SidebarItem, SidebarProps } from './components/Sidebar';
+
+export { default as TagInput } from './components/TagInput';
+export type { TagInputProps } from './components/TagInput';
+
+export {
+  MAX_DAY_CHIPS,
+  MONTH_NAMES,
+  WEEKDAY_INITIALS,
+  buildMonthGrid,
+  eventColor,
+  eventsCoveringDate,
+  isWithinRange,
+  monthGridLabel,
+  nextRangeSelection,
+  parseISODate,
+  toISO,
+} from './internal/calendar';
+export type { CalendarEventLike } from './internal/calendar';
 
 export { default as SearchInput } from './components/SearchInput';
 export type { SearchInputProps } from './components/SearchInput';

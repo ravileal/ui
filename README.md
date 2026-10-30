@@ -107,10 +107,11 @@ export function Example() {
 **Actions and feedback**
 
 - `Button`, `IconButton`
-- `Spinner`, `ProgressBar`
+- `Spinner`, `ProgressBar`, `ProgressStatusPanel`
 - `Alert`
-- `Badge`, `Chip`
+- `Badge`, `Chip`, `TagInput`
 - `ToastProvider`, `useToast`
+- `BulkActionBar`
 
 **Forms**
 
@@ -125,6 +126,7 @@ export function Example() {
 - `Combobox`
 - `DatePicker`
 - `MonthSelector`
+- `MonthCalendar`
 - `ColorPicker`
 
 **Layout and navigation**
@@ -138,10 +140,11 @@ export function Example() {
 - `Drawer` (also exported as `Sheet`)
 - `DataTable`
 - `FileUpload` (also exported as `Dropzone`)
+- `Sidebar`
 
 **Overlays and utilities**
 
-- `Modal`, `ConfirmModal`
+- `Modal`, `ConfirmModal`, `FormModal`, `ModalFooter`
 - `Tooltip`
 - `Avatar`
 - `CopyValue`
@@ -153,8 +156,15 @@ export function Example() {
 
 Every component exports its prop types. `CopyValue` accepts `formatValue` and
 `copyValue` so the consumer owns currency/locale formatting. `MonthSelector`
-accepts its month list as `options`. `DatePicker` accepts `locale`, weekday
-labels and navigation labels. `ColorPicker` accepts a `labels` object.
+accepts its month list as `options`. `MonthCalendar` accepts events, a month
+label, a range formatter and localized navigation labels. `DatePicker` accepts
+`locale`, weekday labels and navigation labels. `ColorPicker` accepts a `labels`
+object. `Sidebar` receives navigation items, an active id and brand/footer
+slots, so no product branding lives in the library.
+
+`MonthCalendar` also ships the pure date helpers it uses (`buildMonthGrid`,
+`monthGridLabel`, `nextRangeSelection`, `eventColor`, `parseISODate`, `toISO`,
+`isWithinRange`) for consumers that need the same grid math outside React.
 `Button` accepts `variant` (`primary`, `secondary`, `ghost`, `danger`), `size`
 and `loading`.
 

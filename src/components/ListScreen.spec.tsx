@@ -24,6 +24,19 @@ describe('ListScreen', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
+  it('renders custom header actions instead of the single action', () => {
+    render(
+      <ListScreen
+        title="Events"
+        subtitle="Calendar"
+        actions={<button type="button">Filters</button>}
+      >
+        <div>content</div>
+      </ListScreen>,
+    );
+    expect(screen.getByRole('button', { name: 'Filters' })).toBeInTheDocument();
+  });
+
   it('renders list rows, search and empty state', () => {
     const onChange = vi.fn();
     render(

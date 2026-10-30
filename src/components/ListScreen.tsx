@@ -4,6 +4,8 @@ export interface ListScreenProps {
   title: string;
   subtitle: string;
   action?: { label: string; onClick: () => void };
+  /** Custom header actions; takes precedence over `action`. */
+  actions?: ReactNode;
   children: ReactNode;
   testId?: string;
   maxWidth?: number;
@@ -19,6 +21,7 @@ export function ListScreen({
   title,
   subtitle,
   action,
+  actions,
   children,
   testId,
   maxWidth = 700,
@@ -52,24 +55,28 @@ export function ListScreen({
             </h1>
             <p style={{ color: 'var(--ui-text-2)', fontSize: 13, marginTop: 2 }}>{subtitle}</p>
           </div>
-          {action && (
-            <button
-              type="button"
-              onClick={action.onClick}
-              style={{
-                padding: '9px 16px',
-                borderRadius: 8,
-                background: 'var(--ui-accent)',
-                color: 'var(--ui-on-accent)',
-                fontWeight: 600,
-                fontSize: 13,
-                cursor: 'pointer',
-                border: 'none',
-                flexShrink: 0,
-              }}
-            >
-              {action.label}
-            </button>
+          {actions ? (
+            <div className="ui-list-screen-actions">{actions}</div>
+          ) : (
+            action && (
+              <button
+                type="button"
+                onClick={action.onClick}
+                style={{
+                  padding: '9px 16px',
+                  borderRadius: 8,
+                  background: 'var(--ui-accent)',
+                  color: 'var(--ui-on-accent)',
+                  fontWeight: 600,
+                  fontSize: 13,
+                  cursor: 'pointer',
+                  border: 'none',
+                  flexShrink: 0,
+                }}
+              >
+                {action.label}
+              </button>
+            )
           )}
         </div>
         {children}
@@ -113,25 +120,53 @@ export function ListRow({
   style,
   className,
   borderBottom = true,
+  selected = false,
+  onClick,
+  ariaLabel,
 }: {
   children: ReactNode;
   style?: CSSProperties;
   className?: string;
   borderBottom?: boolean;
+  selected?: boolean;
+  onClick?: () => void;
+  ariaLabel?: string;
 }) {
   return (
     <div
       className={className}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      aria-pressed={onClick ? selected : undefined}
+      aria-label={ariaLabel}
+      onClick={onClick}
+      onKeyDown={
+        onClick
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
       style={{
         display: 'flex',
         alignItems: 'center',
         padding: '13px 20px',
         gap: 12,
         borderBottom: borderBottom ? '1px solid var(--ui-border)' : 'none',
+        cursor: onClick ? 'pointer' : undefined,
+        background: selected ? 'var(--ui-surface-2)' : 'transparent',
+        boxShadow: selected ? 'inset 2px 0 0 var(--ui-accent)' : undefined,
         ...style,
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--ui-surface-2)')}
-      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+      onMouseEnter={(e) => {
+        if (!selected) e.currentTarget.style.background = 'var(--ui-surface-2)';
+      }}
+      onMouseLeave={(e) => {
+        if (!selected) e.currentTarget.style.background = 'transparent';
+      }}
     >
       {children}
     </div>

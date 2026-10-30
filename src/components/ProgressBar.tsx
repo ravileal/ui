@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react';
 
+export type ProgressTone = 'accent' | 'success' | 'warning' | 'danger';
+
 export interface ProgressBarProps {
   /** Current value. Omit/undefined for an indeterminate bar. */
   value?: number;
@@ -8,6 +10,7 @@ export interface ProgressBarProps {
   /** Overrides the computed percentage (e.g. "3 of 8 files"). */
   valueText?: string;
   size?: 'sm' | 'md';
+  tone?: ProgressTone;
   className?: string;
   style?: CSSProperties;
 }
@@ -18,6 +21,7 @@ export default function ProgressBar({
   label = 'Progress',
   valueText,
   size = 'md',
+  tone = 'accent',
   className,
   style,
 }: ProgressBarProps) {
@@ -37,6 +41,7 @@ export default function ProgressBar({
       className={[
         'ui-progress',
         `ui-progress--${size}`,
+        `ui-progress--${tone}`,
         indeterminate ? 'is-indeterminate' : '',
         className ?? '',
       ]

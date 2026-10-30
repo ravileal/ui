@@ -92,7 +92,9 @@ export function Section({
   return (
     <Card padding="none" className={className} style={style}>
       <CardHeader title={title} subtitle={subtitle} actions={actions} />
-      <CardBody className={contentClassName}>{children}</CardBody>
+      <CardBody className={contentClassName}>
+        <div className="ui-section-stack">{children}</div>
+      </CardBody>
     </Card>
   );
 }
