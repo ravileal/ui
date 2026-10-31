@@ -1,3 +1,13 @@
+## [0.5.0](https://github.com/ravileal/ui/compare/release-0.4.0...release-0.5.0) (2026-10-31)
+
+### Features
+
+* **card:** add interactive, selected and loading states ([ca12551](https://github.com/ravileal/ui/commit/ca1255168e1b42003fa06b12fd36d2528aa830e1))
+* **item-grid:** add the grid, list and adaptive item layouts with a view switcher ([1360224](https://github.com/ravileal/ui/commit/13602246856892749384a0aacce6d49ed3f58043))
+* **item:** add the card-as-item component and the none fallback for thumbs ([c3ed97f](https://github.com/ravileal/ui/commit/c3ed97f635aab48e9260f433a18ce1fd22721174))
+* **kit:** export the item, item grid and view switcher and document them ([486c8be](https://github.com/ravileal/ui/commit/486c8beb68e9820b47e625bd3c3e46b9212f178c))
+* **media-card:** build the media card on the card base with its states ([53256f2](https://github.com/ravileal/ui/commit/53256f2ec044775f6420634c45f33d9effe97697))
+
 ## [0.4.0](https://github.com/ravileal/ui/compare/release-0.3.0...release-0.4.0) (2026-10-31)
 
 ### Features
