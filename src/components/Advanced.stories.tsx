@@ -4,7 +4,7 @@ import Button from './Button';
 import Combobox from './Combobox';
 import { DataTable } from './DataTable';
 import { Drawer } from './Drawer';
-import { FileUpload } from './FileUpload';
+import { FileUpload, type FileRejection } from './FileUpload';
 
 const meta: Meta = {
   title: 'Advanced',
@@ -92,12 +92,45 @@ function DataTableExample() {
 
 function FileUploadExample() {
   const [files, setFiles] = useState<string[]>([]);
+  const [rejections, setRejections] = useState<FileRejection[]>([]);
+  return (
+    <div style={{ display: 'grid', gap: 10, width: 360 }}>
+      <FileUpload
+        multiple
+        accept="image/png,image/jpeg,.pdf"
+        maxSize={1048576}
+        onFiles={(selected) => {
+          setFiles(selected.map((file) => file.name));
+          setRejections([]);
+        }}
+        onFilesRejected={setRejections}
+        hint="PNG, JPEG or PDF up to 1 MB"
+      />
+      {files.map((file) => (
+        <div key={file} style={{ color: 'var(--ui-text-2)', fontSize: 12 }}>
+          {file}
+        </div>
+      ))}
+      {rejections.map((rejection, index) => (
+        <div
+          key={`${rejection.file.name}-${index}`}
+          style={{ color: 'var(--ui-red)', fontSize: 12 }}
+        >
+          {rejection.reason}: {rejection.message}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FileUploadFreeExample() {
+  const [files, setFiles] = useState<string[]>([]);
   return (
     <div style={{ display: 'grid', gap: 10, width: 360 }}>
       <FileUpload
         multiple
         onFiles={(selected) => setFiles(selected.map((file) => file.name))}
-        hint="PDF, CSV or images"
+        hint="Any file type, any size"
       />
       {files.map((file) => (
         <div key={file} style={{ color: 'var(--ui-text-2)', fontSize: 12 }}>
@@ -112,3 +145,7 @@ export const ComboboxStory: Story = { name: 'Combobox', render: () => <ComboboxE
 export const DrawerStory: Story = { name: 'Drawer', render: () => <DrawerExample /> };
 export const Table: Story = { render: () => <DataTableExample /> };
 export const Upload: Story = { render: () => <FileUploadExample /> };
+export const UploadFree: Story = {
+  name: 'Upload (no restrictions)',
+  render: () => <FileUploadFreeExample />,
+};
