@@ -2381,6 +2381,19 @@
   color: var(--ui-text-3);
   font-size: 11px;
 }
+.ui-file-upload.is-invalid,
+.ui-file-upload.is-invalid:hover:not(.is-disabled) {
+  border-color: var(--ui-red);
+}
+.ui-file-upload-error {
+  align-self: stretch;
+  max-width: 100%;
+  color: var(--ui-red);
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
 
 .ui-split-button {
   display: inline-flex;

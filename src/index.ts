@@ -100,7 +100,12 @@ export { default as EmptyState } from './components/EmptyState';
 export type { EmptyStateProps } from './components/EmptyState';
 
 export { Dropzone, FileUpload } from './components/FileUpload';
-export type { FileUploadProps } from './components/FileUpload';
+export type {
+  FileRejection,
+  FileRejectionReason,
+  FileUploadLabels,
+  FileUploadProps,
+} from './components/FileUpload';
 
 export { default as FormField } from './components/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/FormField';

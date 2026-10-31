@@ -160,8 +160,15 @@ Every component exports its prop types. `CopyValue` accepts `formatValue` and
 accepts its month list as `options`. `MonthCalendar` accepts events, a month
 label, a range formatter and localized navigation labels. `DatePicker` accepts
 `locale`, weekday labels and navigation labels. `ColorPicker` accepts a `labels`
-object. `Sidebar` receives navigation items, an active id and brand/footer
-slots, so no product branding lives in the library.
+object. `FileUpload` filters on `accept` (mime types, `image/*` wildcards and
+`.ext` tokens) plus an optional `maxSize` in bytes, and only hands validated
+files to `onFiles`; rejected files arrive in `onFilesRejected` as
+`FileRejection` items with a `type`, `size` or `custom` reason and a message.
+`validateFile` adds your own check, `labels` overrides the built-in messages
+(`%name%` and `%max%` are interpolated) and `error` replaces the inline alert.
+With `multiple` off, only the first dropped file is kept and the rest are
+reported as rejected. `Sidebar` receives navigation items, an active id and
+brand/footer slots, so no product branding lives in the library.
 
 `AppShell` is the frame around a screen: it lays out the sidebar, a `<main>`
 column and an overlay `aside` slot (chat launcher, FAB) for a whole viewport.
