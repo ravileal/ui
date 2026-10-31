@@ -39,6 +39,18 @@
   --ui-on-accent: #ffffff;
 }
 
+/* Boxed primitives that have no base rule of their own. The modal panel class
+   is supplied by the consumer through `panelClassName`; the other selectors are
+   part of the public class contract but ship no default styling here, so they
+   only need to carry their own box model. */
+.ui-modal,
+.ui-modal-body,
+.ui-select,
+.ui-table-wrap,
+.ui-tag {
+  box-sizing: border-box;
+}
+
 .ui-scroll-y {
   overflow-y: auto;
 }
@@ -125,6 +137,7 @@
   flex-shrink: 0;
 }
 .ui-dropdown-menu {
+  box-sizing: border-box;
   position: fixed;
   z-index: 2000;
   padding: 4px;
@@ -739,6 +752,7 @@
 }
 
 .ui-input-wrap {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -768,6 +782,7 @@
   opacity: 0.55;
 }
 .ui-input {
+  box-sizing: border-box;
   flex: 1;
   min-width: 0;
   height: 100%;
@@ -814,6 +829,7 @@
   }
 }
 .ui-textarea {
+  box-sizing: border-box;
   width: 100%;
   min-height: 80px;
   padding: 9px 12px;
@@ -999,6 +1015,7 @@
 }
 
 .ui-alert {
+  box-sizing: border-box;
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -1067,6 +1084,7 @@
 }
 
 .ui-badge {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1212,6 +1230,7 @@
 }
 
 .ui-card {
+  box-sizing: border-box;
   background: var(--ui-surface);
   border: 1px solid var(--ui-border);
   border-radius: 12px;
@@ -2136,6 +2155,7 @@
   transform: translateX(-50%);
 }
 .ui-toast {
+  box-sizing: border-box;
   display: flex;
   align-items: flex-start;
   gap: 12px;
