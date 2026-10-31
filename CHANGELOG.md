@@ -1,3 +1,14 @@
+## [0.4.0](https://github.com/ravileal/ui/compare/release-0.3.0...release-0.4.0) (2026-10-31)
+
+### Features
+
+* **select:** token-themed accessible Select for the kit ([36dc6f5](https://github.com/ravileal/ui/commit/36dc6f55d4d410a36e6db67646221e03b0591ee3))
+
+### Bug Fixes
+
+* **data-table:** use kit Select and Checkbox in pagination and column menu ([ca2290f](https://github.com/ravileal/ui/commit/ca2290f7388f04dc6bd7c16a4a044fd8081e2ad4))
+* **select:** size the compact option list to its content ([23674f1](https://github.com/ravileal/ui/commit/23674f11c567a6d4c3a00171315e12cb00efb391))
+
 ## [0.3.0](https://github.com/ravileal/ui/compare/release-0.2.0...release-0.3.0) (2026-10-31)
 
 ### Features
