@@ -3,17 +3,58 @@ import type { CSSProperties, ReactNode } from 'react';
 export interface CardProps {
   children: ReactNode;
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  /** Hover lift + press-in animation, pointer cursor and a focus ring when a focusable
+   *  element lives inside. Opt-in: plain panel Cards never move. */
+  interactive?: boolean;
+  /** Accent border + inset accent ring. Independent of `interactive`. */
+  selected?: boolean;
+  /** Replaces the visible content with a shimmer skeleton while KEEPING the exact height
+   *  of the real content (children stay in the DOM, `visibility: hidden`). Sets `aria-busy`. */
+  loading?: boolean;
   className?: string;
   style?: CSSProperties;
 }
 
-export function Card({ children, padding = 'md', className, style }: CardProps) {
+/** Custom properties are not part of `CSSProperties`, so the shimmer geometry rides on a cast. */
+function skeletonBlockStyle(height: string, width?: string): CSSProperties {
+  return {
+    '--ui-card-skeleton-h': height,
+    ...(width ? { '--ui-card-skeleton-w': width } : {}),
+  } as CSSProperties;
+}
+
+export function Card({
+  children,
+  padding = 'md',
+  interactive = false,
+  selected = false,
+  loading = false,
+  className,
+  style,
+}: CardProps) {
   return (
     <div
-      className={['ui-card', `ui-card--pad-${padding}`, className ?? ''].filter(Boolean).join(' ')}
+      className={[
+        'ui-card',
+        `ui-card--pad-${padding}`,
+        interactive ? 'ui-card--interactive' : '',
+        selected ? 'ui-card--selected' : '',
+        loading ? 'ui-card--loading' : '',
+        className ?? '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={style}
+      aria-busy={loading ? 'true' : undefined}
     >
-      {children}
+      <div className="ui-card-content">{children}</div>
+      {loading && (
+        <div className="ui-card-skeleton" aria-hidden="true">
+          <span className="ui-card-skeleton-block" style={skeletonBlockStyle('56%')} />
+          <span className="ui-card-skeleton-block" style={skeletonBlockStyle('12px', '70%')} />
+          <span className="ui-card-skeleton-block" style={skeletonBlockStyle('12px', '45%')} />
+        </div>
+      )}
     </div>
   );
 }
