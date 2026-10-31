@@ -127,13 +127,19 @@ export function Example() {
 - `Slider`
 - `SearchInput`
 - `Checkbox`, `Radio`
-- `NumberStepper`
+- `NumberStepper`, `NumberField`
 - `Dropdown`
 - `Combobox`
 - `DatePicker`
 - `MonthSelector`
 - `MonthCalendar`
 - `ColorPicker`
+
+**Media and content**
+
+- `MediaCard`, `MediaThumb`
+- `ResultList`, `ResultRow`
+- `MetaList`
 
 **Layout and navigation**
 
@@ -175,6 +181,20 @@ files to `onFiles`; rejected files arrive in `onFilesRejected` as
 With `multiple` off, only the first dropped file is kept and the rest are
 reported as rejected. `Sidebar` receives navigation items, an active id and
 brand/footer slots, so no product branding lives in the library.
+
+`MediaThumb` renders a cover with an initials fallback and remembers a failed
+URL per source, so a new `src` gets a fresh attempt. `MediaCard` puts that
+thumbnail next to a title, an optional metadata line and a footer; pass
+`titleHref` plus `renderTitleLink` to render the cover and title as your own
+router link, and know that the footer stays a sibling of that anchor — a
+`Switch` or a button inside a link swallows the navigation. `ResultList` /
+`ResultRow` are the search-result list (media, primary and secondary text, meta,
+trailing action), and `MetaList` is the compact inline metadata line whose
+separator is a CSS dot, never a stray text node. `NumberField` is the small
+numeric input for score weights and episode counts: it keeps the typed text
+locally so an empty field and a lone minus stay editable and emits the parsed,
+clamped number, and it uses `type="text"` with `inputMode` because a native
+number input drops the leading minus as you type.
 
 `AppShell` is the frame around a screen: it lays out the sidebar, a `<main>`
 column and an overlay `aside` slot (chat launcher, FAB) for a whole viewport.
