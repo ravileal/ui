@@ -2611,10 +2611,12 @@
   padding: 0 6px;
   text-align: right;
 }
-.ui-data-table-menu-trigger {
+.ui-data-table-menu-trigger.ui-button {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0;
   width: 24px;
   height: 24px;
   padding: 0;
@@ -2625,6 +2627,7 @@
   font: inherit;
   font-size: 16px;
   line-height: 1;
+  white-space: normal;
   cursor: pointer;
 }
 .ui-data-table-menu-trigger:hover,
@@ -2677,12 +2680,12 @@
   font-size: 12px;
   cursor: pointer;
 }
-.ui-data-table-menu-check input {
+.ui-data-table-menu-check .ui-checkbox {
+  box-sizing: border-box;
   margin: 0;
-  accent-color: var(--ui-accent);
   cursor: pointer;
 }
-.ui-data-table-menu-check input:disabled {
+.ui-data-table-menu-check .ui-checkbox:disabled {
   cursor: default;
 }
 .ui-data-table-menu-name {
@@ -2690,10 +2693,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.ui-data-table-menu-move {
+.ui-data-table-menu-move.ui-button {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0;
   width: 22px;
   height: 22px;
   padding: 0;
@@ -2705,8 +2710,9 @@
   line-height: 1;
   cursor: pointer;
 }
-.ui-data-table-menu-move:hover:not(:disabled) {
+.ui-data-table-menu-move.ui-button:hover:not(:disabled) {
   border-color: var(--ui-accent);
+  background: var(--ui-surface-2);
   color: var(--ui-text);
 }
 .ui-data-table-menu-move:focus-visible,
@@ -2714,7 +2720,7 @@
   outline: 2px solid var(--ui-accent);
   outline-offset: 1px;
 }
-.ui-data-table-menu-move:disabled {
+.ui-data-table-menu-move.ui-button:disabled {
   opacity: 0.45;
   cursor: default;
 }
@@ -2795,19 +2801,19 @@
   gap: 6px;
   color: var(--ui-text-2);
 }
-.ui-data-table-page-size select {
+.ui-data-table-page-size .ui-select {
+  flex-shrink: 0;
+  width: auto;
+}
+.ui-data-table-page-size .ui-select-trigger {
+  box-sizing: border-box;
   height: 28px;
   padding: 0 6px;
-  border: 1px solid var(--ui-border);
+  gap: 4px;
   border-radius: 8px;
   background: var(--ui-surface-2);
-  color: var(--ui-text);
-  font: inherit;
   font-size: 12px;
-}
-.ui-data-table-page-size select:focus-visible {
-  outline: 2px solid var(--ui-accent);
-  outline-offset: 1px;
+  line-height: 1;
 }
 
 .ui-file-upload {

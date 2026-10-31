@@ -10,6 +10,9 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from 'react';
+import Button from './Button';
+import Checkbox from './Checkbox';
+import Select from './Select';
 
 export interface DataTableColumn<T> {
   key: string;
@@ -528,9 +531,11 @@ export function DataTable<T>({
             })}
             {columnMenu && (
               <th className="ui-data-table-menu-cell" scope="col">
-                <button
-                  type="button"
+                <Button
                   ref={menuTriggerRef}
+                  type="button"
+                  variant="ghost"
+                  size="sm"
                   className="ui-data-table-menu-trigger"
                   aria-label={menuLabels.menu}
                   aria-haspopup="menu"
@@ -540,7 +545,7 @@ export function DataTable<T>({
                   onClick={() => setMenuOpen((open) => !open)}
                 >
                   ⋮
-                </button>
+                </Button>
               </th>
             )}
           </tr>
@@ -603,8 +608,8 @@ export function DataTable<T>({
             return (
               <div className="ui-data-table-menu-row" role="none" key={key}>
                 <label className="ui-data-table-menu-check">
-                  <input
-                    type="checkbox"
+                  <Checkbox
+                    size="sm"
                     checked={visible}
                     disabled={column.fixed || lastVisible}
                     aria-label={`${menuLabels.show} ${name}`}
@@ -612,24 +617,28 @@ export function DataTable<T>({
                   />
                   <span className="ui-data-table-menu-name">{name}</span>
                 </label>
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   className="ui-data-table-menu-move"
                   aria-label={`${menuLabels.moveLeft} ${name}`}
                   disabled={column.fixed || index === 0}
                   onClick={() => moveColumn(key, -1)}
                 >
                   ‹
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   className="ui-data-table-menu-move"
                   aria-label={`${menuLabels.moveRight} ${name}`}
                   disabled={column.fixed || index === normalized.order.length - 1}
                   onClick={() => moveColumn(key, 1)}
                 >
                   ›
-                </button>
+                </Button>
               </div>
             );
           })}
@@ -687,17 +696,16 @@ export function DataTable<T>({
             {pagination.onPageSizeChange && (
               <label className="ui-data-table-page-size">
                 <span>{pageLabels.rowsPerPage}</span>
-                <select
-                  aria-label={pageLabels.rowsPerPage}
+                <Select
+                  ariaLabel={pageLabels.rowsPerPage}
+                  size="sm"
+                  fullWidth={false}
                   value={pageSize}
-                  onChange={(event) => pagination.onPageSizeChange?.(Number(event.target.value))}
-                >
-                  {(pagination.pageSizeOptions ?? DEFAULT_PAGE_SIZE_OPTIONS).map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                  options={(pagination.pageSizeOptions ?? DEFAULT_PAGE_SIZE_OPTIONS).map(
+                    (option) => ({ value: option, label: String(option) }),
+                  )}
+                  onChange={(next) => pagination.onPageSizeChange?.(Number(next))}
+                />
               </label>
             )}
           </div>

@@ -273,6 +273,19 @@ describe('DataTable column menu', () => {
     expect(within(panel).getAllByRole('checkbox')).toHaveLength(2);
   });
 
+  it('renders the columns as kit checkboxes that reflect visibility', async () => {
+    renderTable({ columns: menuColumns, columnMenu: true });
+    const panel = await openMenu();
+
+    const checkboxes = within(panel).getAllByRole('checkbox');
+    expect(checkboxes.map((checkbox) => checkbox.getAttribute('aria-label'))).toEqual([
+      'Show Name',
+      'Show Amount',
+    ]);
+    expect(checkboxes[0]).toHaveClass('ui-checkbox');
+    expect(checkboxes.every((checkbox) => (checkbox as HTMLInputElement).checked)).toBe(true);
+  });
+
   it('removes a hidden column from the header and from every body row', async () => {
     const { container } = renderTable({ columns: menuColumns, columnMenu: true });
 
@@ -464,7 +477,7 @@ describe('DataTable pagination', () => {
     expect(within(nav).getByRole('button', { name: 'First page' })).toBeEnabled();
   });
 
-  it('reports page-size changes from the select', async () => {
+  it('reports page-size changes from the kit select', async () => {
     const onPageSizeChange = vi.fn();
     renderTable({
       pagination: {
@@ -476,17 +489,35 @@ describe('DataTable pagination', () => {
       },
     });
 
-    const select = screen.getByRole('combobox', { name: 'Rows per page' });
-    expect(select).toHaveValue('25');
+    const trigger = screen.getByRole('button', { name: 'Rows per page' });
+    expect(trigger).toHaveTextContent('25');
 
-    await userEvent.selectOptions(select, '50');
+    await userEvent.click(trigger);
+    expect(screen.getAllByRole('option')).toHaveLength(4);
+    expect(screen.getByRole('option', { name: '25' })).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.click(screen.getByRole('option', { name: '50' }));
     expect(onPageSizeChange).toHaveBeenCalledWith(50);
   });
 
-  it('renders no page-size select without onPageSizeChange', () => {
+  it('no longer renders a native select control', () => {
+    const { container } = renderTable({
+      pagination: {
+        page: 1,
+        pageSize: 25,
+        total: 320,
+        onPageChange: vi.fn(),
+        onPageSizeChange: vi.fn(),
+      },
+    });
+
+    expect(container.querySelector('select')).toBeNull();
+  });
+
+  it('renders no page-size control without onPageSizeChange', () => {
     renderTable({ pagination: { page: 1, pageSize: 25, total: 320, onPageChange: vi.fn() } });
 
-    expect(screen.queryByRole('combobox', { name: 'Rows per page' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Rows per page' })).not.toBeInTheDocument();
   });
 
   it('accepts custom labels', () => {
