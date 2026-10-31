@@ -6,6 +6,7 @@ import { ListCard, ListEmptyState, ListRow, ListScreen } from './ListScreen';
 import { RowActions } from './RowActions';
 import { ListCardSkeleton, PageSkeleton } from './ScreenSkeleton';
 import Skeleton from './Skeleton';
+import TextInput from './TextInput';
 
 const meta: Meta = {
   title: 'Foundations',
@@ -70,7 +71,7 @@ function InlineEditorExample() {
   const [value, setValue] = useState('Food');
   return (
     <InlineEditorCard title="Edit alias" onSave={() => {}} onCancel={() => {}}>
-      <input aria-label="Alias" value={value} onChange={(event) => setValue(event.target.value)} />
+      <TextInput aria-label="Alias" value={value} onChange={(event) => setValue(event.target.value)} />
     </InlineEditorCard>
   );
 }
