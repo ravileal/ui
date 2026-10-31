@@ -115,6 +115,22 @@ describe('DataTable', () => {
     expect(headers[1]).not.toHaveAttribute('aria-sort');
   });
 
+  it('only draws a sort arrow on the sorted column, never a neutral hint', () => {
+    const columns: DataTableColumn<Row>[] = [
+      { key: 'name', header: 'Name', sortable: true },
+      { key: 'amount', header: 'Amount', sortable: true },
+    ];
+    const { container } = renderTable({
+      columns,
+      sort: { key: 'amount', direction: 'desc' },
+      onSortChange: vi.fn(),
+    });
+
+    const icons = container.querySelectorAll('.ui-data-table-sort-icon');
+    expect(icons).toHaveLength(1);
+    expect(icons[0]).toHaveTextContent('▼');
+  });
+
   it('activates clickable rows with the keyboard and keeps them focusable', async () => {
     const onRowClick = vi.fn();
     renderTable({ onRowClick });

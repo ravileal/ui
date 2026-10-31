@@ -95,9 +95,11 @@ export function DataTable<T>({
                       }
                     >
                       {column.header}
-                      <span className="ui-data-table-sort-icon" aria-hidden="true">
-                        {activeSort === 'asc' ? '▲' : activeSort === 'desc' ? '▼' : '↕'}
-                      </span>
+                      {activeSort && (
+                        <span className="ui-data-table-sort-icon" aria-hidden="true">
+                          {activeSort === 'asc' ? '▲' : '▼'}
+                        </span>
+                      )}
                     </button>
                   ) : (
                     column.header
