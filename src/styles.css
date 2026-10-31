@@ -2379,8 +2379,9 @@
   cursor: pointer;
 }
 .ui-data-table-sort-icon {
-  color: var(--ui-text-3);
-  font-size: 9px;
+  color: var(--ui-text-2);
+  font-size: 10px;
+  line-height: 1;
 }
 
 .ui-file-upload {
