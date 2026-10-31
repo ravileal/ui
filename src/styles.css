@@ -2520,16 +2520,42 @@
   cursor: not-allowed;
 }
 
-/* The list is welded to the button: no offset, no padding, no border and
-   squared top corners, so no hairline or empty strip can open between the two
-   halves. Only the bottom corners keep the rounded surface of the component. */
+/* An open menu turns the control into a single shape: neither half keeps a
+   bottom radius, because the list slides underneath them and owns the bottom
+   corners of the silhouette. Closed, each half keeps its own rounding. */
+.ui-split-button:has(.ui-menu-trigger[aria-expanded='true']) .ui-split-button-main {
+  border-bottom-left-radius: 0;
+}
+.ui-split-button:has(.ui-menu-trigger[aria-expanded='true'])
+  .ui-split-button-caret.ui-menu-trigger {
+  border-bottom-right-radius: 0;
+}
+
+/* The list is welded to the button: no offset, no padding, no border and a
+   flat top edge, so no hairline or empty strip can open between the two
+   halves. It hangs off the right edge of the control, so only its left
+   corners carry the surface radius while the right side stays square and
+   lines up with the caret. */
 .ui-split-button .ui-menu-list {
   top: 100%;
   margin: 0;
   padding: 0;
   border: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 8px 0 0 10px;
   overflow: hidden;
+  /* The shared elevation is cast downwards only. Left unclipped, its blur
+     climbs over the button face and paints a dark line across the weld, so
+     the shadow is cut at the top edge while the sides and the bottom keep it
+     in full. */
+  clip-path: inset(0 -48px -48px -48px);
+}
+/* The top-left corner follows the size scale of the button the menu grows out
+   of, so both edges curve with the same radius. */
+.ui-split-button:has(.ui-menu-trigger.ui-button--sm) .ui-menu-list {
+  border-radius: 7px 0 0 10px;
+}
+.ui-split-button:has(.ui-menu-trigger.ui-button--lg) .ui-menu-list {
+  border-radius: 9px 0 0 10px;
 }
 
 /* Items continue the main button surface: the same background and foreground,
