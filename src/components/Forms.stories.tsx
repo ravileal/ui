@@ -6,6 +6,7 @@ import Dropdown from './Dropdown';
 import MonthSelector from './MonthSelector';
 import { NumberStepper } from './NumberStepper';
 import Radio from './Radio';
+import Select from './Select';
 
 const MONTHS = [
   { value: '2026-10', label: 'Oct 2026' },
@@ -36,6 +37,73 @@ function DatePickerExample() {
   return (
     <div style={{ width: 240 }}>
       <DatePicker value={value} onChange={setValue} locale="en-US" />
+    </div>
+  );
+}
+
+function SelectExample() {
+  const [value, setValue] = useState<string | number | null>('groceries');
+  return (
+    <div style={{ width: 260, display: 'grid', gap: 12 }}>
+      <Select
+        ariaLabel="Category"
+        value={value}
+        onChange={setValue}
+        options={[
+          { value: 'groceries', label: 'Groceries', description: 'Supermarket and household' },
+          { value: 'dining', label: 'Dining', description: 'Restaurants and coffee' },
+          { value: 'travel', label: 'Travel' },
+          { value: 'archived', label: 'Archived', disabled: true },
+        ]}
+      />
+    </div>
+  );
+}
+
+function SelectSmallExample() {
+  const [value, setValue] = useState<string | number | null>(20);
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span style={{ fontSize: 12, color: 'var(--ui-text-2)' }}>Rows per page</span>
+      <Select
+        ariaLabel="Rows per page"
+        size="sm"
+        fullWidth={false}
+        value={value}
+        onChange={setValue}
+        options={[
+          { value: 10, label: '10' },
+          { value: 20, label: '20' },
+          { value: 50, label: '50' },
+        ]}
+      />
+    </div>
+  );
+}
+
+function SelectInvalidExample() {
+  const [value, setValue] = useState<string | number | null>(null);
+  const accounts = [
+    { value: 'checking', label: 'Checking' },
+    { value: 'savings', label: 'Savings' },
+  ];
+  return (
+    <div style={{ width: 260, display: 'grid', gap: 12 }}>
+      <Select
+        ariaLabel="Account"
+        value={value}
+        onChange={setValue}
+        invalid
+        placeholder="Pick an account"
+        options={accounts}
+      />
+      <Select
+        ariaLabel="Locked account"
+        value="savings"
+        onChange={() => {}}
+        disabled
+        options={accounts}
+      />
     </div>
   );
 }
@@ -108,6 +176,21 @@ export const NumberStepperStory: Story = {
 export const DropdownStory: Story = {
   name: 'Dropdown',
   render: () => <DropdownExample />,
+};
+
+export const SelectStory: Story = {
+  name: 'Select',
+  render: () => <SelectExample />,
+};
+
+export const SelectSmallStory: Story = {
+  name: 'Select (sm)',
+  render: () => <SelectSmallExample />,
+};
+
+export const SelectInvalidStory: Story = {
+  name: 'Select (invalid, disabled)',
+  render: () => <SelectInvalidExample />,
 };
 
 export const DatePickerStory: Story = {

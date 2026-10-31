@@ -179,6 +179,9 @@ export type { SearchInputProps } from './components/SearchInput';
 export { SegmentedControl } from './components/SegmentedControl';
 export type { SegmentedControlProps, SegmentedItem } from './components/SegmentedControl';
 
+export { default as Select } from './components/Select';
+export type { SelectOption, SelectProps } from './components/Select';
+
 export { default as Slider } from './components/Slider';
 export type { SliderProps } from './components/Slider';
 

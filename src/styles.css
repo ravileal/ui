@@ -260,6 +260,93 @@
 }
 
 /* --------------------------------------------------------------------------
+   Select — the themed trigger that opens a `ui-dropdown-menu` listbox
+   The popup reuses the dropdown surface, item rhythm and shared scrollbar, so
+   only the trigger and the option extras live here.
+   -------------------------------------------------------------------------- */
+.ui-select {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+.ui-select.is-inline {
+  width: auto;
+}
+.ui-select-trigger {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.ui-select-trigger.is-md {
+  height: 36px;
+  font-size: 13px;
+}
+@media (hover: hover) {
+  .ui-select-trigger:hover:not(:disabled) {
+    border-color: var(--ui-text-3);
+  }
+}
+.ui-select-trigger[aria-expanded='true'],
+.ui-select-trigger:focus-visible {
+  border-color: var(--ui-accent);
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ui-accent) 18%, transparent);
+}
+.ui-select-trigger:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.ui-select-trigger.is-invalid {
+  border-color: var(--ui-red);
+}
+.ui-select-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-select-value.is-placeholder {
+  color: var(--ui-text-3);
+}
+.ui-select-caret {
+  flex-shrink: 0;
+  font-size: 9px;
+  line-height: 1;
+  color: var(--ui-text-3);
+}
+.ui-select-option.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ui-select-option-description {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ui-text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
    Colour picker panel
    The picker body carries the menu's inner padding, so that padding has to be
    counted inside its own width. As a content-box body it added its 20px of

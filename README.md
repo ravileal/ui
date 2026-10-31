@@ -130,6 +130,7 @@ export function Example() {
 - `NumberStepper`, `NumberField`
 - `Dropdown`
 - `Combobox`
+- `Select`
 - `DatePicker`
 - `MonthSelector`
 - `MonthCalendar`
@@ -181,6 +182,12 @@ files to `onFiles`; rejected files arrive in `onFilesRejected` as
 With `multiple` off, only the first dropped file is kept and the rest are
 reported as rejected. `Sidebar` receives navigation items, an active id and
 brand/footer slots, so no product branding lives in the library.
+
+`Select` requires `ariaLabel` because the trigger shows only the current value.
+`size` picks the form-field height (`md`, matching `.ui-input`) or the compact
+in-table one (`sm`); `invalid` paints the error border and sets `aria-invalid`;
+`menuMaxHeight` caps the option list. The list renders in a portal, so no
+ancestor `overflow: hidden` clips it.
 
 `MediaThumb` renders a cover with an initials fallback and remembers a failed
 URL per source, so a new `src` gets a fresh attempt. `MediaCard` puts that
