@@ -30,20 +30,14 @@ export function ListScreen({
 }: ListScreenProps) {
   return (
     <div
-      style={{ height: '100%', overflowY: 'auto', padding: '28px 32px', ...style }}
-      className={`ui-scroll-y${className ? ` ${className}` : ''}`}
+      style={style}
+      className={['ui-list-screen', 'ui-scroll-y', className ?? ''].filter(Boolean).join(' ')}
     >
-      <div style={{ maxWidth, margin: '0 auto' }} data-testid={testId}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            marginBottom: 24,
-          }}
-        >
+      <div className="ui-list-screen-inner" style={{ maxWidth }} data-testid={testId}>
+        <div className="ui-list-screen-head">
           <div>
             <h1
+              className="ui-list-screen-title"
               style={{
                 fontSize: 22,
                 fontWeight: 700,
@@ -53,27 +47,18 @@ export function ListScreen({
             >
               {title}
             </h1>
-            <p style={{ color: 'var(--ui-text-2)', fontSize: 13, marginTop: 2 }}>{subtitle}</p>
+            <p
+              className="ui-list-screen-subtitle"
+              style={{ color: 'var(--ui-text-2)', fontSize: 13 }}
+            >
+              {subtitle}
+            </p>
           </div>
           {actions ? (
             <div className="ui-list-screen-actions">{actions}</div>
           ) : (
             action && (
-              <button
-                type="button"
-                onClick={action.onClick}
-                style={{
-                  padding: '9px 16px',
-                  borderRadius: 8,
-                  background: 'var(--ui-accent)',
-                  color: 'var(--ui-on-accent)',
-                  fontWeight: 600,
-                  fontSize: 13,
-                  cursor: 'pointer',
-                  border: 'none',
-                  flexShrink: 0,
-                }}
-              >
+              <button type="button" className="ui-list-screen-action" onClick={action.onClick}>
                 {action.label}
               </button>
             )

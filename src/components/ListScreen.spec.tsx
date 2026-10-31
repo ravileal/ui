@@ -35,6 +35,35 @@ describe('ListScreen', () => {
       </ListScreen>,
     );
     expect(screen.getByRole('button', { name: 'Filters' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Filters' }).parentElement).toHaveClass(
+      'ui-list-screen-actions',
+    );
+  });
+
+  it('exposes responsive layout class hooks instead of inline layout styles', () => {
+    const { container } = render(
+      <ListScreen
+        title="Events"
+        subtitle="Calendar"
+        action={{ label: 'New event', onClick: vi.fn() }}
+        className="extra"
+      >
+        <div>content</div>
+      </ListScreen>,
+    );
+
+    const outer = container.firstElementChild as HTMLElement;
+    expect(outer).toHaveClass('ui-list-screen');
+    expect(outer).toHaveClass('ui-scroll-y');
+    expect(outer).toHaveClass('extra');
+
+    const inner = container.querySelector('.ui-list-screen-inner') as HTMLElement;
+    expect(inner).toHaveStyle({ maxWidth: '700px' });
+
+    expect(container.querySelector('.ui-list-screen-head')).toBeInTheDocument();
+    expect(container.querySelector('.ui-list-screen-title')).toHaveTextContent('Events');
+    expect(container.querySelector('.ui-list-screen-subtitle')).toHaveTextContent('Calendar');
+    expect(screen.getByRole('button', { name: 'New event' })).toHaveClass('ui-list-screen-action');
   });
 
   it('renders list rows, search and empty state', () => {

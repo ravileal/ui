@@ -3,6 +3,8 @@ import type { CSSProperties, ReactNode } from 'react';
 export interface DataTableColumn<T> {
   key: string;
   header: ReactNode;
+  /** Text used as the per-cell `data-label` in stacked/card mode. */
+  label?: string;
   render?: (row: T, index: number) => ReactNode;
   sortable?: boolean;
   align?: 'left' | 'center' | 'right';
@@ -24,8 +26,19 @@ export interface DataTableProps<T> {
   onSortChange?: (sort: DataTableSort) => void;
   emptyState?: ReactNode;
   onRowClick?: (row: T) => void;
+  /** Adds the `is-stacked` hook so CSS can turn rows into cards on narrow screens. */
+  stacked?: boolean;
   className?: string;
   style?: CSSProperties;
+}
+
+/**
+ * Column label used for the `data-label` attribute of body cells. Falls back to
+ * the header when it is plain text, and to an empty string for node headers.
+ */
+function cellLabel<T>(column: DataTableColumn<T>): string {
+  if (column.label !== undefined) return column.label;
+  return typeof column.header === 'string' ? column.header : '';
 }
 
 export function DataTable<T>({
@@ -38,12 +51,15 @@ export function DataTable<T>({
   onSortChange,
   emptyState = 'No data',
   onRowClick,
+  stacked = true,
   className,
   style,
 }: DataTableProps<T>) {
   return (
     <div
-      className={['ui-data-table-wrap', className ?? ''].filter(Boolean).join(' ')}
+      className={['ui-data-table-wrap', stacked ? 'is-stacked' : '', className ?? '']
+        .filter(Boolean)
+        .join(' ')}
       style={style}
     >
       <table className="ui-data-table" aria-label={ariaLabel}>
@@ -114,7 +130,11 @@ export function DataTable<T>({
                 }}
               >
                 {columns.map((column) => (
-                  <td key={column.key} style={{ textAlign: column.align ?? 'left' }}>
+                  <td
+                    key={column.key}
+                    data-label={cellLabel(column)}
+                    style={{ textAlign: column.align ?? 'left' }}
+                  >
                     {column.render
                       ? column.render(row, index)
                       : String(row[column.key as keyof T] ?? '')}
