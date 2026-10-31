@@ -284,15 +284,7 @@ export function ColorPicker({
               maxHeight: pos.maxHeight,
             }}
           >
-            <div
-              style={{
-                padding: 10,
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10,
-              }}
-            >
+            <div className="ui-color-picker-panel">
               <div
                 ref={svRef}
                 role="slider"
