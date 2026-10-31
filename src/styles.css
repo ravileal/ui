@@ -4184,3 +4184,68 @@
 .ui-item:has(.ui-item-footer) .ui-item-body {
   padding-bottom: 0;
 }
+
+/* --- 0.5.0: item grid --- */
+
+.ui-item-grid {
+  box-sizing: border-box;
+  display: grid;
+  align-items: stretch;
+  gap: var(--ui-item-grid-gap, 16px);
+  grid-template-columns: repeat(var(--ui-item-grid-cols, 4), minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-item-grid--list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* min(…, 100%) keeps a single column from overflowing a container narrower
+   than the requested minimum. */
+.ui-item-grid--adaptive {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--ui-item-grid-min, 200px), 100%), 1fr));
+}
+
+.ui-item-grid-cell {
+  box-sizing: border-box;
+  display: flex;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The cell is the sizing contract: the card fills it in both axes, so every
+   card in a fixed grid has the same width and height as its neighbours. */
+.ui-item-grid-cell > * {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ui-item-grid-cell--empty {
+  grid-column: 1 / -1;
+}
+
+/* A floor keeps the grid from collapsing before the data arrives; the real
+   card height takes over once it does. */
+.ui-item-grid-skeleton {
+  min-height: var(--ui-item-grid-skeleton-h, 168px);
+}
+
+/* CSS-only collapse of the fixed grid: 4 → 2 → 1 columns. */
+@media (max-width: 640px) {
+  .ui-item-grid--grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .ui-item-grid--grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
