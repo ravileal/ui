@@ -44,4 +44,34 @@ describe('MediaThumb', () => {
     expect(thumb.style.getPropertyValue('--ui-media-thumb-radius')).toBe('8px');
     expect(thumb.style.getPropertyValue('--ui-media-thumb-ratio')).toBe('1 / 1');
   });
+
+  it('renders nothing at all with fallback="none" and no image', () => {
+    const { container } = render(<MediaThumb src={null} initials="AB" fallback="none" />);
+
+    expect(container.querySelector('.ui-media-thumb')).toBeNull();
+    expect(container.querySelector('.ui-media-thumb-fallback')).toBeNull();
+    expect(container.innerHTML).toBe('');
+  });
+
+  it('still renders a working image with fallback="none"', () => {
+    const { container } = render(
+      <MediaThumb src="https://example.com/cover.jpg" alt="Cover" initials="AB" fallback="none" />,
+    );
+
+    const image = container.querySelector('img') as HTMLImageElement;
+    expect(image).not.toBeNull();
+    expect(image.getAttribute('src')).toBe('https://example.com/cover.jpg');
+    expect(container.querySelector('.ui-media-thumb-fallback')).toBeNull();
+  });
+
+  it('renders nothing with fallback="none" after the image fails', () => {
+    const { container } = render(
+      <MediaThumb src="https://example.com/broken.jpg" initials="AB" fallback="none" />,
+    );
+
+    fireEvent.error(container.querySelector('img') as HTMLImageElement);
+
+    expect(container.querySelector('.ui-media-thumb')).toBeNull();
+    expect(container.querySelector('.ui-media-thumb-fallback')).toBeNull();
+  });
 });

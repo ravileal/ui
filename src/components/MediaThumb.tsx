@@ -1,12 +1,16 @@
 import { useState, type CSSProperties } from 'react';
 
 export type MediaThumbSize = 'xs' | 'sm' | 'md';
+export type MediaThumbFallback = 'initials' | 'none';
 
 export interface MediaThumbProps {
   src: string | null;
   alt?: string;
   initials: string;
   size?: MediaThumbSize;
+  /** 'initials' (default) renders the initials block when there is no usable image.
+   *  'none' renders NOTHING in that case: no box, no reserved aspect ratio. */
+  fallback?: MediaThumbFallback;
   radius?: number | string;
   aspectRatio?: string;
   className?: string;
@@ -28,6 +32,7 @@ export default function MediaThumb({
   alt,
   initials,
   size = 'md',
+  fallback = 'initials',
   radius,
   aspectRatio,
   className,
@@ -35,6 +40,10 @@ export default function MediaThumb({
 }: MediaThumbProps) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const showImage = Boolean(src) && failedSrc !== src;
+
+  // No usable image and no fallback wanted: there is no slot to reserve, so
+  // render nothing at all (the consumer lays its text out alone).
+  if (!showImage && fallback === 'none') return null;
 
   const thumbStyle: MediaThumbStyle = { ...style };
   if (radius !== undefined) {
