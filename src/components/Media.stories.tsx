@@ -111,6 +111,81 @@ function HorizontalCardExample() {
   );
 }
 
+function LoadingCardExample() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gap: 12,
+        width: '100%',
+        maxWidth: 390,
+      }}
+    >
+      <MediaCard
+        coverImage="https://placehold.co/300x450/png"
+        initials="FR"
+        title="Sousou no Frieren"
+        meta="2023 · 28 episodes"
+        loading
+      />
+      <MediaCard
+        coverImage={null}
+        initials="VS"
+        title="Vinland Saga"
+        meta="2019 · 48 episodes"
+        loading
+      />
+    </div>
+  );
+}
+
+function InteractiveCardExample() {
+  return (
+    <div style={{ width: '100%', maxWidth: 190 }}>
+      <MediaCard
+        coverImage="https://placehold.co/300x450/png"
+        initials="FR"
+        title="Sousou no Frieren"
+        titleHref="/series/frieren"
+        meta="2023 · 28 episodes"
+        interactive
+      />
+    </div>
+  );
+}
+
+function SelectedCardExample() {
+  return (
+    <div style={{ width: '100%', maxWidth: 190 }}>
+      <MediaCard
+        coverImage="https://placehold.co/300x450/png"
+        initials="FR"
+        title="Sousou no Frieren"
+        titleHref="/series/frieren"
+        meta="2023 · 28 episodes"
+        interactive
+        selected
+      />
+    </div>
+  );
+}
+
+function TextOnlyCardExample() {
+  return (
+    <div style={{ width: '100%', maxWidth: 190 }}>
+      <MediaCard
+        coverImage={null}
+        initials="FR"
+        fallback="none"
+        title="Sousou no Frieren"
+        titleHref="/series/frieren"
+        meta="2023 · 28 episodes"
+      />
+    </div>
+  );
+}
+
 function ResultListExample() {
   return (
     <div style={{ width: '100%', maxWidth: 390 }}>
@@ -222,6 +297,26 @@ export const MediaCardStory: Story = {
 export const MediaCardHorizontalStory: Story = {
   name: 'MediaCardHorizontal',
   render: () => <HorizontalCardExample />,
+};
+
+export const MediaCardLoadingStory: Story = {
+  name: 'MediaCardLoading',
+  render: () => <LoadingCardExample />,
+};
+
+export const MediaCardInteractiveStory: Story = {
+  name: 'MediaCardInteractive',
+  render: () => <InteractiveCardExample />,
+};
+
+export const MediaCardSelectedStory: Story = {
+  name: 'MediaCardSelected',
+  render: () => <SelectedCardExample />,
+};
+
+export const MediaCardTextOnlyStory: Story = {
+  name: 'MediaCardTextOnly',
+  render: () => <TextOnlyCardExample />,
 };
 
 export const ResultListStory: Story = {

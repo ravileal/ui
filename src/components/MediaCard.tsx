@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
-import MediaThumb, { type MediaThumbSize } from './MediaThumb';
+import { Card } from './Card';
+import MediaThumb, { type MediaThumbFallback, type MediaThumbSize } from './MediaThumb';
 
 export interface MediaCardTitleLinkProps {
   href: string;
@@ -20,6 +21,14 @@ export interface MediaCardProps {
   footer?: ReactNode;
   orientation?: MediaCardOrientation;
   thumbSize?: MediaThumbSize;
+  /** 'initials' (default) reserves the cover box; 'none' means text only, no cover slot. */
+  fallback?: MediaThumbFallback;
+  /** Hover lift and press-in, forwarded to the card base. */
+  interactive?: boolean;
+  /** Accent border and inset ring, forwarded to the card base. */
+  selected?: boolean;
+  /** Skeleton at the real height, forwarded to the card base. */
+  loading?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -30,6 +39,10 @@ const LEAD_LINK_CLASS = 'ui-media-card-lead is-link';
  * Cover + title card with an optional metadata line and footer. The card can be
  * a link, but the footer stays a sibling of that link: interactive controls
  * (a Switch, a button) must never be nested inside an anchor.
+ *
+ * The root is the kit's `Card`, so surface, border, radius and the
+ * interactive/selected/loading states all come from the base component; this
+ * component only lays out the cover, title, meta line and footer.
  */
 export default function MediaCard({
   coverImage,
@@ -41,6 +54,10 @@ export default function MediaCard({
   footer,
   orientation = 'vertical',
   thumbSize,
+  fallback = 'initials',
+  interactive,
+  selected,
+  loading,
   className,
   style,
 }: MediaCardProps) {
@@ -54,6 +71,7 @@ export default function MediaCard({
         alt=""
         initials={initials}
         size={resolvedThumbSize}
+        fallback={fallback}
       />
       <span className="ui-media-card-title">{title}</span>
     </>
@@ -73,7 +91,11 @@ export default function MediaCard({
   }
 
   return (
-    <div
+    <Card
+      padding="none"
+      interactive={interactive}
+      selected={selected}
+      loading={loading}
       className={['ui-media-card', `ui-media-card--${orientation}`, className ?? '']
         .filter(Boolean)
         .join(' ')}
@@ -84,6 +106,6 @@ export default function MediaCard({
       {lead}
       {meta && <p className="ui-media-card-meta">{meta}</p>}
       {footer && <div className="ui-media-card-footer">{footer}</div>}
-    </div>
+    </Card>
   );
 }

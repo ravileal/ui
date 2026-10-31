@@ -4249,3 +4249,50 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* --- 0.5.0: media card on the card base --- */
+
+/* The root is now the kit Card: it owns surface, border, radius and box-sizing,
+   and it wraps the children in .ui-card-content. The layout that used to live
+   on the root moves onto that content box, so every part keeps its class and
+   its place in the card. */
+.ui-media-card > .ui-card-content {
+  box-sizing: border-box;
+  display: grid;
+  min-width: 0;
+  gap: 10px;
+}
+
+/* Vertical keeps a flex column, so the footer can sit at the bottom of a cell
+   whose height the consumer stretches, and the content grows with the card. */
+.ui-media-card--vertical > .ui-card-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+/* Horizontal: the root holds a single child now, so the two-column grid moves
+   to the content instead of the root. */
+.ui-media-card--horizontal {
+  display: block;
+}
+.ui-media-card--horizontal > .ui-card-content {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'lead meta'
+    'lead footer';
+}
+
+/* The card clips its overflow, so the link ring has to sit inside the box. */
+.ui-media-card .ui-media-card-lead.is-link:focus-visible {
+  outline-offset: -2px;
+}
+
+/* fallback="none" with no cover: there is no thumb to provide the inner inset,
+   so the card pads the text itself and the skeleton follows the same inset. */
+.ui-media-card:not(:has(.ui-media-card-thumb)) > .ui-card-content {
+  padding: 12px;
+}
+.ui-media-card:not(:has(.ui-media-card-thumb)) .ui-card-skeleton {
+  padding: 12px;
+}
