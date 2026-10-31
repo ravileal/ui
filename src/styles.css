@@ -2460,6 +2460,269 @@
   line-height: 1;
 }
 
+/* --- Resizable columns --------------------------------------------------- */
+/* Fixed layout only for tables that opt in: a colgroup plus a hard width is
+   what makes a drag move one divider instead of re-flowing the whole grid.
+   Every other table keeps automatic layout. */
+.ui-data-table.is-resizable {
+  table-layout: fixed;
+}
+.ui-data-table.is-resizable th {
+  position: relative;
+}
+/* Fixed layout ignores intrinsic content width, so long unbroken strings have
+   to be allowed to wrap instead of spilling out of the cell. */
+.ui-data-table.is-resizable th,
+.ui-data-table.is-resizable td {
+  overflow-wrap: anywhere;
+}
+/* 8px hit area straddling the right border, with a 1px visual line so the
+   handle reads as a divider rather than an invisible hotspot. */
+.ui-data-table-resizer {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  bottom: 0;
+  z-index: 2;
+  width: 8px;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+}
+.ui-data-table-resizer::after {
+  content: '';
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  left: 50%;
+  width: 1px;
+  background: var(--ui-border);
+  transform: translateX(-50%);
+  transition: background 120ms ease;
+}
+.ui-data-table-resizer:hover::after,
+.ui-data-table-resizer:focus-visible::after,
+.ui-data-table-resizer.is-dragging::after {
+  background: var(--ui-accent);
+}
+.ui-data-table-resizer:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+/* --- Column menu --------------------------------------------------------- */
+/* The panel is anchored to the wrap, so the wrap becomes the containing box
+   only when the menu is actually rendered. */
+.ui-data-table-wrap.has-menu {
+  position: relative;
+}
+/* The menu cell and body spacer beat `.ui-data-table th/td` on specificity so
+   the narrow column keeps zero vertical padding. */
+.ui-data-table th.ui-data-table-menu-cell {
+  width: 40px;
+  padding: 0 6px;
+  text-align: right;
+}
+.ui-data-table-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--ui-text-2);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.ui-data-table-menu-trigger:hover,
+.ui-data-table-menu-trigger[data-state='open'] {
+  background: var(--ui-surface);
+  color: var(--ui-text);
+}
+.ui-data-table-menu-trigger:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 1px;
+}
+/* Scoped under the wrap on purpose: the panel only ever renders inside it, and
+   nesting keeps the wrap's inherited thin/themed scrollbar treatment applied
+   instead of minting a bare scroll container of its own. */
+.ui-data-table-wrap .ui-data-table-menu {
+  position: absolute;
+  top: 44px;
+  right: 8px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 240px;
+  max-height: min(320px, 60vh);
+  overflow: auto;
+  padding: 6px;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-lg);
+}
+
+.ui-data-table-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px;
+  border-radius: 8px;
+}
+.ui-data-table-menu-row:hover {
+  background: var(--ui-surface-2);
+}
+.ui-data-table-menu-check {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--ui-text);
+  font-size: 12px;
+  cursor: pointer;
+}
+.ui-data-table-menu-check input {
+  margin: 0;
+  accent-color: var(--ui-accent);
+  cursor: pointer;
+}
+.ui-data-table-menu-check input:disabled {
+  cursor: default;
+}
+.ui-data-table-menu-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-data-table-menu-move {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  background: var(--ui-surface-2);
+  color: var(--ui-text-2);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+.ui-data-table-menu-move:hover:not(:disabled) {
+  border-color: var(--ui-accent);
+  color: var(--ui-text);
+}
+.ui-data-table-menu-move:focus-visible,
+.ui-data-table-menu-reset:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 1px;
+}
+.ui-data-table-menu-move:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.ui-data-table-menu-reset {
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  background: var(--ui-surface-2);
+  color: var(--ui-text-2);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.ui-data-table-menu-reset:hover {
+  border-color: var(--ui-accent);
+  color: var(--ui-text);
+}
+/* Empty spacer that keeps body rows aligned with the extra header cell. */
+.ui-data-table td.ui-data-table-menu-gap {
+  padding: 0;
+}
+
+/* --- Pagination ---------------------------------------------------------- */
+.ui-data-table-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 6px 8px;
+  padding: 10px 4px 0;
+  color: var(--ui-text-2);
+  font-size: 12px;
+}
+.ui-data-table-page-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ui-data-table-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  background: var(--ui-surface-2);
+  color: var(--ui-text-2);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+.ui-data-table-page-btn:hover:not(:disabled) {
+  border-color: var(--ui-accent);
+  color: var(--ui-text);
+}
+.ui-data-table-page-btn:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 1px;
+}
+.ui-data-table-page-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.ui-data-table-page-status {
+  min-width: 96px;
+  color: var(--ui-text-2);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.ui-data-table-page-size {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ui-text-2);
+}
+.ui-data-table-page-size select {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  background: var(--ui-surface-2);
+  color: var(--ui-text);
+  font: inherit;
+  font-size: 12px;
+}
+.ui-data-table-page-size select:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 1px;
+}
+
 .ui-file-upload {
   display: flex;
   flex-direction: column;
@@ -3059,6 +3322,30 @@
   /* Rows stay actionable: press feedback replaces hover on touch. */
   .ui-data-table-wrap.is-stacked tbody tr.is-clickable:active {
     background: var(--ui-surface-2);
+  }
+  /* Resizers and the column menu are desktop-pointer affordances: a card has
+     one column strip per row, so column widths and order stop making sense. */
+  .ui-data-table-resizer,
+  .ui-data-table-menu-cell,
+  .ui-data-table-menu {
+    display: none;
+  }
+  /* The body spacer needs the stacked `td` rule's specificity to stay hidden,
+     otherwise every card grows an empty label/value row. */
+  .ui-data-table-wrap.is-stacked td.ui-data-table-menu-gap {
+    display: none;
+  }
+  /* ...and because the spacer is still the last child, the real last column
+     would keep its dashed divider. Only rows that carry the spacer change. */
+  .ui-data-table-wrap.is-stacked tbody tr:has(> td.ui-data-table-menu-gap) > td:nth-last-child(2) {
+    border-bottom: none;
+  }
+  /* Pagination stays usable on cards. The wrap loses its border and padding
+     here, so the nav carries its own spacing instead of the boxed values. */
+  .ui-data-table-pagination {
+    margin: 12px 0 0;
+    padding: 0;
+    font-size: 12px;
   }
 
   /* --- Page header ------------------------------------------------------- */

@@ -83,7 +83,15 @@ export { default as Combobox } from './components/Combobox';
 export type { ComboboxOption, ComboboxProps } from './components/Combobox';
 
 export { DataTable } from './components/DataTable';
-export type { DataTableColumn, DataTableProps, DataTableSort } from './components/DataTable';
+export type {
+  DataTableColumn,
+  DataTableColumnMenuLabels,
+  DataTableColumnSettings,
+  DataTablePagination,
+  DataTablePaginationLabels,
+  DataTableProps,
+  DataTableSort,
+} from './components/DataTable';
 
 export { Drawer, Sheet } from './components/Drawer';
 export type { DrawerProps } from './components/Drawer';

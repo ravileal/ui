@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from './Button';
 import Combobox from './Combobox';
-import { DataTable } from './DataTable';
+import { DataTable, type DataTableColumn } from './DataTable';
 import { Drawer } from './Drawer';
 import { FileUpload, type FileRejection } from './FileUpload';
 
@@ -90,6 +90,66 @@ function DataTableExample() {
   );
 }
 
+interface ControlsRow {
+  id: string;
+  item: string;
+  category: string;
+  owner: string;
+  amount: number;
+  updated: string;
+}
+
+const CONTROLS_ROWS: ControlsRow[] = Array.from({ length: 40 }, (_, index) => {
+  const categories = ['Food', 'Transport', 'Home', 'Leisure', 'Health'];
+  const owners = ['Ana', 'Bruno', 'Carla', 'Diego'];
+  return {
+    id: `row-${index + 1}`,
+    item: `Expense ${String(index + 1).padStart(2, '0')}`,
+    category: categories[index % categories.length],
+    owner: owners[index % owners.length],
+    amount: 18 + ((index * 37) % 420),
+    updated: `2026-03-${String((index % 28) + 1).padStart(2, '0')}`,
+  };
+});
+
+const CONTROLS_COLUMNS: DataTableColumn<ControlsRow>[] = [
+  { key: 'item', header: 'Item', width: 180, minWidth: 120 },
+  { key: 'category', header: 'Category', width: 140 },
+  { key: 'owner', header: 'Owner', width: 140 },
+  { key: 'amount', header: 'Amount', width: 110, align: 'right', minWidth: 90 },
+  { key: 'updated', header: 'Updated', width: 140 },
+];
+
+function DataTableControlsExample() {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const first = (page - 1) * pageSize;
+  const visible = CONTROLS_ROWS.slice(first, first + pageSize);
+
+  return (
+    <div style={{ width: 760 }}>
+      <DataTable
+        ariaLabel="Team spend"
+        columns={CONTROLS_COLUMNS}
+        rows={visible}
+        rowKey={(row) => row.id}
+        resizable
+        columnMenu
+        pagination={{
+          page,
+          pageSize,
+          total: CONTROLS_ROWS.length,
+          onPageChange: setPage,
+          onPageSizeChange: (size) => {
+            setPageSize(size);
+            setPage(1);
+          },
+        }}
+      />
+    </div>
+  );
+}
+
 function FileUploadExample() {
   const [files, setFiles] = useState<string[]>([]);
   const [rejections, setRejections] = useState<FileRejection[]>([]);
@@ -144,6 +204,10 @@ function FileUploadFreeExample() {
 export const ComboboxStory: Story = { name: 'Combobox', render: () => <ComboboxExample /> };
 export const DrawerStory: Story = { name: 'Drawer', render: () => <DrawerExample /> };
 export const Table: Story = { render: () => <DataTableExample /> };
+export const TableControls: Story = {
+  name: 'Table controls',
+  render: () => <DataTableControlsExample />,
+};
 export const Upload: Story = { render: () => <FileUploadExample /> };
 export const UploadFree: Story = {
   name: 'Upload (no restrictions)',
