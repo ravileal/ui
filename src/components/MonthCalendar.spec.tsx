@@ -97,4 +97,28 @@ describe('MonthCalendar', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Clear' }));
     expect(onChange).toHaveBeenCalledWith({ startDate: '', endDate: '' });
   });
+
+  it('previews the pending range on hover while awaiting the end date', async () => {
+    const { container } = render(
+      <MonthCalendar
+        mode="range"
+        startDate="2026-05-10"
+        endDate="2026-05-10"
+        initialMonth="2026-05"
+        onChange={() => {}}
+        formatRange={(start, end) => `${start} → ${end}`}
+      />,
+    );
+
+    expect(screen.getByText('2026-05-10 → 2026-05-10')).toBeInTheDocument();
+
+    await userEvent.hover(screen.getByRole('button', { name: '2026-05-14' }));
+    expect(screen.getByText('2026-05-10 → 2026-05-14')).toBeInTheDocument();
+    expect(container.querySelectorAll('.is-preview')).toHaveLength(4);
+    expect(screen.getByRole('button', { name: '2026-05-14' })).toHaveClass('is-preview-end');
+
+    await userEvent.unhover(screen.getByRole('button', { name: '2026-05-14' }));
+    expect(screen.getByText('2026-05-10 → 2026-05-10')).toBeInTheDocument();
+    expect(container.querySelectorAll('.is-preview')).toHaveLength(0);
+  });
 });

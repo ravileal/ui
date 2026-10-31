@@ -63,9 +63,12 @@ function FormModalExample() {
 }
 
 function RangeCalendarExample() {
-  const [range, setRange] = useState({ startDate: '2026-05-01', endDate: '2026-05-04' });
+  const [range, setRange] = useState({ startDate: '2026-05-11', endDate: '2026-05-11' });
   return (
     <div style={{ width: 640 }}>
+      <div style={{ color: 'var(--ui-text-3)', fontSize: 12, marginBottom: 8 }}>
+        Pick a day, then hover another to preview the range.
+      </div>
       <MonthCalendar
         mode="range"
         startDate={range.startDate}

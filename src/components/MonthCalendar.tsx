@@ -97,12 +97,15 @@ function chipColors(event: MonthCalendarEvent): { background: string; border: st
 export default function MonthCalendar(props: MonthCalendarProps) {
   const startDate = props.mode === 'range' ? props.startDate : '';
   const [view, setView] = useState(() => initialView(props.initialMonth, startDate));
+  const [hoverDate, setHoverDate] = useState('');
 
-  const shiftMonth = (delta: number) =>
+  const shiftMonth = (delta: number) => {
+    setHoverDate('');
     setView((current) => {
       const next = new Date(current.year, current.month + delta, 1);
       return { year: next.getFullYear(), month: next.getMonth() };
     });
+  };
 
   const cells = buildMonthGrid(view.year, view.month);
   const todayISO = toISO(new Date());
@@ -111,6 +114,18 @@ export default function MonthCalendar(props: MonthCalendarProps) {
   const monthLabel = props.monthLabel ?? monthGridLabel;
   const labels = props.labels ?? {};
   const maxDayChips = props.maxDayChips ?? MAX_DAY_CHIPS;
+
+  // A preview only exists while waiting for the end of the range: the picked
+  // start already equals the end, so a click elsewhere would extend it.
+  const awaitingRangeEnd =
+    props.mode === 'range' && props.startDate !== '' && props.startDate === props.endDate;
+  const previewActive = awaitingRangeEnd && hoverDate !== '' && hoverDate !== startDate;
+  const previewStart = previewActive
+    ? hoverDate < startDate
+      ? hoverDate
+      : startDate
+    : '';
+  const previewEnd = previewActive ? (hoverDate < startDate ? startDate : hoverDate) : '';
 
   function pickDay(iso: string) {
     if (props.mode === 'range') {
@@ -192,7 +207,7 @@ export default function MonthCalendar(props: MonthCalendarProps) {
         </span>
       </div>
 
-      <div className="ui-month-calendar-grid">
+      <div className="ui-month-calendar-grid" onMouseLeave={() => setHoverDate('')}>
         {weekdayLabels.map((weekday, index) => (
           <span key={`${weekday}-${index}`} className="ui-month-calendar-weekday">
             {weekday}
@@ -208,14 +223,21 @@ export default function MonthCalendar(props: MonthCalendarProps) {
             isWithinRange(iso, props.startDate, props.endDate || props.startDate);
           const isStart = props.mode === 'range' && props.startDate === iso;
           const isEnd = props.mode === 'range' && props.endDate === iso;
+          // The picked start keeps its committed look; the pending span is the
+          // rest of the preview range.
+          const isPreview =
+            previewActive && iso !== startDate && isWithinRange(iso, previewStart, previewEnd);
+          const isPreviewEnd = isPreview && iso === hoverDate;
 
           const cellClass = [
             'ui-month-calendar-cell',
             isOutside ? 'is-out' : '',
             isToday ? 'is-today' : '',
-            inRange ? 'is-in-range' : '',
+            inRange || isPreview ? 'is-in-range' : '',
             isStart ? 'is-range-start' : '',
             isEnd ? 'is-range-end' : '',
+            isPreview ? 'is-preview' : '',
+            isPreviewEnd ? 'is-preview-end' : '',
           ]
             .filter(Boolean)
             .join(' ');
@@ -229,6 +251,13 @@ export default function MonthCalendar(props: MonthCalendarProps) {
                 className={cellClass}
                 onClick={() => pickDay(iso)}
                 onKeyDown={(event) => onDayKeyDown(event, iso)}
+                onMouseEnter={() => {
+                  if (props.mode === 'range') setHoverDate(iso);
+                }}
+                onFocus={() => {
+                  if (props.mode === 'range') setHoverDate(iso);
+                }}
+                onBlur={() => setHoverDate('')}
               >
                 <span className="ui-month-calendar-daynum">{cell.getDate()}</span>
                 {props.mode === 'view' && dayEvents.length > 0 && renderChips(dayEvents)}
@@ -241,9 +270,11 @@ export default function MonthCalendar(props: MonthCalendarProps) {
       {props.mode === 'range' && (
         <div className="ui-month-calendar-foot">
           <span className="ui-month-calendar-range-label">
-            {props.startDate
-              ? formatRange(props.startDate, props.endDate || props.startDate)
-              : (labels.selectStart ?? 'Select a start date')}
+            {previewActive
+              ? formatRange(previewStart, previewEnd)
+              : props.startDate
+                ? formatRange(props.startDate, props.endDate || props.startDate)
+                : (labels.selectStart ?? 'Select a start date')}
           </span>
           <button
             type="button"
