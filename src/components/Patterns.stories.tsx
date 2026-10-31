@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import BulkActionBar from './BulkActionBar';
 import Button from './Button';
@@ -93,37 +93,72 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { id: 'settings', label: 'Settings', icon: <span>⚙</span> },
 ];
 
+const SIDEBAR_COMPACT_BREAKPOINT = 640;
+
+/** Mirrors the sidebar breakpoint so the story only shows the drawer trigger when needed. */
+function useCompactViewport(breakpoint: number): boolean {
+  const query = `(max-width: ${breakpoint}px)`;
+  const [matches, setMatches] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const list = window.matchMedia(query);
+    const onChange = (event: MediaQueryListEvent) => setMatches(event.matches);
+    list.addEventListener('change', onChange);
+    return () => list.removeEventListener('change', onChange);
+  }, [query]);
+
+  return matches;
+}
+
 function SidebarExample() {
   const [activeId, setActiveId] = useState('transactions');
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const isCompact = useCompactViewport(SIDEBAR_COMPACT_BREAKPOINT);
   return (
-    <div style={{ display: 'flex', height: 560, overflow: 'hidden', borderRadius: 12 }}>
-      <Sidebar
-        items={SIDEBAR_ITEMS}
-        activeId={activeId}
-        onSelect={setActiveId}
-        collapsed={collapsed}
-        onToggle={() => setCollapsed((current) => !current)}
-        brand={{ icon: <span>◆</span>, title: 'CoupleFinance', subtitle: 'Ravi & Keri' }}
-        footer={(isCollapsed) => (
-          <span style={{ color: 'var(--ui-text-2)', fontSize: 12 }}>
-            {isCollapsed ? '◐' : 'Footer slot'}
-          </span>
-        )}
-        style={{ height: 560, minHeight: 560 }}
-      />
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'var(--ui-bg)',
-          color: 'var(--ui-text-2)',
-          fontSize: 13,
-        }}
-      >
-        Active: {activeId}
+    <div>
+      {/* Only the overlay drawer needs a trigger: on desktop the sidebar stays in the flow. */}
+      {isCompact && (
+        <div style={{ marginBottom: 12 }}>
+          <Button size="sm" variant="secondary" onClick={() => setMobileOpen(true)}>
+            ☰ Open menu
+          </Button>
+        </div>
+      )}
+      <div style={{ display: 'flex', height: 560, overflow: 'hidden', borderRadius: 12 }}>
+        <Sidebar
+          items={SIDEBAR_ITEMS}
+          activeId={activeId}
+          onSelect={setActiveId}
+          collapsed={collapsed}
+          onToggle={() => setCollapsed((current) => !current)}
+          mobileOpen={mobileOpen}
+          onMobileClose={() => setMobileOpen(false)}
+          compactBreakpoint={SIDEBAR_COMPACT_BREAKPOINT}
+          brand={{ icon: <span>◆</span>, title: 'CoupleFinance', subtitle: 'Ravi & Keri' }}
+          footer={(isCollapsed) => (
+            <span style={{ color: 'var(--ui-text-2)', fontSize: 12 }}>
+              {isCollapsed ? '◐' : 'Footer slot'}
+            </span>
+          )}
+          style={{ height: 560, minHeight: 560 }}
+        />
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'var(--ui-bg)',
+            color: 'var(--ui-text-2)',
+            fontSize: 13,
+          }}
+        >
+          Active: {activeId}
+        </div>
       </div>
     </div>
   );

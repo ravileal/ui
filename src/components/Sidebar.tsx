@@ -118,10 +118,28 @@ export default function Sidebar({
 }: SidebarProps) {
   const generatedId = useId();
   const isCompact = useIsCompact(compactBreakpoint);
-  const isOpen = mobileOpen ?? !collapsed;
+  // A controlled drawer (`mobileOpen` provided) fully owns its state. Otherwise the
+  // drawer keeps its own copy, so the backdrop and the close button can dismiss it
+  // even when the consumer passes no `onMobileClose`.
+  const isControlled = mobileOpen !== undefined;
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(!collapsed);
+  const isOpen = isControlled ? (mobileOpen as boolean) : uncontrolledOpen;
   // `rail` is the desktop collapsed state; the drawer always renders expanded.
   const rail = !isCompact && collapsed;
   const drawerOpen = isCompact && isOpen;
+
+  // Closing always notifies the consumer; only an uncontrolled drawer moves itself.
+  const requestClose = useCallback(() => {
+    if (!isControlled) setUncontrolledOpen(false);
+    onMobileClose?.();
+  }, [isControlled, onMobileClose]);
+
+  // There is no `onMobileOpen` prop: a controlled drawer reports the intent through
+  // `onToggle`, an uncontrolled one simply opens itself.
+  const requestOpen = useCallback(() => {
+    if (isControlled) onToggle();
+    else setUncontrolledOpen(true);
+  }, [isControlled, onToggle]);
 
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
@@ -146,11 +164,11 @@ export default function Sidebar({
   useEffect(() => {
     if (!drawerOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onMobileClose?.();
+      if (event.key === 'Escape') requestClose();
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [drawerOpen, onMobileClose]);
+  }, [drawerOpen, requestClose]);
 
   // Lock page scroll while the drawer is open, restoring the previous value.
   useEffect(() => {
@@ -174,13 +192,13 @@ export default function Sidebar({
 
   const select = (id: string) => {
     onSelect(id);
-    if (isCompact) onMobileClose?.();
+    if (isCompact) requestClose();
   };
 
   const handleToggleClick = () => {
     if (isCompact) {
-      if (isOpen) onMobileClose?.();
-      else onToggle();
+      if (isOpen) requestClose();
+      else requestOpen();
       return;
     }
     onToggle();
@@ -192,7 +210,7 @@ export default function Sidebar({
   return (
     <>
       {drawerOpen && (
-        <div className="ui-sidebar-backdrop" aria-hidden="true" onClick={onMobileClose} />
+        <div className="ui-sidebar-backdrop" aria-hidden="true" onClick={requestClose} />
       )}
       <nav
         aria-label={ariaLabel}

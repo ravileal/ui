@@ -228,6 +228,82 @@ describe('Sidebar', () => {
       expect(screen.getByRole('navigation', { name: 'Main navigation' })).toHaveClass('is-open');
     });
 
+    it('closes an uncontrolled drawer from the backdrop without onMobileClose', async () => {
+      setViewportWidth(MOBILE_WIDTH);
+      render(
+        <Sidebar
+          items={items}
+          activeId="dashboard"
+          onSelect={vi.fn()}
+          collapsed={false}
+          onToggle={vi.fn()}
+        />,
+      );
+
+      const nav = screen.getByRole('navigation', { name: 'Main navigation' });
+      expect(nav).toHaveClass('is-compact');
+      expect(nav).toHaveClass('is-open');
+      const overlay = backdrop();
+      expect(overlay).not.toBeNull();
+
+      await userEvent.click(overlay as Element);
+      expect(nav).not.toHaveClass('is-open');
+      expect(backdrop()).toBeNull();
+      expect(document.body.style.overflow).toBe('');
+    });
+
+    it('closes and reopens an uncontrolled drawer from the × toggle button', async () => {
+      setViewportWidth(MOBILE_WIDTH);
+      const onToggle = vi.fn();
+      render(
+        <Sidebar
+          items={items}
+          activeId="dashboard"
+          onSelect={vi.fn()}
+          collapsed={false}
+          onToggle={onToggle}
+        />,
+      );
+
+      const nav = screen.getByRole('navigation', { name: 'Main navigation' });
+      expect(nav).toHaveClass('is-open');
+
+      await userEvent.click(screen.getByRole('button', { name: 'Close navigation' }));
+      expect(nav).not.toHaveClass('is-open');
+      expect(backdrop()).toBeNull();
+
+      await userEvent.click(screen.getByRole('button', { name: 'Close navigation' }));
+      expect(nav).toHaveClass('is-open');
+      expect(backdrop()).not.toBeNull();
+      // The desktop collapse callback is never used to drive the drawer.
+      expect(onToggle).not.toHaveBeenCalled();
+    });
+
+    it('lets a controlled drawer win over the internal state', async () => {
+      setViewportWidth(MOBILE_WIDTH);
+      const onMobileClose = vi.fn();
+      render(
+        <Sidebar
+          items={items}
+          activeId="dashboard"
+          onSelect={vi.fn()}
+          collapsed={false}
+          mobileOpen={false}
+          onMobileClose={onMobileClose}
+          onToggle={vi.fn()}
+        />,
+      );
+
+      const nav = screen.getByRole('navigation', { name: 'Main navigation' });
+      expect(nav).not.toHaveClass('is-open');
+      expect(backdrop()).toBeNull();
+
+      await userEvent.click(screen.getByRole('button', { name: 'Close navigation' }));
+      expect(nav).not.toHaveClass('is-open');
+      expect(backdrop()).toBeNull();
+      expect(onMobileClose).not.toHaveBeenCalled();
+    });
+
     it('opens full-width labels and a backdrop that closes the drawer', async () => {
       setViewportWidth(MOBILE_WIDTH);
       const onMobileClose = vi.fn();
