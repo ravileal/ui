@@ -22,8 +22,9 @@ export interface SplitButtonProps {
 
 /**
  * Primary action plus a caret menu, visually joined into one control. The caret
- * keeps the same variant/size tokens as the main Button and the menu uses the
- * standard DropdownMenu item styling.
+ * keeps the same variant/size tokens as the main Button, and the menu surface
+ * grows out of the button: no gap, no border between the halves, and item rows
+ * that reuse the main button's background for the current variant.
  */
 export default function SplitButton({
   label,

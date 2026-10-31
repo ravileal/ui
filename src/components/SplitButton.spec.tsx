@@ -50,4 +50,32 @@ describe('SplitButton', () => {
 
     expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
   });
+
+  it('renders the opened menu inside the split button so it stays attached', async () => {
+    render(
+      <SplitButton
+        label="Add"
+        onPrimary={vi.fn()}
+        ariaLabel="More add options"
+        items={[
+          { id: 'manual', label: 'Add manually' },
+          { id: 'template', label: 'Add from template' },
+        ]}
+      />,
+    );
+
+    const trigger = screen.getByRole('button', { name: 'More add options' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    await userEvent.click(trigger);
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    const menu = screen.getByRole('menu');
+    expect(menu).toHaveClass('ui-menu-list');
+    // The list must live inside the split button and inside the caret's
+    // .ui-menu wrapper: that nesting is what the flush-menu CSS targets.
+    expect(menu.closest('.ui-split-button')).not.toBeNull();
+    expect(menu.closest('.ui-menu')).toBe(trigger.parentElement);
+    expect(screen.getAllByRole('menuitem')).toHaveLength(2);
+  });
 });

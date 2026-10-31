@@ -44,6 +44,7 @@ export const SplitButtons: Story = {
         ariaLabel="More add options"
         items={[
           { id: 'manual', label: 'Add manually', icon: <span aria-hidden="true">✎</span> },
+          { id: 'template', label: 'Add from template' },
         ]}
       />
       <SplitButton
