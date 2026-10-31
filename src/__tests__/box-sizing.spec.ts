@@ -75,6 +75,7 @@ const boxedPrimitives = [
   'ui-card',
   'ui-input-wrap',
   'ui-input',
+  'ui-regex-tester',
   'ui-textarea',
   'ui-select',
   'ui-modal',

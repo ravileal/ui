@@ -828,6 +828,34 @@
     color: var(--ui-text);
   }
 }
+
+/* --------------------------------------------------------------------------
+   RegexField sample tester
+   The tester is the only full-width field that sits directly in the card flow,
+   so it carries its own width contract instead of inheriting one from the
+   surrounding layout: block and field are both clamped to the card content box,
+   which keeps the sample input inside the card padding and out of the
+   horizontal overflow the block used to produce when the surrounding sheet
+   relied on the default content-box model.
+   -------------------------------------------------------------------------- */
+.ui-regex-tester {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ui-border);
+}
+.ui-regex-tester .ui-input-wrap {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
 .ui-textarea {
   box-sizing: border-box;
   width: 100%;

@@ -251,16 +251,7 @@ export default function RegexField({
       </div>
 
       {showTester && (
-        <div
-          style={{
-            marginTop: 8,
-            borderTop: '1px solid var(--ui-border)',
-            paddingTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 6,
-          }}
-        >
+        <div className="ui-regex-tester">
           <TextInput
             aria-label={`${ariaLabel ?? (typeof label === 'string' ? label : 'Regex')} sample`}
             value={testInput}

@@ -156,6 +156,40 @@ describe('RegexField', () => {
     expect(screen.getByText('Não casou')).toBeInTheDocument();
   });
 
+  it('keeps the sample field inside the card tester block', async () => {
+    render(
+      <RegexField
+        label="Amount pattern"
+        value={'(?<amount>\\d+)'}
+        sampleText="MERCADO XYZ R$ 120,00"
+        onChange={vi.fn()}
+      />,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Testar linha' }));
+
+    const patternField = screen.getByRole('textbox', { name: 'Amount pattern' });
+    const sampleField = screen.getByRole('textbox', { name: 'Amount pattern sample' });
+    const tester = sampleField.closest('.ui-regex-tester');
+
+    // The sample field reuses the same wrapper contract as every other field,
+    // so it inherits the same padding and border-box sizing.
+    expect(sampleField.closest('.ui-input-wrap')).toHaveClass('ui-input-wrap', 'ui-input-wrap--md');
+    expect(sampleField.closest('.ui-input-wrap')).toHaveClass(
+      ...String(patternField.closest('.ui-input-wrap')?.className).split(' '),
+    );
+
+    // Both fields live inside the same card element: the tester is a child of
+    // the card, not a sibling that escapes its padding.
+    expect(tester).not.toBeNull();
+    const card = tester?.parentElement;
+    expect(card).toContainElement(patternField);
+    expect(card).toContainElement(sampleField);
+    expect(
+      screen.getByRole('textbox', { name: 'Amount pattern' }).closest('.ui-regex-tester'),
+    ).toBeNull();
+  });
+
   it('disables the input and the flag buttons', async () => {
     const onChange = vi.fn();
     const onFlagsChange = vi.fn();
