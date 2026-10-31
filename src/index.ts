@@ -207,7 +207,7 @@ export { default as VisuallyHidden } from './components/VisuallyHidden';
 export type { VisuallyHiddenProps } from './components/VisuallyHidden';
 
 export { default as MediaThumb } from './components/MediaThumb';
-export type { MediaThumbProps, MediaThumbSize } from './components/MediaThumb';
+export type { MediaThumbFallback, MediaThumbProps, MediaThumbSize } from './components/MediaThumb';
 
 export { default as MediaCard } from './components/MediaCard';
 export type {
@@ -215,6 +215,21 @@ export type {
   MediaCardProps,
   MediaCardTitleLinkProps,
 } from './components/MediaCard';
+
+export { default as Item } from './components/Item';
+export type {
+  ItemLinkRenderProps,
+  ItemMedia,
+  ItemMediaPosition,
+  ItemProps,
+  ItemSize,
+} from './components/Item';
+
+export { ItemGrid } from './components/ItemGrid';
+export type { ItemGridLayout, ItemGridProps } from './components/ItemGrid';
+
+export { ViewSwitcher } from './components/ViewSwitcher';
+export type { ViewSwitcherProps } from './components/ViewSwitcher';
 
 export { ResultList, ResultRow } from './components/ResultList';
 export type { ResultListProps, ResultRowMedia, ResultRowProps } from './components/ResultList';

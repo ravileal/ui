@@ -1,6 +1,6 @@
-import type { CSSProperties, ReactElement, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import MediaThumb, { type MediaThumbSize } from './MediaThumb';
-import { Card, type CardProps } from './Card';
+import { Card } from './Card';
 
 export type ItemSize = 'sm' | 'md' | 'lg';
 export type ItemMediaPosition = 'start' | 'top';
@@ -42,19 +42,6 @@ export interface ItemProps {
   className?: string;
   style?: CSSProperties;
 }
-
-/**
- * Card gains `interactive`, `selected` and `loading` in the 0.5.0 contract,
- * which lands from a parallel stream. The narrowed type keeps this branch
- * compiling before that merge; the props are additive, so the cast stays
- * valid once the base component ships them.
- */
-type ItemCardProps = CardProps & {
-  interactive?: boolean;
-  selected?: boolean;
-  loading?: boolean;
-};
-const ItemCard = Card as (props: ItemCardProps) => ReactElement;
 
 const LEAD_CLASS = 'ui-item-lead';
 const LEAD_LINK_CLASS = 'ui-item-lead is-link';
@@ -124,7 +111,7 @@ export default function Item({
   }
 
   return (
-    <ItemCard
+    <Card
       padding="none"
       interactive={interactive}
       selected={selected}
@@ -140,6 +127,6 @@ export default function Item({
         {actions && <div className="ui-item-actions">{actions}</div>}
       </div>
       {footer && <div className="ui-item-footer">{footer}</div>}
-    </ItemCard>
+    </Card>
   );
 }

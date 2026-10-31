@@ -145,6 +145,7 @@ export function Example() {
 **Layout and navigation**
 
 - `Card`, `CardHeader`, `CardBody`, `CardFooter`, `Section`
+- `Item`, `ItemGrid`, `ViewSwitcher`
 - `EmptyState`
 - `PageHeader`
 - `ListScreen`, `ListCard`, `ListRow`, `ListSearch`, `ListEmptyState`
@@ -192,8 +193,16 @@ no dead gutter, while `md` matches the field width; `invalid` paints the error
 border and sets `aria-invalid`; `menuMaxHeight` caps the option list. The list
 renders in a portal, so no ancestor `overflow: hidden` clips it.
 
+`Card` stays a plain panel unless you ask for more: `interactive` adds the hover
+lift, the press-in and a focus ring for a card that holds a control, `selected`
+paints the accent ring on its own, and `loading` swaps the visible content for a
+shimmer skeleton that keeps the exact height of the real content and sets
+`aria-busy`, so a grid of loading cards does not jump when the data arrives.
+
 `MediaThumb` renders a cover with an initials fallback and remembers a failed
-URL per source, so a new `src` gets a fresh attempt. `MediaCard` puts that
+URL per source, so a new `src` gets a fresh attempt. `initials` is the default
+fallback; `fallback="none"` renders nothing when there is no usable image — no
+box and no reserved aspect ratio — so an item can be text only. `MediaCard` puts that
 thumbnail next to a title, an optional metadata line and a footer; pass
 `titleHref` plus `renderTitleLink` to render the cover and title as your own
 router link, and know that the footer stays a sibling of that anchor — a
@@ -205,6 +214,17 @@ numeric input for score weights and episode counts: it keeps the typed text
 locally so an empty field and a lone minus stay editable and emits the parsed,
 clamped number, and it uses `type="text"` with `inputMode` because a native
 number input drops the leading minus as you type.
+
+`Item` is the card as an item: the optional media sits beside the text
+(`mediaPosition="start"`) or above it (`"top"`), and `size` (`sm`, `md`, `lg`)
+drives the title, the padding and the thumb. `actions` and `footer` stay outside
+the anchor, so a control inside the card is always reachable, and `interactive`,
+`selected` and `loading` are forwarded straight to `Card`. `ItemGrid` lays those
+items out as `grid` (equal columns that fill every cell), `list`, or `adaptive`
+(any item width, from `minColumnWidth`), and takes `columns`, `gap`, a `loading`
+state that renders skeleton cells and an `empty` slot for no items.
+`ViewSwitcher` is the layout menu built on `SegmentedControl`; pass a
+`storageKey` and it remembers the last choice in localStorage.
 
 `AppShell` is the frame around a screen: it lays out the sidebar, a `<main>`
 column and an overlay `aside` slot (chat launcher, FAB) for a whole viewport.
