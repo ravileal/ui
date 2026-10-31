@@ -3312,3 +3312,292 @@
     padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* --------------------------------------------------------------------------
+   Media card, thumbnail, result list, metadata line and numeric field
+   -------------------------------------------------------------------------- */
+
+.ui-media-thumb {
+  box-sizing: border-box;
+  position: relative;
+  flex-shrink: 0;
+  /* The size classes only set the custom property, so a consumer (and the
+     vertical MediaCard, which stretches the cover to the full card width)
+     can override the width without fighting a `width` declaration. */
+  width: var(--ui-media-thumb-width, 100%);
+  aspect-ratio: var(--ui-media-thumb-ratio, 2 / 3);
+  border-radius: var(--ui-media-thumb-radius, 10px);
+  overflow: hidden;
+  background: var(--ui-surface-2);
+}
+.ui-media-thumb--xs {
+  --ui-media-thumb-width: 32px;
+  --ui-media-thumb-radius: 4px;
+}
+.ui-media-thumb--sm {
+  --ui-media-thumb-width: 48px;
+  --ui-media-thumb-radius: 6px;
+}
+.ui-media-thumb--md {
+  --ui-media-thumb-width: 96px;
+  --ui-media-thumb-radius: 10px;
+}
+.ui-media-thumb-img {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ui-media-thumb-fallback {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  color: var(--ui-text-3);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-align: center;
+  line-height: 1.1;
+}
+.ui-media-thumb--md .ui-media-thumb-fallback {
+  font-size: 26px;
+}
+.ui-media-thumb--sm .ui-media-thumb-fallback {
+  font-size: 15px;
+}
+
+.ui-media-card {
+  box-sizing: border-box;
+  display: grid;
+  min-width: 0;
+  gap: 10px;
+}
+.ui-media-card--vertical {
+  /* Flex, not grid, for the vertical card: the footer has to sit at the bottom
+     of a cell whose height the consumer stretches (a library grid), which
+     `margin-top: auto` does inside a flex column and does not do inside
+     auto-sized grid tracks. */
+  display: flex;
+  flex-direction: column;
+}
+.ui-media-card--horizontal {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'lead meta'
+    'lead footer';
+}
+.ui-media-card-lead {
+  box-sizing: border-box;
+  grid-area: lead;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+.ui-media-card--horizontal .ui-media-card-lead {
+  flex-direction: row;
+  gap: 12px;
+}
+.ui-media-card-lead.is-link {
+  cursor: pointer;
+}
+.ui-media-card-lead.is-link:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+.ui-media-card-thumb {
+  align-self: flex-start;
+}
+/* The vertical card uses the cover as a full-width poster (2/3 by default), so
+   the size class only matters for horizontal cards and standalone thumbs. */
+.ui-media-card--vertical .ui-media-thumb {
+  --ui-media-thumb-width: 100%;
+}
+.ui-media-card-title {
+  box-sizing: border-box;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--ui-text);
+  overflow-wrap: anywhere;
+}
+.ui-media-card-meta {
+  box-sizing: border-box;
+  grid-area: meta;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  color: var(--ui-text-3);
+}
+.ui-media-card-footer {
+  box-sizing: border-box;
+  grid-area: footer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding-top: 2px;
+}
+.ui-media-card--vertical .ui-media-card-footer {
+  margin-top: auto;
+}
+
+.ui-result-list {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ui-result-row {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  background: var(--ui-surface-2);
+  list-style: none;
+}
+.ui-result-row.is-clickable {
+  cursor: pointer;
+}
+.ui-result-row.is-clickable:hover {
+  background: var(--ui-surface);
+}
+.ui-result-row:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+.ui-result-row-media {
+  box-sizing: border-box;
+  display: flex;
+  flex-shrink: 0;
+}
+.ui-result-row-text {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ui-result-row-primary {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-text);
+}
+.ui-result-row-secondary {
+  min-width: 0;
+  font-size: 12px;
+  color: var(--ui-text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-result-row-meta {
+  min-width: 0;
+  font-size: 12px;
+  color: var(--ui-text-2);
+}
+.ui-result-row-action {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.ui-result-list-empty {
+  box-sizing: border-box;
+  padding: 12px 4px;
+  font-size: 13px;
+  color: var(--ui-text-3);
+  list-style: none;
+}
+
+.ui-meta-list {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ui-meta-list-item {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+}
+.ui-meta-list-label {
+  font-size: 12px;
+  color: var(--ui-text-3);
+}
+.ui-meta-list-value {
+  font-size: 12px;
+  color: var(--ui-text-2);
+}
+.ui-meta-list-value--muted {
+  color: var(--ui-text-3);
+}
+.ui-meta-list-value--danger {
+  color: var(--ui-red);
+}
+.ui-meta-list-value--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  overflow-wrap: anywhere;
+}
+.ui-meta-list--separator .ui-meta-list-item + .ui-meta-list-item::before {
+  content: '·';
+  margin-right: 8px;
+  color: var(--ui-text-3);
+  white-space: nowrap;
+}
+
+.ui-number-field {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+/* The control keeps its width and the label yields: in a two-column form at
+   390px the label is the only part that can shrink, and it ellipsises instead
+   of pushing the input past the row edge. */
+.ui-number-field-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--ui-text-3);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-number-field-control {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.ui-number-field-control .ui-input {
+  text-align: right;
+}
+/* With the label out of flow (`.ui-visually-hidden`) there is a single flex
+   item, and `space-between` would park it on the left; align it with the other
+   fields' inputs instead. */
+.ui-number-field--label-hidden {
+  justify-content: flex-end;
+}

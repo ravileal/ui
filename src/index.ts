@@ -195,4 +195,23 @@ export type { ToastApi, ToastOptions, ToastProviderProps, ToastTone } from './co
 export { default as VisuallyHidden } from './components/VisuallyHidden';
 export type { VisuallyHiddenProps } from './components/VisuallyHidden';
 
+export { default as MediaThumb } from './components/MediaThumb';
+export type { MediaThumbProps, MediaThumbSize } from './components/MediaThumb';
+
+export { default as MediaCard } from './components/MediaCard';
+export type {
+  MediaCardOrientation,
+  MediaCardProps,
+  MediaCardTitleLinkProps,
+} from './components/MediaCard';
+
+export { ResultList, ResultRow } from './components/ResultList';
+export type { ResultListProps, ResultRowMedia, ResultRowProps } from './components/ResultList';
+
+export { default as MetaList } from './components/MetaList';
+export type { MetaListItem, MetaListProps, MetaListTone } from './components/MetaList';
+
+export { default as NumberField } from './components/NumberField';
+export type { NumberFieldProps } from './components/NumberField';
+
 export type { Tone } from './internal/tone';
