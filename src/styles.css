@@ -2536,6 +2536,116 @@
   min-height: 100dvh;
 }
 
+/* Application shell: one viewport-height flex row holding the sidebar, the
+   main column and the overlay slot. The shell owns the frame only — screens
+   below it keep their own scroll region, which is why the main/content boxes
+   clip instead of scrolling. `100vh` first is the fallback for engines without
+   `dvh`. */
+.ui-app-shell {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--ui-bg);
+}
+
+.ui-app-shell-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ui-app-shell-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Overlay slot (chat launcher, FAB): a sibling of the main column so it is
+   never clipped by, or scrolled with, the screen content. */
+.ui-app-shell-aside {
+  flex-shrink: 0;
+}
+
+.ui-app-bar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  padding-top: max(10px, env(safe-area-inset-top, 0px));
+  background: var(--ui-surface);
+  border-bottom: 1px solid var(--ui-border);
+}
+
+/* The single way back to the navigation once the drawer closes. */
+.ui-app-bar-nav {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  background: var(--ui-surface-2);
+  color: var(--ui-text);
+  cursor: pointer;
+}
+.ui-app-bar-nav:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+
+/* `min-width: 0` lets the copy block shrink below its content, which is what
+   makes the ellipsis below reachable. */
+.ui-app-bar-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-app-bar-title {
+  overflow: hidden;
+  color: var(--ui-text);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ui-app-bar-subtitle {
+  overflow: hidden;
+  margin-top: 1px;
+  color: var(--ui-text-3);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ui-app-bar-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sticky keeps the trigger reachable while a screen scrolls underneath it;
+   the z-index clears scrolling content but stays below overlays (drawer 60,
+   modal 100). */
+.ui-app-bar.is-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
 /* --------------------------------------------------------------------------
    Tablet (<= 900px)
    -------------------------------------------------------------------------- */
@@ -2909,5 +3019,32 @@
 @media (max-width: 640px) and (prefers-reduced-motion: reduce) {
   .ui-sidebar.is-compact {
     transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Application shell on mobile
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  /* 44px touch target: the trigger is the only way back into the drawer, so it
+     matches the other mobile controls rather than the 40px desktop box. */
+  .ui-app-bar-nav {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* The bar keeps its safe-area top padding (declared in the structural rules)
+     so the copy does not sit under a notch or a status bar overlay. */
+  .ui-app-bar {
+    padding-top: max(10px, env(safe-area-inset-top, 0px));
+  }
+
+  /* The home-indicator inset goes on the main column, not on the content box:
+     screens like ListScreen already own their scroll and pad themselves, so
+     padding the content would double the gap inside the scroll area while
+     leaving the column edge uncovered. `max()` keeps the value at 0 where the
+     inset is unsupported or absent. */
+  .ui-app-shell-main {
+    padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
   }
 }

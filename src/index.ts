@@ -136,6 +136,9 @@ export type {
   MonthCalendarViewProps,
 } from './components/MonthCalendar';
 
+export { default as AppShell, AppBar } from './components/AppShell';
+export type { AppBarProps, AppShellDrawerState, AppShellProps } from './components/AppShell';
+
 export { default as Sidebar } from './components/Sidebar';
 export type { SidebarBrand, SidebarItem, SidebarProps } from './components/Sidebar';
 

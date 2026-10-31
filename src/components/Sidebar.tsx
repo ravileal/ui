@@ -1,12 +1,5 @@
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useState,
-  useSyncExternalStore,
-  type CSSProperties,
-  type ReactNode,
-} from 'react';
+import { useCallback, useEffect, useId, useState, type CSSProperties, type ReactNode } from 'react';
+import { DEFAULT_COMPACT_BREAKPOINT, useIsCompact } from '../internal/useIsCompact';
 
 export interface SidebarItem {
   id: string;
@@ -54,37 +47,10 @@ export interface SidebarProps {
 
 const DEFAULT_WIDTH = 220;
 const DEFAULT_COLLAPSED_WIDTH = 64;
-const DEFAULT_COMPACT_BREAKPOINT = 640;
 const DEFAULT_CLOSE_LABEL = 'Close navigation';
 
 function isItemActive(item: SidebarItem, activeId: string): boolean {
   return item.id === activeId || Boolean(item.children?.some((child) => child.id === activeId));
-}
-
-function getMatchMedia(breakpoint: number): MediaQueryList | null {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return null;
-  return window.matchMedia(`(max-width: ${breakpoint}px)`);
-}
-
-/**
- * Tracks whether the viewport is narrower than `breakpoint` using
- * `useSyncExternalStore`, so SSR and hydration use a stable `false` snapshot.
- */
-function useIsCompact(breakpoint: number): boolean {
-  const subscribe = useCallback(
-    (onStoreChange: () => void) => {
-      const query = getMatchMedia(breakpoint);
-      if (!query) return () => {};
-      query.addEventListener('change', onStoreChange);
-      return () => query.removeEventListener('change', onStoreChange);
-    },
-    [breakpoint],
-  );
-
-  const getSnapshot = useCallback(() => getMatchMedia(breakpoint)?.matches ?? false, [breakpoint]);
-  const getServerSnapshot = useCallback(() => false, []);
-
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
 /**

@@ -141,6 +141,7 @@ export function Example() {
 - `DataTable`
 - `FileUpload` (also exported as `Dropzone`)
 - `Sidebar`
+- `AppShell`, `AppBar`
 
 **Overlays and utilities**
 
@@ -161,6 +162,51 @@ label, a range formatter and localized navigation labels. `DatePicker` accepts
 `locale`, weekday labels and navigation labels. `ColorPicker` accepts a `labels`
 object. `Sidebar` receives navigation items, an active id and brand/footer
 slots, so no product branding lives in the library.
+
+`AppShell` is the frame around a screen: it lays out the sidebar, a `<main>`
+column and an overlay `aside` slot (chat launcher, FAB) for a whole viewport.
+Below `compactBreakpoint` (640px by default) `Sidebar` turns into an off-canvas
+drawer and the shell renders a compact `AppBar` at the top with the only
+trigger that can reopen it — without the shell, a phone has no way back to the
+navigation once the drawer closes. Pass `sidebar` as a render prop to drive the
+drawer's controlled `mobileOpen` / `onMobileClose` props. The shell only owns
+the frame: `children` is never wrapped in a scroller, so screens keep owning
+their own scroll region.
+
+```tsx
+import { useState } from 'react';
+import { AppShell, Sidebar } from '@ravileal/ui';
+
+export function Dashboard() {
+  const [collapsed, setCollapsed] = useState(false);
+  const [activeId, setActiveId] = useState('dashboard');
+
+  return (
+    <AppShell
+      title="Dashboard"
+      subtitle="October 2026"
+      aside={<ChatLauncher />}
+      sidebar={({ mobileOpen, onMobileClose }) => (
+        <Sidebar
+          items={items}
+          activeId={activeId}
+          onSelect={(id) => {
+            setActiveId(id);
+            onMobileClose();
+          }}
+          collapsed={collapsed}
+          onToggle={() => setCollapsed((current) => !current)}
+          mobileOpen={mobileOpen}
+          onMobileClose={onMobileClose}
+          brand={{ title: 'Budget' }}
+        />
+      )}
+    >
+      <DashboardScreen />
+    </AppShell>
+  );
+}
+```
 
 `MonthCalendar` also ships the pure date helpers it uses (`buildMonthGrid`,
 `monthGridLabel`, `nextRangeSelection`, `eventColor`, `parseISODate`, `toISO`,
