@@ -65,6 +65,8 @@ export default function Select({
   const listboxId = useId();
   const { open, pos, triggerRef, menuRef, openMenu, closeMenu } = usePopover({
     maxHeight: menuMaxHeight,
+    fitContent: size === 'sm',
+    minWidth: size === 'sm' ? 72 : 160,
   });
 
   const selectedIndex = options.findIndex((option) => option.value === value);

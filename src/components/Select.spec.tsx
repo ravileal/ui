@@ -233,6 +233,21 @@ describe('Select', () => {
     expect(trigger.parentElement).toHaveClass('ui-select', 'is-inline');
   });
 
+  it('mounts one listbox with every option on the compact size', async () => {
+    const options = [
+      { value: 10, label: '10' },
+      { value: 25, label: '25' },
+      { value: 50, label: '50' },
+      { value: 100, label: '100' },
+    ];
+    render(
+      <Select ariaLabel="Page size" value={10} onChange={vi.fn()} options={options} size="sm" />,
+    );
+    await userEvent.click(screen.getByLabelText('Page size'));
+    expect(screen.getAllByRole('listbox')).toHaveLength(1);
+    expect(screen.getAllByRole('option')).toHaveLength(options.length);
+  });
+
   it('does not open when disabled', async () => {
     render(
       <Select ariaLabel="Category" value={null} onChange={vi.fn()} options={OPTIONS} disabled />,

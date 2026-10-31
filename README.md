@@ -185,9 +185,12 @@ brand/footer slots, so no product branding lives in the library.
 
 `Select` requires `ariaLabel` because the trigger shows only the current value.
 `size` picks the form-field height (`md`, matching `.ui-input`) or the compact
-in-table one (`sm`); `invalid` paints the error border and sets `aria-invalid`;
-`menuMaxHeight` caps the option list. The list renders in a portal, so no
-ancestor `overflow: hidden` clips it.
+in-table one (`sm`), and it also drives the option list width: `sm` sizes the
+popup to its own content — a floor of 72px, anchored to the trigger's right edge
+when the trigger is wider — so short labels such as `10 / 25 / 50 / 100` leave
+no dead gutter, while `md` matches the field width; `invalid` paints the error
+border and sets `aria-invalid`; `menuMaxHeight` caps the option list. The list
+renders in a portal, so no ancestor `overflow: hidden` clips it.
 
 `MediaThumb` renders a cover with an initials fallback and remembers a failed
 URL per source, so a new `src` gets a fresh attempt. `MediaCard` puts that
