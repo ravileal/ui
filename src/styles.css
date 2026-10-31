@@ -2503,6 +2503,12 @@
    flex row that survives the switch to the shell classes); only the compact
    override lives below. */
 
+/* Matches the `marginTop: 2` the component used inline before it moved to
+   classes; the user-agent default (1em) would add 11px under the title. */
+.ui-list-screen-subtitle {
+  margin-top: 2px;
+}
+
 .ui-list-screen-action {
   flex-shrink: 0;
   padding: 9px 16px;
