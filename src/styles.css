@@ -16,6 +16,12 @@
   --ui-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
   --ui-overlay: rgba(0, 0, 0, 0.6);
   --ui-on-accent: #ffffff;
+  /* Scrollbar geometry shared by every scroll container. The colours are not
+     duplicated here: the bars are tinted with --ui-border and --ui-text-3, so
+     a theme swap retints them and a consumer only overrides these two values
+     to resize every scrollbar in the package at once. */
+  --ui-scrollbar-size: 6px;
+  --ui-scrollbar-radius: 3px;
 }
 
 [data-ui-theme='light'],
@@ -51,21 +57,94 @@
   box-sizing: border-box;
 }
 
-.ui-scroll-y {
-  overflow-y: auto;
+/* ---------------------------------------------------------------------------
+   Themed scrollbars — the one place the package styles a scrollbar
+   Every element the package makes scrollable opts in through this group, so a
+   new scroll container only needs its class appended here instead of getting
+   its own copy. WebKit/Blink read the ::-webkit-scrollbar pseudo-elements
+   (thickness, pill thumb, hover tint); Firefox and Chromium >= 121 read the
+   standard scrollbar-width / scrollbar-color pair, which supersedes those
+   pseudo-elements once it is set — both engines therefore paint a thin bar
+   tinted with the theme tokens.
+   Vertical and horizontal bars share the block: `width` sizes the vertical
+   one, `height` the horizontal one, and scrollbar-corner keeps the square
+   where two bars meet transparent like the track.
+   Measured in Chromium 145: once the standard pair is set the bar is drawn by
+   the engine as an inset pill in that colour, which already clears the radius
+   and border of a rounded container; the pseudo-element block is what Safari
+   and older Blink paint.
+   -------------------------------------------------------------------------- */
+.ui-scroll-y,
+.ui-dropdown-menu,
+.ui-combobox-menu,
+.ui-sidebar-items,
+.ui-drawer-body,
+.ui-list-screen,
+.ui-data-table-wrap {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ui-border) transparent;
 }
-.ui-scroll-y::-webkit-scrollbar {
-  width: 5px;
+
+.ui-scroll-y::-webkit-scrollbar,
+.ui-dropdown-menu::-webkit-scrollbar,
+.ui-combobox-menu::-webkit-scrollbar,
+.ui-sidebar-items::-webkit-scrollbar,
+.ui-drawer-body::-webkit-scrollbar,
+.ui-list-screen::-webkit-scrollbar,
+.ui-data-table-wrap::-webkit-scrollbar {
+  width: var(--ui-scrollbar-size);
+  height: var(--ui-scrollbar-size);
 }
-.ui-scroll-y::-webkit-scrollbar-track {
+
+.ui-scroll-y::-webkit-scrollbar-track,
+.ui-dropdown-menu::-webkit-scrollbar-track,
+.ui-combobox-menu::-webkit-scrollbar-track,
+.ui-sidebar-items::-webkit-scrollbar-track,
+.ui-drawer-body::-webkit-scrollbar-track,
+.ui-list-screen::-webkit-scrollbar-track,
+.ui-data-table-wrap::-webkit-scrollbar-track,
+.ui-scroll-y::-webkit-scrollbar-corner,
+.ui-dropdown-menu::-webkit-scrollbar-corner,
+.ui-combobox-menu::-webkit-scrollbar-corner,
+.ui-sidebar-items::-webkit-scrollbar-corner,
+.ui-drawer-body::-webkit-scrollbar-corner,
+.ui-list-screen::-webkit-scrollbar-corner,
+.ui-data-table-wrap::-webkit-scrollbar-corner {
   background: transparent;
 }
-.ui-scroll-y::-webkit-scrollbar-thumb {
-  background: var(--ui-border);
-  border-radius: 3px;
+
+/* The transparent border plus `background-clip: padding-box` insets the thumb
+   inside the bar, which is what keeps a thumb in a rounded, bordered box
+   (§ .ui-data-table-wrap) clear of the corner arc and of the 1px border. The
+   inset defaults to 0, so a container that does not opt in keeps a full-width
+   thumb exactly as before. */
+.ui-scroll-y::-webkit-scrollbar-thumb,
+.ui-dropdown-menu::-webkit-scrollbar-thumb,
+.ui-combobox-menu::-webkit-scrollbar-thumb,
+.ui-sidebar-items::-webkit-scrollbar-thumb,
+.ui-drawer-body::-webkit-scrollbar-thumb,
+.ui-list-screen::-webkit-scrollbar-thumb,
+.ui-data-table-wrap::-webkit-scrollbar-thumb {
+  border: var(--ui-scrollbar-thumb-inset, 0) solid transparent;
+  border-radius: var(--ui-scrollbar-radius);
+  background-color: var(--ui-border);
+  background-clip: padding-box;
 }
-.ui-scroll-y::-webkit-scrollbar-thumb:hover {
-  background: var(--ui-text-3);
+.ui-scroll-y::-webkit-scrollbar-thumb:hover,
+.ui-dropdown-menu::-webkit-scrollbar-thumb:hover,
+.ui-combobox-menu::-webkit-scrollbar-thumb:hover,
+.ui-sidebar-items::-webkit-scrollbar-thumb:hover,
+.ui-drawer-body::-webkit-scrollbar-thumb:hover,
+.ui-list-screen::-webkit-scrollbar-thumb:hover,
+.ui-data-table-wrap::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ui-text-3);
+}
+
+.ui-scroll-y {
+  overflow-y: auto;
+  /* Kept at the package's original 5px: this bar is the narrowest in the
+     library and widening it would be a visual regression. */
+  --ui-scrollbar-size: 5px;
 }
 
 .ui-dropdown {
@@ -146,21 +225,6 @@
   border-radius: 10px;
   box-shadow: var(--ui-shadow);
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ui-border) transparent;
-}
-.ui-dropdown-menu::-webkit-scrollbar {
-  width: 6px;
-}
-.ui-dropdown-menu::-webkit-scrollbar-track {
-  background: transparent;
-}
-.ui-dropdown-menu::-webkit-scrollbar-thumb {
-  background: var(--ui-border);
-  border-radius: 3px;
-}
-.ui-dropdown-menu::-webkit-scrollbar-thumb:hover {
-  background: var(--ui-text-3);
 }
 .ui-dropdown-option {
   display: flex;
@@ -2319,6 +2383,18 @@
   border: 1px solid var(--ui-border);
   border-radius: 12px;
   background: var(--ui-surface);
+  /* The bar is painted inside this rounded, bordered box, so it gets its own
+     geometry instead of the 6px default: a 10px bar whose thumb is inset by
+     2px leaves a 6px pill that clears the 12px corner arc and the 1px border,
+     while still being ~5px thinner than the native bar it replaces — a table
+     that starts to scroll never grows taller, and no column moves sideways.
+     Chromium >= 121 paints its standard thin bar instead (measured: a 6px pill
+     inset ~5px from the border, 2px above it), so these values only drive the
+     ::-webkit-scrollbar path that Safari and older Blink take.
+     The stacked variant drops the scroll container entirely (overflow:
+     visible below), so both paths are inert there. */
+  --ui-scrollbar-size: 10px;
+  --ui-scrollbar-thumb-inset: 2px;
 }
 .ui-data-table {
   width: 100%;

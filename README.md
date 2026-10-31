@@ -59,8 +59,14 @@ All tokens are namespaced with `--ui-*` to avoid collisions:
   --ui-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
   --ui-overlay: rgba(0, 0, 0, 0.6);
   --ui-on-accent: #ffffff;
+  --ui-scrollbar-size: 6px;
+  --ui-scrollbar-radius: 3px;
 }
 ```
+
+`--ui-scrollbar-size` and `--ui-scrollbar-radius` size every themed scrollbar in
+the package; their colours follow `--ui-border` (thumb) and `--ui-text-3` (hover),
+so a theme swap retints them without extra work.
 
 Override any token on `:root`, a container, or a theme selector. The library
 ships light defaults under `[data-ui-theme='light']` and `.ui-theme-light`:
