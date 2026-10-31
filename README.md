@@ -173,6 +173,13 @@ drawer's controlled `mobileOpen` / `onMobileClose` props. The shell only owns
 the frame: `children` is never wrapped in a scroller, so screens keep owning
 their own scroll region.
 
+`Drawer` (also exported as `Sheet`) animates only on open: the overlay fades in
+and the panel slides in from its own side, both in under 200ms. Closing stays
+instant — the panel unmounts as soon as `open` becomes false — and
+`prefers-reduced-motion: reduce` disables the animations. In its mobile layout
+`Sidebar` follows the same rule: the backdrop fades in while the panel slides,
+as one motion.
+
 ```tsx
 import { useState } from 'react';
 import { AppShell, Sidebar } from '@ravileal/ui';

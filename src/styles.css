@@ -2062,6 +2062,7 @@
   z-index: 2000;
   display: flex;
   background: var(--ui-overlay);
+  animation: ui-drawer-overlay-in 160ms ease-out;
 }
 .ui-drawer {
   display: flex;
@@ -2072,12 +2073,14 @@
   border-left: 1px solid var(--ui-border);
   box-shadow: var(--ui-shadow-lg);
   outline: none;
+  animation: ui-drawer-panel-in-right 180ms ease-out;
 }
 .ui-drawer--left {
   margin-right: auto;
   margin-left: 0;
   border-right: 1px solid var(--ui-border);
   border-left: none;
+  animation-name: ui-drawer-panel-in-left;
 }
 .ui-drawer-header {
   display: flex;
@@ -2116,6 +2119,40 @@
   gap: 8px;
   padding: 14px 20px;
   border-top: 1px solid var(--ui-border);
+}
+
+@keyframes ui-drawer-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ui-drawer-panel-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes ui-drawer-panel-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Entrance only: the drawer unmounts as soon as it closes, so the close itself
+   stays instant and only the opening is animated. */
+@media (prefers-reduced-motion: reduce) {
+  .ui-drawer-overlay,
+  .ui-drawer {
+    animation: none;
+  }
 }
 
 .ui-toast-viewport {
@@ -2688,7 +2725,7 @@
     height: 100dvh;
     min-height: 100dvh;
     transform: translateX(-100%);
-    transition: transform 0.18s ease;
+    transition: transform 0.18s ease-out;
     box-shadow: 0 0 40px rgb(0 0 0 / 0.45);
   }
   .ui-sidebar.is-compact.is-open {
@@ -2700,6 +2737,7 @@
     inset: 0;
     z-index: 59;
     background: rgb(0 0 0 / 0.55);
+    animation: ui-sidebar-backdrop-in 180ms ease-out;
   }
 
   /* A collapsed sidebar becomes a full drawer here: the collapse chrome
@@ -3014,11 +3052,25 @@
   }
 }
 
+/* Backdrop fade for the mobile drawer: the same 180ms as the panel slide, so
+   the two read as one motion. */
+@keyframes ui-sidebar-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Drop the drawer slide when motion is reduced (the transform states remain so
    open/close still work). */
 @media (max-width: 640px) and (prefers-reduced-motion: reduce) {
   .ui-sidebar.is-compact {
     transition: none;
+  }
+  .ui-sidebar-backdrop {
+    animation: none;
   }
 }
 
