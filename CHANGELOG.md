@@ -1,3 +1,9 @@
+## [0.3.0](https://github.com/ravileal/ui/compare/release-0.2.0...release-0.3.0) (2026-10-31)
+
+### Features
+
+* **data-table:** resizable columns, column menu and pagination ([189817c](https://github.com/ravileal/ui/commit/189817cbad204d259d682f68db60504be53c5c58))
+
 ## [0.2.0](https://github.com/ravileal/ui/compare/release-0.1.0...release-0.2.0) (2026-10-31)
 
 ### Features
