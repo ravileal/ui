@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/ravileal/ui/compare/release-1.0.2...release-1.1.0) (2026-11-01)
+
+### Features
+
+* **sidebar:** float the collapse toggle and animate the label collapse ([249bd76](https://github.com/ravileal/ui/commit/249bd76083772ec63e2a8263f250ed47f9f340e0))
+
 ## [1.0.2](https://github.com/ravileal/ui/compare/release-1.0.1...release-1.0.2) (2026-11-01)
 
 ### Bug Fixes
