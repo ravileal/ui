@@ -1605,6 +1605,9 @@
   flex: 1;
   flex-direction: column;
   gap: 6px;
+  /* A flex child defaults to min-height: auto, which lets the list push the
+     footer past the panel bottom instead of scrolling. */
+  min-height: 0;
   padding: 24px 12px;
   overflow-x: hidden;
   overflow-y: auto;
