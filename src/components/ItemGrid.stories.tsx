@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import Button from './Button';
 import EmptyState from './EmptyState';
 import Item from './Item';
 import { ItemGrid, type ItemGridLayout } from './ItemGrid';
@@ -102,7 +103,13 @@ const MOSAIC: MosaicItem[] = [
   { ...SHOWS[3], span: 1, ratio: '1 / 1' },
   { ...SHOWS[4], span: 2, ratio: '16 / 10' },
   { ...SHOWS[5], span: 1, ratio: '2 / 3' },
-  { ...SHOWS[0], id: 'frieren-2', title: 'Sousou no Frieren: Beyond Journey\'s End', span: 1, ratio: '2 / 3' },
+  {
+    ...SHOWS[0],
+    id: 'frieren-2',
+    title: "Sousou no Frieren: Beyond Journey's End",
+    span: 1,
+    ratio: '2 / 3',
+  },
   { ...SHOWS[1], id: 'vinland-2', title: 'Vinland Saga', span: 1, ratio: '1 / 1' },
   { ...SHOWS[2], id: 'chainsaw-2', title: 'Chainsaw Man', span: 1, ratio: '2 / 3' },
   { ...SHOWS[3], id: 'mushishi-2', title: 'Mushishi: The Next Passage', span: 2, ratio: '21 / 9' },
@@ -202,7 +209,11 @@ function GridWithSwitcher() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 960 }}>
-      <ViewSwitcher value={layout} onChange={setLayout} storageKey="ui-item-grid-story" />
+      {/* The switcher and the primary action share one height: 36px each. */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <ViewSwitcher value={layout} onChange={setLayout} storageKey="ui-item-grid-story" />
+        <Button>Adicionar anime</Button>
+      </div>
       <ItemGrid
         items={SHOWS}
         layout={layout}

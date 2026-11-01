@@ -27,9 +27,7 @@ describe('Item', () => {
   });
 
   it('leaves a meta node alone when it is not a delimited string', () => {
-    const { container } = render(
-      <Item title="Frieren" meta={<span>TV / 2018</span>} />,
-    );
+    const { container } = render(<Item title="Frieren" meta={<span>TV / 2018</span>} />);
 
     expect(container.querySelector('.ui-item-meta-sep')).toBeNull();
     expect(container.querySelector('.ui-item-meta')?.textContent).toBe('TV / 2018');

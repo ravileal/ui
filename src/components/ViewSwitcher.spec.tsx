@@ -70,10 +70,7 @@ describe('ViewSwitcher', () => {
 
     const options = screen.getAllByRole('radio');
     expect(options).toHaveLength(2);
-    expect(options.map((option) => option.getAttribute('aria-label'))).toEqual([
-      'Cards',
-      'Rows',
-    ]);
+    expect(options.map((option) => option.getAttribute('aria-label'))).toEqual(['Cards', 'Rows']);
     expect(screen.getByRole('radiogroup', { name: 'Show as' })).toBeInTheDocument();
   });
 
@@ -90,10 +87,7 @@ describe('ViewSwitcher', () => {
     const options = screen.getAllByRole('radio');
     // The reference toolbar is two pictures: no "Grade"/"Lista" on screen.
     expect(options.map((option) => option.textContent)).toEqual(['', '']);
-    expect(options.map((option) => option.getAttribute('aria-label'))).toEqual([
-      'Grade',
-      'Lista',
-    ]);
+    expect(options.map((option) => option.getAttribute('aria-label'))).toEqual(['Grade', 'Lista']);
     for (const option of options) {
       expect(option).toHaveClass('ui-segmented-item--icon');
       expect(option.querySelector('.ui-view-switcher-icon > svg')).not.toBeNull();

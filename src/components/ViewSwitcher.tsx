@@ -152,8 +152,7 @@ export function ViewSwitcher({
   // Locked screen: no option to choose, so no control and no landmark.
   if (layouts.length === 0) return null;
 
-  const glyphFor = (layout: ItemGridLayout): ReactNode =>
-    icons?.[layout] ?? DEFAULT_GLYPHS[layout];
+  const glyphFor = (layout: ItemGridLayout): ReactNode => icons?.[layout] ?? DEFAULT_GLYPHS[layout];
 
   if (layouts.length === 1) {
     const only = layouts[0] as ItemGridLayout;

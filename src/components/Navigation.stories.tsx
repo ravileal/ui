@@ -58,6 +58,17 @@ function SegmentedExample() {
           { value: 'month', label: 'Month' },
         ]}
       />
+      <SegmentedControl
+        ariaLabel="Roomy period"
+        value={value}
+        onChange={setValue}
+        size="lg"
+        items={[
+          { value: 'day', label: 'Day' },
+          { value: 'week', label: 'Week' },
+          { value: 'month', label: 'Month' },
+        ]}
+      />
     </div>
   );
 }
@@ -88,7 +99,7 @@ function AppHeaderExample() {
         brand={<a href="#brand">anime-tracker</a>}
         nav={
           <SegmentedControl
-            size="sm"
+            size="lg"
             ariaLabel="Seções"
             value={section}
             onChange={setSection}
