@@ -4261,9 +4261,13 @@
   grid-template-columns: repeat(auto-fill, minmax(min(var(--ui-item-grid-min, 200px), 100%), 1fr));
 }
 
+/* A block may ask for one or two columns; the row span comes from its measured
+   height. Both are inert until the adaptive layout sets them. */
 .ui-item-grid-cell {
   box-sizing: border-box;
   display: flex;
+  grid-column: span var(--ui-item-cell-cols, 1);
+  grid-row: span var(--ui-item-cell-rows, 1);
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -4278,6 +4282,30 @@
   min-width: 0;
   width: 100%;
   height: 100%;
+}
+
+/* Adaptive: once the container has been measured the column count is explicit,
+   so a two-column block can never spill into an implicit column. */
+.ui-item-grid--adaptive[data-cols] {
+  grid-template-columns: repeat(var(--ui-item-grid-cols), minmax(0, 1fr));
+}
+
+/* Adaptive packing: dense flow pulls later blocks into the holes a wide or tall
+   block leaves behind, and the fine row track lets each block take exactly the
+   rows its own height needs. */
+.ui-item-grid--adaptive[data-masonry] {
+  grid-auto-flow: row dense;
+  grid-auto-rows: var(--ui-item-grid-row-h, 4px);
+}
+
+/* The block is measured, so it keeps its natural height instead of stretching
+   to the track — otherwise the span would feed back into its own measurement. */
+.ui-item-grid--adaptive .ui-item-grid-cell {
+  align-items: flex-start;
+}
+
+.ui-item-grid--adaptive .ui-item-grid-cell > * {
+  height: auto;
 }
 
 .ui-item-grid-cell--empty {

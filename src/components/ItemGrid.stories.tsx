@@ -83,9 +83,46 @@ export const List: Story = {
   ),
 };
 
-/* Adaptive reads its container, not the viewport, so the same six shows at
-   three widths is the honest demo: only the column count changes. */
+/* Adaptive reads its container, not the viewport, so the same set at three
+   widths is the honest demo: only the column count changes. */
 const ADAPTIVE_WIDTHS = [420, 640, 1000];
+
+/* Mixed footprints: a couple of hero blocks claim two columns and every card
+   keeps its own height (cover ratio + how many lines the title wraps to), so
+   the only thing holding the mosaic together is the packing. */
+interface MosaicItem extends Show {
+  span: 1 | 2;
+  ratio: string;
+}
+
+const MOSAIC: MosaicItem[] = [
+  { ...SHOWS[0], span: 2, ratio: '16 / 9' },
+  { ...SHOWS[1], span: 1, ratio: '2 / 3' },
+  { ...SHOWS[2], span: 1, ratio: '2 / 3' },
+  { ...SHOWS[3], span: 1, ratio: '1 / 1' },
+  { ...SHOWS[4], span: 2, ratio: '16 / 10' },
+  { ...SHOWS[5], span: 1, ratio: '2 / 3' },
+  { ...SHOWS[0], id: 'frieren-2', title: 'Sousou no Frieren: Beyond Journey\'s End', span: 1, ratio: '2 / 3' },
+  { ...SHOWS[1], id: 'vinland-2', title: 'Vinland Saga', span: 1, ratio: '1 / 1' },
+  { ...SHOWS[2], id: 'chainsaw-2', title: 'Chainsaw Man', span: 1, ratio: '2 / 3' },
+  { ...SHOWS[3], id: 'mushishi-2', title: 'Mushishi: The Next Passage', span: 2, ratio: '21 / 9' },
+  { ...SHOWS[4], id: 'monster-2', title: 'Monster', span: 1, ratio: '2 / 3' },
+  { ...SHOWS[5], id: 'ping-pong-2', title: 'Ping Pong the Animation', span: 1, ratio: '1 / 1' },
+];
+
+function mosaicItem(item: MosaicItem) {
+  return (
+    <Item
+      title={item.title}
+      subtitle={item.studio}
+      meta={item.meta}
+      href={`/series/${item.id}`}
+      interactive
+      mediaPosition="top"
+      media={{ src: null, initials: item.initials, aspectRatio: item.ratio }}
+    />
+  );
+}
 
 export const Adaptive: Story = {
   render: () => (
@@ -96,10 +133,12 @@ export const Adaptive: Story = {
             {width}px container
           </div>
           <ItemGrid
-            items={SHOWS}
+            items={MOSAIC}
             layout="adaptive"
             minColumnWidth={180}
-            renderItem={(show) => gridItem(show, 'top')}
+            getSpan={(item) => item.span}
+            getKey={(item) => item.id}
+            renderItem={mosaicItem}
           />
         </section>
       ))}
@@ -107,7 +146,7 @@ export const Adaptive: Story = {
   ),
 };
 
-/** Drag the bottom-right corner: a new column appears as soon as one fits. */
+/** Drag the bottom-right corner: blocks re-pack as the column count changes. */
 export const AdaptiveResizing: Story = {
   render: () => (
     <div
@@ -122,10 +161,12 @@ export const AdaptiveResizing: Story = {
       }}
     >
       <ItemGrid
-        items={SHOWS}
+        items={MOSAIC}
         layout="adaptive"
         minColumnWidth={180}
-        renderItem={(show) => gridItem(show, 'top')}
+        getSpan={(item) => item.span}
+        getKey={(item) => item.id}
+        renderItem={mosaicItem}
       />
     </div>
   ),

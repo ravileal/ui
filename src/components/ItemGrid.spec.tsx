@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import type { ComponentProps } from 'react';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Item from './Item';
 import { ItemGrid } from './ItemGrid';
@@ -140,5 +141,141 @@ describe('ItemGrid', () => {
     const cards = container.querySelectorAll('.ui-card');
     expect(cards).toHaveLength(8);
     cards.forEach((card) => expect(card.getAttribute('aria-busy')).toBe('true'));
+  });
+});
+
+/**
+ * The adaptive layout reads its container and each block's own height, so the
+ * spec has to own both: `getBoundingClientRect` supplies the width on the list
+ * and the height on each card, and the observer stub fires on observe.
+ */
+describe('ItemGrid adaptive packing', () => {
+  interface Row {
+    id: string;
+    h: number;
+    span?: 1 | 2;
+  }
+
+  const ROWS: Row[] = [
+    { id: 'a', h: 100, span: 2 },
+    { id: 'b', h: 200 },
+    { id: 'c', h: 60 },
+  ];
+
+  let containerWidth = 0;
+  let rectSpy: ReturnType<typeof vi.spyOn> | undefined;
+
+  class ResizeObserverStub {
+    private readonly callback: ResizeObserverCallback;
+    constructor(callback: ResizeObserverCallback) {
+      this.callback = callback;
+    }
+    observe(target: Element) {
+      this.callback([{ target } as ResizeObserverEntry], this as unknown as ResizeObserver);
+    }
+    unobserve() {}
+    disconnect() {}
+  }
+
+  function layoutAt(width: number) {
+    containerWidth = width;
+    rectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        const w = this.classList.contains('ui-item-grid') ? containerWidth : 0;
+        const h = Number(this.dataset.h ?? 0);
+        return {
+          width: w,
+          height: h,
+          top: 0,
+          left: 0,
+          right: w,
+          bottom: h,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        } as DOMRect;
+      });
+  }
+
+  function renderAdaptive(props: Partial<ComponentProps<typeof ItemGrid<Row>>> = {}) {
+    return render(
+      <ItemGrid
+        items={ROWS}
+        layout="adaptive"
+        getKey={(row) => row.id}
+        minColumnWidth={200}
+        getSpan={(row) => row.span ?? 1}
+        renderItem={(row) => <div data-h={row.h}>{row.id}</div>}
+        {...props}
+      />,
+    );
+  }
+
+  function cells(container: HTMLElement) {
+    return Array.from(container.querySelectorAll<HTMLElement>('.ui-item-grid-cell'));
+  }
+
+  const originalObserver = globalThis.ResizeObserver;
+
+  beforeEach(() => {
+    // Written directly: the test setup defines the mock as writable but not
+    // configurable, so `vi.stubGlobal` cannot replace it.
+    (globalThis as { ResizeObserver: unknown }).ResizeObserver = ResizeObserverStub;
+  });
+
+  afterEach(() => {
+    rectSpy?.mockRestore();
+    (globalThis as { ResizeObserver: unknown }).ResizeObserver = originalObserver;
+  });
+
+  it('takes the column count from the container, not the viewport', () => {
+    layoutAt(1000);
+    const { container } = renderAdaptive();
+
+    // (1000 + 16) / (200 + 16) = 4.7 → four columns.
+    expect(container.querySelector('.ui-item-grid')).toHaveAttribute('data-cols', '4');
+  });
+
+  it('honours maxColumns even when the container could fit more', () => {
+    layoutAt(1600);
+    const { container } = renderAdaptive({ maxColumns: 3 });
+
+    expect(container.querySelector('.ui-item-grid')).toHaveAttribute('data-cols', '3');
+  });
+
+  it('gives a wide block two columns only when the container can hold them', () => {
+    layoutAt(1000);
+    const wide = renderAdaptive();
+    expect(cells(wide.container)[0]?.style.getPropertyValue('--ui-item-cell-cols')).toBe('2');
+    expect(cells(wide.container)[1]?.style.getPropertyValue('--ui-item-cell-cols')).toBe('1');
+    wide.unmount();
+
+    layoutAt(150);
+    const narrow = renderAdaptive();
+    expect(narrow.container.querySelector('.ui-item-grid')).toHaveAttribute('data-cols', '1');
+    expect(cells(narrow.container)[0]?.style.getPropertyValue('--ui-item-cell-cols')).toBe('1');
+  });
+
+  it('snaps every block to the rows its own height needs and packs densely', () => {
+    layoutAt(1000);
+    const { container } = renderAdaptive({ gap: 16, rowHeight: 4 });
+
+    const list = container.querySelector('.ui-item-grid');
+    expect(list).toHaveAttribute('data-masonry', 'true');
+    // ceil((h + 16) / (4 + 16)): 100 → 6, 200 → 11, 60 → 4.
+    expect(cells(container).map((cell) => cell.style.getPropertyValue('--ui-item-cell-rows'))).toEqual(
+      ['6', '11', '4'],
+    );
+  });
+
+  it('keeps plain rows while the container has no measured width', () => {
+    layoutAt(0);
+    const { container } = renderAdaptive();
+
+    const list = container.querySelector('.ui-item-grid');
+    expect(list).not.toHaveAttribute('data-cols');
+    expect(list).not.toHaveAttribute('data-masonry');
+    expect(cells(container)[0]?.style.getPropertyValue('--ui-item-cell-cols')).toBe('1');
   });
 });
