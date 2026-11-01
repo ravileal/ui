@@ -1,3 +1,15 @@
+## [1.0.0](https://github.com/ravileal/ui/compare/release-0.5.0...release-1.0.0) (2026-11-01)
+
+### ⚠ BREAKING CHANGES
+
+* MediaCard and its types are no longer exported. Use Item with
+mediaPosition="top", the media prop for the cover and initials, footer for the
+controls and renderLink instead of renderTitleLink.
+
+### Features
+
+* drop MediaCard in favour of Item with a top cover ([94a0b49](https://github.com/ravileal/ui/commit/94a0b4956f5a51fa364eb7717a9ac8d0e411c14a))
+
 ## [0.5.0](https://github.com/ravileal/ui/compare/release-0.4.0...release-0.5.0) (2026-10-31)
 
 ### Features
