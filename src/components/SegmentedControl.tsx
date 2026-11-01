@@ -23,7 +23,8 @@ export interface SegmentedControlProps {
   value: string;
   onChange: (value: string) => void;
   ariaLabel: string;
-  size?: 'sm' | 'md';
+  /** Height ladder shared with `Button`: `sm` 28px, `md` 36px, `lg` 42px. */
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
   style?: CSSProperties;
 }

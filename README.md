@@ -61,12 +61,16 @@ All tokens are namespaced with `--ui-*` to avoid collisions:
   --ui-on-accent: #ffffff;
   --ui-scrollbar-size: 6px;
   --ui-scrollbar-radius: 3px;
+  --ui-poster-glow: 0 18px 30px -14px color-mix(in srgb, var(--ui-accent) 65%, transparent);
+  --ui-app-header-max: 1600px;
 }
 ```
 
 `--ui-scrollbar-size` and `--ui-scrollbar-radius` size every themed scrollbar in
 the package; their colours follow `--ui-border` (thumb) and `--ui-text-3` (hover),
-so a theme swap retints them without extra work.
+so a theme swap retints them without extra work. `--ui-poster-glow` is the
+gallery cover's hover shadow (accent-tinted, so it follows the theme) and
+`--ui-app-header-max` is the centred measure an `AppHeader` sits on.
 
 Override any token on `:root`, a container, or a theme selector. The library
 ships light defaults under `[data-ui-theme='light']` and `.ui-theme-light`:
@@ -227,6 +231,12 @@ leads the cell at 2/3 with a 12px radius, the surface and the padding are gone,
 the title takes the accent and the cover zooms under a scrim on hover, and the
 presentational `badge` chip sits on the cover's top-right corner — it lives
 inside the title anchor, so it must hold an icon or a label, never a control.
+On a poster the chip is an overlay on the artwork: no border, a translucent
+blurred backing and one step more height. The hover shadow belongs to the cover,
+not to the card: the cover lifts and casts `--ui-poster-glow` (accent-tinted,
+downward from its bottom edge), so the title below neither moves nor takes a
+shadow. A `meta` string split on `·` renders parts separated by a real 5px dot
+instead of the glyph, while `textContent` keeps reading the same.
 `coverAction` is the one real control for that corner (a monitor toggle, a menu
 trigger): it renders as a sibling of the anchor, over the cover's top-right, so
 it stays focusable while the card still navigates. `ItemGrid` lays those
@@ -239,14 +249,20 @@ a `loading` state that renders skeleton cells and an `empty` slot for no items.
 `storageKey` and it remembers the last choice in localStorage. `layouts` is the
 exact set of options it offers: a subset hides the rest, `[]` renders nothing
 for a screen locked to one layout, and a single entry renders that layout as a
-fixed label instead of a radio group nobody can change. Pass `icons` to render
-icon-only segments: each one keeps `labels` (or the default label) as its
-accessible name and `title`, and a layout without an icon keeps its text label.
+fixed label instead of a radio group nobody can change. Every layout ships its
+own 16px glyph, so the segments are icon-only without an icon library and each
+one keeps `labels` (or the default label) as its accessible name and `title`;
+`icons` overrides a single glyph, `showLabels` brings the words back, and `size`
+(`sm`, `md`, `lg`) sets the bar to the `Button` height of the same size — `md`,
+36px, is the height of a default `Button`.
 
 `AppHeader` is the bar above the screens: brand, section switcher (`nav`), status
 chips (`meta`) and the primary `actions` on one line, sticky by default. The bar
 is full bleed, but its content sits in a centred measure
 (`--ui-app-header-max`, 1600px by default) so it lines up with the page column.
+The section switcher in `nav` is a `SegmentedControl` at `size="lg"`: 42px, one
+step taller than the `Button`s beside it, with 14px labels — the toolbar the
+reference screen shows.
 It is the sibling of `PageHeader`, which still names the current screen and
 carries its own actions. Below 720px the switcher drops to its own row instead
 of being hidden, so navigation survives on a phone; only the chips go away.

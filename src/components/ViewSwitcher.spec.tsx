@@ -48,7 +48,11 @@ describe('ViewSwitcher', () => {
 
     const options = screen.getAllByRole('radio');
     expect(options).toHaveLength(3);
-    expect(options.map((option) => option.textContent)).toEqual(['Grid', 'List', 'Adaptive']);
+    expect(options.map((option) => option.getAttribute('aria-label'))).toEqual([
+      'Grid',
+      'List',
+      'Adaptive',
+    ]);
     expect(screen.getByRole('radio', { name: 'List' })).toHaveAttribute('aria-checked', 'true');
     expect(screen.getByRole('radiogroup', { name: 'Item layout' })).toBeInTheDocument();
   });
@@ -66,34 +70,95 @@ describe('ViewSwitcher', () => {
 
     const options = screen.getAllByRole('radio');
     expect(options).toHaveLength(2);
-    expect(options.map((option) => option.textContent)).toEqual(['Cards', 'Rows']);
+    expect(options.map((option) => option.getAttribute('aria-label'))).toEqual([
+      'Cards',
+      'Rows',
+    ]);
     expect(screen.getByRole('radiogroup', { name: 'Show as' })).toBeInTheDocument();
   });
 
-  it('uses the small segmented control, never a native select', () => {
+  it('is icon-only by default, with no visible words', () => {
+    const { container } = render(
+      <ViewSwitcher
+        value="grid"
+        onChange={() => {}}
+        layouts={['grid', 'list']}
+        labels={{ grid: 'Grade', list: 'Lista' }}
+      />,
+    );
+
+    const options = screen.getAllByRole('radio');
+    // The reference toolbar is two pictures: no "Grade"/"Lista" on screen.
+    expect(options.map((option) => option.textContent)).toEqual(['', '']);
+    expect(options.map((option) => option.getAttribute('aria-label'))).toEqual([
+      'Grade',
+      'Lista',
+    ]);
+    for (const option of options) {
+      expect(option).toHaveClass('ui-segmented-item--icon');
+      expect(option.querySelector('.ui-view-switcher-icon > svg')).not.toBeNull();
+      expect(option.querySelector('.ui-view-switcher-icon')?.getAttribute('aria-hidden')).toBe(
+        'true',
+      );
+    }
+    expect(container.querySelectorAll('.ui-view-switcher-icon svg')).toHaveLength(2);
+  });
+
+  it('matches the default Button height in the segmented bar', () => {
     const { container } = render(<ViewSwitcher value="grid" onChange={() => {}} />);
 
-    expect(container.querySelector('.ui-segmented--sm')).not.toBeNull();
+    expect(container.querySelector('.ui-segmented--md')).not.toBeNull();
     expect(container.querySelector('select')).toBeNull();
   });
 
-  it('renders icon segments with the accessible name and no visible text', async () => {
+  it('takes the segmented size, so it can follow the Button beside it', () => {
+    const { container, rerender } = render(
+      <ViewSwitcher value="grid" onChange={() => {}} size="lg" />,
+    );
+    expect(container.querySelector('.ui-segmented--lg')).not.toBeNull();
+
+    rerender(<ViewSwitcher value="grid" onChange={() => {}} size="sm" />);
+    expect(container.querySelector('.ui-segmented--sm')).not.toBeNull();
+  });
+
+  it('shows the words again with showLabels', () => {
+    render(
+      <ViewSwitcher
+        value="grid"
+        onChange={() => {}}
+        layouts={['grid', 'list']}
+        labels={{ grid: 'Grade', list: 'Lista' }}
+        showLabels
+      />,
+    );
+
+    const options = screen.getAllByRole('radio');
+    expect(options.map((option) => option.textContent)).toEqual(['Grade', 'Lista']);
+    expect(options.every((option) => !option.classList.contains('ui-segmented-item--icon'))).toBe(
+      true,
+    );
+  });
+
+  it('renders an explicit icon override with the accessible name', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <ViewSwitcher value="grid" onChange={onChange} icons={{ grid: <svg />, list: <svg /> }} />,
+      <ViewSwitcher
+        value="grid"
+        onChange={onChange}
+        layouts={['grid', 'list']}
+        icons={{ grid: <svg data-testid="custom-grid" /> }}
+      />,
     );
 
     const grid = screen.getByRole('radio', { name: 'Grid' });
     const list = screen.getByRole('radio', { name: 'List' });
     expect(grid).toHaveAttribute('aria-label', 'Grid');
     expect(grid).toHaveAttribute('title', 'Grid');
-    expect(list).toHaveAttribute('aria-label', 'List');
     expect(grid.textContent).toBe('');
-    expect(grid.querySelector('.ui-view-switcher-icon')?.getAttribute('aria-hidden')).toBe('true');
-
-    // A layout without an icon keeps the text label.
-    expect(screen.getByRole('radio', { name: 'Adaptive' }).textContent).toBe('Adaptive');
+    expect(screen.getByTestId('custom-grid')).toBeInTheDocument();
+    // The layout without an override keeps the glyph the switcher ships.
+    expect(list.querySelector('.ui-view-switcher-icon svg')).not.toBeNull();
 
     await user.click(list);
     expect(onChange).toHaveBeenCalledWith('list');

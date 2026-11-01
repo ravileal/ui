@@ -15,6 +15,32 @@ describe('Item', () => {
     expect(container.querySelector('.ui-media-thumb')).toBeNull();
   });
 
+  it('turns a middot-delimited meta into real dot separators', () => {
+    const { container } = render(<Item title="Frieren" meta="TV · 2018 · 13 episódios" />);
+
+    const separators = container.querySelectorAll('.ui-item-meta .ui-item-meta-sep');
+    expect(separators).toHaveLength(2);
+    expect(Array.from(separators).map((separator) => separator.textContent)).toEqual(['·', '·']);
+    expect(container.querySelectorAll('.ui-item-meta-part')).toHaveLength(3);
+    // Splitting is visual only: the line reads the same to a screen reader.
+    expect(container.querySelector('.ui-item-meta')?.textContent).toBe('TV · 2018 · 13 episódios');
+  });
+
+  it('leaves a meta node alone when it is not a delimited string', () => {
+    const { container } = render(
+      <Item title="Frieren" meta={<span>TV / 2018</span>} />,
+    );
+
+    expect(container.querySelector('.ui-item-meta-sep')).toBeNull();
+    expect(container.querySelector('.ui-item-meta')?.textContent).toBe('TV / 2018');
+  });
+
+  it('leaves a string with an empty part alone', () => {
+    const { container } = render(<Item title="Frieren" meta="TV · " />);
+
+    expect(container.querySelector('.ui-item-meta-sep')).toBeNull();
+  });
+
   it('lets the text fill the row when there is no media', () => {
     const { container } = render(<Item title="Frieren" />);
 

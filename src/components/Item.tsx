@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { Fragment, type CSSProperties, type ReactNode } from 'react';
 import MediaThumb, { type MediaThumbSize } from './MediaThumb';
 import { Card } from './Card';
 
@@ -68,6 +68,32 @@ const LEAD_LINK_CLASS = 'ui-item-lead is-link';
 
 const THUMB_SIZE: Record<ItemSize, MediaThumbSize> = { sm: 'xs', md: 'sm', lg: 'md' };
 
+const META_SEPARATOR = '·';
+
+/**
+ * A `·`-delimited meta string (`TV · 2018 · 13 eps`) keeps its parts as text and
+ * swaps the glyph for a real 5px dot between them, which reads at 12px where the
+ * middot looks like a comma. Anything that is not a delimited string is left
+ * alone, and the parts are joined on the same spaces, so `textContent` still
+ * reads `TV · 2018 · 13 eps` for assistive tech and for tests.
+ */
+function renderMeta(meta: ReactNode): ReactNode {
+  if (typeof meta !== 'string' || !meta.includes(META_SEPARATOR)) return meta;
+  const parts = meta.split(META_SEPARATOR).map((part) => part.trim());
+  if (parts.length < 2 || parts.some((part) => part === '')) return meta;
+  return parts.map((part, index) => (
+    <Fragment key={`${index}-${part}`}>
+      {index > 0 && (
+        <>
+          {' '}
+          <span className="ui-item-meta-sep">{META_SEPARATOR}</span>{' '}
+        </>
+      )}
+      <span className="ui-item-meta-part">{part}</span>
+    </Fragment>
+  ));
+}
+
 /**
  * The card as a list/grid item: optional media (beside or above the text), a
  * title, subtitle and meta line, plus trailing actions and a footer. The card
@@ -125,7 +151,7 @@ export default function Item({
       <span className="ui-item-text">
         <span className="ui-item-title">{title}</span>
         {subtitle && <span className="ui-item-subtitle">{subtitle}</span>}
-        {meta && <span className="ui-item-meta">{meta}</span>}
+        {meta && <span className="ui-item-meta">{renderMeta(meta)}</span>}
       </span>
     </>
   );

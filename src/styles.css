@@ -23,6 +23,13 @@
      to resize every scrollbar in the package at once. */
   --ui-scrollbar-size: 6px;
   --ui-scrollbar-radius: 3px;
+  /* The gallery cover's hover glow: accent-tinted, cast downward from the
+     cover's bottom edge. It belongs to the cover alone — the card never
+     lifts and the text never takes a shadow. */
+  --ui-poster-glow: 0 18px 30px -14px color-mix(in srgb, var(--ui-accent) 65%, transparent);
+  /* Width of the centred measure the app header content sits on, so the bar
+     lines up with the page column instead of the window edges. */
+  --ui-app-header-max: 1600px;
 }
 
 [data-ui-theme='light'],
@@ -2265,12 +2272,20 @@
   border-radius: 9px;
   background: var(--ui-surface-2);
 }
-/* The bar matches the Button height of the same size. */
+/* The bar matches the Button height of the same size: 28/36/42px, so a
+   switcher and the primary action next to it share one baseline. */
 .ui-segmented--sm {
   height: 28px;
 }
 .ui-segmented--md {
   height: 36px;
+}
+/* Section nav in an app header: the reference's roomier bar — one step taller
+   than the buttons beside it, a wider 4px trough and 14px labels. */
+.ui-segmented--lg {
+  height: 42px;
+  padding: 4px;
+  border-radius: 11px;
 }
 .ui-segmented-item {
   display: inline-flex;
@@ -2293,6 +2308,15 @@
 .ui-segmented--md .ui-segmented-item {
   padding: 0 16px;
   font-size: 13px;
+}
+.ui-segmented--lg .ui-segmented-item {
+  padding: 0 16px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.ui-segmented--lg .ui-segmented-item.is-active {
+  font-weight: 600;
 }
 /* Icon-only segment: same height, narrower than a text label. */
 .ui-segmented .ui-segmented-item--icon {
@@ -4246,6 +4270,22 @@
   color: var(--ui-text-3);
   overflow-wrap: anywhere;
 }
+/* A `·`-delimited meta string becomes parts with a real dot between them: a
+   5px circle on the text's optical centre instead of the glyph, which reads as
+   a comma at this size. The glyph itself stays in the DOM for assistive tech
+   and for anything reading `textContent`. */
+.ui-item-meta-sep {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 1px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ui-text-3) 85%, transparent);
+  font-size: 0;
+  line-height: 0;
+  vertical-align: middle;
+}
 
 .ui-item-actions {
   box-sizing: border-box;
@@ -4556,10 +4596,11 @@
     color: var(--ui-accent);
     text-shadow: none;
   }
-  /* The lift and the accent-tinted glow belong to the cover alone. */
+  /* The lift and the green glow belong to the cover alone: the shadow is cast
+     downward from the cover's bottom edge, and the text below never moves. */
   .ui-item--poster:hover .ui-media-thumb {
     transform: translateY(-4px);
-    box-shadow: 0 16px 30px -16px color-mix(in srgb, var(--ui-accent) 55%, transparent);
+    box-shadow: var(--ui-poster-glow);
   }
 }
 
@@ -4606,6 +4647,30 @@
   height: 14px;
 }
 
+/* On a poster the chip is an overlay on the artwork, not a chip on a surface:
+   no border at all, a translucent blurred backing and one step more height so
+   the glyph has room. Hover only brightens the backing. */
+.ui-item--poster .ui-item-badge {
+  gap: 0;
+  box-sizing: border-box;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--ui-bg) 62%, transparent);
+  box-shadow: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+@media (hover: hover) {
+  .ui-item--poster .ui-item-badge:hover {
+    background: color-mix(in srgb, var(--ui-bg) 84%, transparent);
+  }
+}
+
 /* The real control on the cover's corner: a sibling of the anchor, so it can
    take focus and clicks without swallowing the card navigation. */
 .ui-item-cover-action {
@@ -4618,7 +4683,7 @@
 }
 
 .ui-item-cover-action .ui-button {
-  height: 30px;
+  height: 32px;
   min-width: 34px;
 }
 

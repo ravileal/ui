@@ -116,6 +116,24 @@ describe('SegmentedControl', () => {
     expect(grid).toHaveClass('ui-segmented-item--icon');
     expect(screen.getByRole('radio', { name: 'List' })).not.toHaveAttribute('aria-label');
   });
+
+  it('takes the same height ladder as Button', () => {
+    const items = [
+      { value: 'day', label: 'Day' },
+      { value: 'week', label: 'Week' },
+    ];
+    const { container, rerender } = render(
+      <SegmentedControl ariaLabel="Period" value="day" onChange={vi.fn()} items={items} size="lg" />,
+    );
+
+    // sm 28px, md 36px and lg 42px are the Button heights, one modifier each.
+    expect(container.querySelector('.ui-segmented')).toHaveClass('ui-segmented--lg');
+
+    rerender(
+      <SegmentedControl ariaLabel="Period" value="day" onChange={vi.fn()} items={items} size="md" />,
+    );
+    expect(container.querySelector('.ui-segmented')).toHaveClass('ui-segmented--md');
+  });
 });
 
 interface Row {
