@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/ravileal/ui/compare/release-1.4.0...release-1.5.0) (2026-11-01)
+
+### Features
+
+* align the gallery card, header and toolbar with the reference ([9fa8f65](https://github.com/ravileal/ui/commit/9fa8f65a55b2ac794d2080180260123523f46823))
+
 ## [1.4.0](https://github.com/ravileal/ui/compare/release-1.3.0...release-1.4.0) (2026-11-01)
 
 ### Features
