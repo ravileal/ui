@@ -4564,6 +4564,18 @@
   padding: 8px 2px 0;
 }
 
+/* Two title lines are reserved in every poster cell, so the meta line sits at
+   the same height across a row whether the title wraps or not — a long romaji
+   ("Shingeki no Kyojin Zenpen: …") used to push its own meta 18px below the
+   neighbours'. The clamp keeps a third line from doing it again. */
+.ui-item--poster .ui-item-title {
+  display: -webkit-box;
+  min-height: calc(2 * 1.3em);
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .ui-item--poster .ui-item-meta {
   font-size: 12px;
 }
