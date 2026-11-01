@@ -1,3 +1,9 @@
+## [1.6.1](https://github.com/ravileal/ui/compare/release-1.6.0...release-1.6.1) (2026-11-01)
+
+### Bug Fixes
+
+* **item:** reserve two title lines so poster meta lines align ([8fe1cb6](https://github.com/ravileal/ui/commit/8fe1cb6b0bc0855dd81470912efb77e9aee21a9d))
+
 ## [1.6.0](https://github.com/ravileal/ui/compare/release-1.5.0...release-1.6.0) (2026-11-01)
 
 ### Features
