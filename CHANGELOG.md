@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/ravileal/ui/compare/release-1.5.0...release-1.6.0) (2026-11-01)
+
+### Features
+
+* ship the gallery glyphs, the dot separators and the roomier nav ([aa1872a](https://github.com/ravileal/ui/commit/aa1872a9e8132b815cee860b255915ca58d8f253))
+
 ## [1.5.0](https://github.com/ravileal/ui/compare/release-1.4.0...release-1.5.0) (2026-11-01)
 
 ### Features
