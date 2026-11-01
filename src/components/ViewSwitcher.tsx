@@ -5,6 +5,11 @@ import type { ItemGridLayout } from './ItemGrid';
 export interface ViewSwitcherProps {
   value: ItemGridLayout;
   onChange: (value: ItemGridLayout) => void;
+  /**
+   * The layouts the menu offers. Pass a subset to hide an option, `[]` to hide
+   * the menu entirely (the screen is locked to a layout), or a single entry to
+   * show that layout as a fixed, non-interactive indicator.
+   */
   layouts?: ItemGridLayout[];
   labels?: Partial<Record<ItemGridLayout, string>>;
   ariaLabel?: string;
@@ -45,6 +50,11 @@ function writeStoredLayout(key: string, value: ItemGridLayout) {
  * The layout menu for an `ItemGrid`, built on `SegmentedControl`. With a
  * `storageKey` the last choice survives a reload; the stored value is applied
  * once on mount, and only when it is a known layout and differs from `value`.
+ *
+ * The menu renders exactly the layouts it is given, so a screen can offer all
+ * three, only two, or none at all: with no layouts there is nothing to choose
+ * and the component renders nothing, and with one layout it renders a fixed
+ * label instead of a one-option radio group nobody can change.
  */
 export function ViewSwitcher({
   value,
@@ -64,9 +74,10 @@ export function ViewSwitcher({
   onChangeRef.current = onChange;
 
   // Mount-only restore: re-running on every render would fight the controlled
-  // `value` and could fire `onChange` in a loop.
+  // `value` and could fire `onChange` in a loop. A locked screen (one layout or
+  // none) has nothing to restore.
   useEffect(() => {
-    if (!storageKey) return;
+    if (!storageKey || layoutsRef.current.length < 2) return;
     const stored = readStoredLayout(storageKey);
     if (!stored) return;
     const known = layoutsRef.current.includes(stored as ItemGridLayout);
@@ -74,6 +85,23 @@ export function ViewSwitcher({
       onChangeRef.current(stored as ItemGridLayout);
     }
   }, [storageKey]);
+
+  // Locked screen: no option to choose, so no control and no landmark.
+  if (layouts.length === 0) return null;
+
+  if (layouts.length === 1) {
+    const only = layouts[0] as ItemGridLayout;
+    return (
+      <div
+        className={['ui-view-switcher-fixed', className ?? ''].filter(Boolean).join(' ')}
+        style={style}
+        data-layout={only}
+        title={ariaLabel}
+      >
+        {labels?.[only] ?? DEFAULT_LABELS[only]}
+      </div>
+    );
+  }
 
   const handleChange = (next: string) => {
     const layout = next as ItemGridLayout;

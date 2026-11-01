@@ -141,3 +141,48 @@ describe('ViewSwitcher', () => {
     setItem.mockRestore();
   });
 });
+
+describe('ViewSwitcher layout subset', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  it('renders nothing when no layout is offered', () => {
+    const { container } = render(
+      <ViewSwitcher value="grid" onChange={() => {}} layouts={[]} storageKey={STORAGE_KEY} />,
+    );
+
+    expect(container.firstChild).toBeNull();
+    expect(screen.queryByRole('radiogroup')).toBeNull();
+    expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
+  });
+
+  it('shows a single layout as a fixed label instead of a radio group', () => {
+    const { container } = render(
+      <ViewSwitcher
+        value="grid"
+        onChange={() => {}}
+        layouts={['grid']}
+        labels={{ grid: 'Grade' }}
+        ariaLabel="Formato da biblioteca"
+      />,
+    );
+
+    const fixed = container.querySelector('.ui-view-switcher-fixed');
+    expect(fixed?.textContent).toBe('Grade');
+    expect(fixed?.getAttribute('data-layout')).toBe('grid');
+    expect(fixed?.getAttribute('title')).toBe('Formato da biblioteca');
+    expect(screen.queryAllByRole('radio')).toHaveLength(0);
+  });
+
+  it('ignores the stored preference while the screen is locked to one layout', () => {
+    window.localStorage.setItem(STORAGE_KEY, 'list');
+    const onChange = vi.fn();
+
+    render(
+      <ViewSwitcher value="grid" onChange={onChange} layouts={['grid']} storageKey={STORAGE_KEY} />,
+    );
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+});

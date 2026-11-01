@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import AppHeader from './AppHeader';
+import { Badge } from './Badge';
+import Button from './Button';
 import { DropdownMenu } from './DropdownMenu';
 import { SegmentedControl } from './SegmentedControl';
 import { Tabs } from './Tabs';
@@ -76,3 +79,49 @@ export const Menu: Story = {
     />
   ),
 };
+
+function AppHeaderExample() {
+  const [section, setSection] = useState('library');
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
+      <AppHeader
+        brand={<a href="#brand">anime-tracker</a>}
+        nav={
+          <SegmentedControl
+            size="sm"
+            ariaLabel="Seções"
+            value={section}
+            onChange={setSection}
+            items={[
+              { value: 'library', label: 'Biblioteca' },
+              { value: 'queue', label: 'Fila' },
+              { value: 'rules', label: 'Regras' },
+            ]}
+          />
+        }
+        meta={
+          <>
+            <Badge tone="neutral" variant="outline">
+              Biblioteca: /animes
+            </Badge>
+            <Badge tone="info" variant="soft">
+              Indexadores: nyaa, tokyotosho
+            </Badge>
+            <Badge tone="neutral" variant="soft">
+              v0.0.0
+            </Badge>
+          </>
+        }
+        actions={<Button size="sm">Adicionar anime</Button>}
+      />
+      <p style={{ margin: 0, color: 'var(--ui-text-2)' }}>Seção ativa: {section}</p>
+    </div>
+  );
+}
+
+/**
+ * The app header: brand, section switcher, status chips and the primary action
+ * on one sticky bar. Narrow the preview to 390px — the switcher drops to its own
+ * row and only the chips go away, so the navigation survives.
+ */
+export const AppHeaderBar: Story = { name: 'App header', render: () => <AppHeaderExample /> };

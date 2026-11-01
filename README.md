@@ -155,7 +155,7 @@ export function Example() {
 - `DataTable`
 - `FileUpload` (also exported as `Dropzone`)
 - `Sidebar`
-- `AppShell`, `AppBar`
+- `AppShell`, `AppBar`, `AppHeader`
 
 **Overlays and utilities**
 
@@ -222,12 +222,25 @@ takes the poster scale. `actions` and `footer` stay outside the anchor, so a
 control inside the card is always reachable, and the footer is pinned to the
 bottom of a card stretched by its grid cell, so the controls of a whole row line
 up whatever the titles wrap to. `interactive`, `selected` and `loading` are
-forwarded straight to `Card`. `ItemGrid` lays those
+forwarded straight to `Card`. `variant="poster"` is the gallery shape: the cover
+leads the cell at 2/3 with a 12px radius, the surface and the padding are gone,
+the title takes the accent and the cover zooms under a scrim on hover, and the
+presentational `badge` chip sits on the cover's top-right corner — it lives
+inside the title anchor, so it must hold an icon or a label, never a control. `ItemGrid` lays those
 items out as `grid` (equal columns that fill every cell), `list`, or `adaptive`
 (any item width, from `minColumnWidth`), and takes `columns`, `gap`, a `loading`
 state that renders skeleton cells and an `empty` slot for no items.
 `ViewSwitcher` is the layout menu built on `SegmentedControl`; pass a
-`storageKey` and it remembers the last choice in localStorage.
+`storageKey` and it remembers the last choice in localStorage. `layouts` is the
+exact set of options it offers: a subset hides the rest, `[]` renders nothing
+for a screen locked to one layout, and a single entry renders that layout as a
+fixed label instead of a radio group nobody can change.
+
+`AppHeader` is the bar above the screens: brand, section switcher (`nav`), status
+chips (`meta`) and the primary `actions` on one line, sticky by default. It is
+the sibling of `PageHeader`, which still names the current screen and carries its
+own actions. Below 720px the switcher drops to its own row instead of being
+hidden, so navigation survives on a phone; only the chips go away.
 
 `AppShell` is the frame around a screen: it lays out the sidebar, a `<main>`
 column and an overlay `aside` slot (chat launcher, FAB) for a whole viewport.

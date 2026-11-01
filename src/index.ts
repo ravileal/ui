@@ -216,10 +216,14 @@ export type {
   ItemMediaPosition,
   ItemProps,
   ItemSize,
+  ItemVariant,
 } from './components/Item';
 
 export { ItemGrid } from './components/ItemGrid';
 export type { ItemGridLayout, ItemGridProps } from './components/ItemGrid';
+
+export { default as AppHeader } from './components/AppHeader';
+export type { AppHeaderProps } from './components/AppHeader';
 
 export { ViewSwitcher } from './components/ViewSwitcher';
 export type { ViewSwitcherProps } from './components/ViewSwitcher';

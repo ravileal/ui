@@ -4,6 +4,12 @@ import { Card } from './Card';
 
 export type ItemSize = 'sm' | 'md' | 'lg';
 export type ItemMediaPosition = 'start' | 'top';
+/**
+ * `surface` (default) is the padded card. `poster` drops the card chrome: the
+ * cover leads the cell at the poster ratio, the text sits under it, and the
+ * cover zooms while a scrim rises on hover — the gallery card.
+ */
+export type ItemVariant = 'surface' | 'poster';
 
 export interface ItemMedia {
   src?: string | null;
@@ -29,6 +35,14 @@ export interface ItemProps {
   media?: ItemMedia | null;
   /** 'start' = thumbnail beside the text (list row); 'top' = cover above the text (grid cell). */
   mediaPosition?: ItemMediaPosition;
+  /** Omitted means `surface`. `poster` always puts the cover above the text. */
+  variant?: ItemVariant;
+  /**
+   * Presentational chip pinned to the cover's top-right corner (poster only).
+   * It lives inside the title anchor, so it must not hold a control: pass an
+   * icon, a label or a `Badge`, never a button.
+   */
+  badge?: ReactNode;
   size?: ItemSize;
   href?: string;
   /** Router-agnostic escape hatch for the title/media link. */
@@ -60,6 +74,8 @@ export default function Item({
   meta,
   media,
   mediaPosition = 'start',
+  variant = 'surface',
+  badge,
   size = 'md',
   href,
   renderLink,
@@ -71,6 +87,10 @@ export default function Item({
   className,
   style,
 }: ItemProps) {
+  // A poster always leads with its cover, whatever position the caller asked
+  // for: the shape is the cover above the text, with the chip on the corner.
+  const poster = variant === 'poster';
+  const position: ItemMediaPosition = poster ? 'top' : mediaPosition;
   const thumbFallback = media?.fallback ?? 'initials';
   // A missing image with `fallback="none"` is "no image slot": do not render a
   // thumb at all. Any other combination keeps the initials box (or the image).
@@ -87,11 +107,14 @@ export default function Item({
           // A cover above the text spans the whole body, so it always takes the
           // poster scale: the size class still drives the initials' font size
           // (and only that, since the CSS pins its width to 100%).
-          size={media.size ?? (mediaPosition === 'top' ? 'md' : THUMB_SIZE[size])}
-          aspectRatio={media.aspectRatio ?? (mediaPosition === 'top' ? '2 / 3' : undefined)}
+          size={media.size ?? (position === 'top' ? 'md' : THUMB_SIZE[size])}
+          aspectRatio={media.aspectRatio ?? (position === 'top' ? '2 / 3' : undefined)}
           fallback={thumbFallback}
         />
       )}
+      {/* Sits after the cover so it paints over it; presentational only, since
+          the lead is the anchor. */}
+      {poster && badge != null && <span className="ui-item-badge">{badge}</span>}
       <span className="ui-item-text">
         <span className="ui-item-title">{title}</span>
         {subtitle && <span className="ui-item-subtitle">{subtitle}</span>}
@@ -119,7 +142,13 @@ export default function Item({
       interactive={interactive}
       selected={selected}
       loading={loading}
-      className={['ui-item', `ui-item--${size}`, `ui-item--${mediaPosition}`, className ?? '']
+      className={[
+        'ui-item',
+        `ui-item--${size}`,
+        `ui-item--${position}`,
+        `ui-item--${variant}`,
+        className ?? '',
+      ]
         .filter(Boolean)
         .join(' ')}
       style={style}

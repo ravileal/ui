@@ -187,3 +187,73 @@ describe('Item', () => {
     vi.resetModules();
   });
 });
+
+describe('Item poster variant', () => {
+  it('leads with the cover even when the caller asks for a side thumb', () => {
+    const { container } = render(
+      <Item
+        variant="poster"
+        mediaPosition="start"
+        media={{ src: null, initials: 'FR' }}
+        title="Sousou no Frieren"
+      />,
+    );
+
+    const item = container.querySelector('.ui-item');
+    expect(item?.className).toContain('ui-item--poster');
+    expect(item?.className).toContain('ui-item--top');
+    expect(container.querySelector('.ui-item-thumb.ui-media-thumb--md')).not.toBeNull();
+  });
+
+  it('pins the badge inside the lead, after the cover', () => {
+    const { container } = render(
+      <Item
+        variant="poster"
+        media={{ src: null, initials: 'FR' }}
+        title="Frieren"
+        href="/series/frieren"
+        badge={<span>Monitorado</span>}
+      />,
+    );
+
+    const lead = container.querySelector('.ui-item-lead');
+    const children = Array.from(lead?.children ?? []);
+    const badge = lead?.querySelector('.ui-item-badge');
+    expect(badge?.textContent).toBe('Monitorado');
+    expect(children.indexOf(badge as Element)).toBeGreaterThan(
+      children.findIndex((child) => child.className.includes('ui-media-thumb')),
+    );
+    expect(badge?.closest('a')).toBe(lead);
+  });
+
+  it('renders no badge on a surface card, and none without the prop', () => {
+    const { container, rerender } = render(
+      <Item
+        title="Frieren"
+        media={{ src: null, initials: 'FR' }}
+        badge={<span>Monitorado</span>}
+      />,
+    );
+
+    expect(container.querySelector('.ui-item-badge')).toBeNull();
+
+    rerender(<Item variant="poster" title="Frieren" media={{ src: null, initials: 'FR' }} />);
+    expect(container.querySelector('.ui-item-badge')).toBeNull();
+  });
+
+  it('keeps the poster text and footer slots inside the card', () => {
+    const { container } = render(
+      <Item
+        variant="poster"
+        media={{ src: null, initials: 'FR' }}
+        title="Frieren"
+        subtitle="Madhouse"
+        meta="2023 · 28 eps"
+        footer={<span>switch</span>}
+      />,
+    );
+
+    expect(container.querySelector('.ui-item--poster .ui-item-body .ui-item-text')).not.toBeNull();
+    expect(container.querySelector('.ui-item--poster .ui-item-footer')?.textContent).toBe('switch');
+  });
+});
