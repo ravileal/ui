@@ -26,7 +26,7 @@ export interface ItemGridProps<T> {
   /** One Item/Card per cell. */
   renderItem: (item: T, index: number) => ReactNode;
   getKey?: (item: T, index: number) => string | number;
-  /** Fixed column count for `layout="grid"`. Ignored by `list` and `adaptive`. */
+  /** Fixed column count for `layout="grid"`. Omitted = responsive 2→6 ladder. */
   columns?: number;
   /** Minimum column width for `layout="adaptive"`. Ignored otherwise. */
   minColumnWidth?: number;
@@ -74,7 +74,7 @@ export function ItemGrid<T>({
   layout = 'grid',
   renderItem,
   getKey,
-  columns = 4,
+  columns,
   minColumnWidth = 200,
   maxColumns = 0,
   getSpan,
@@ -242,7 +242,7 @@ export function ItemGrid<T>({
 
   const gridStyle = {
     '--ui-item-grid-gap': `${gap}px`,
-    ...(layout === 'grid' ? { '--ui-item-grid-cols': columns } : {}),
+    ...(layout === 'grid' && columns != null ? { '--ui-item-grid-cols': columns } : {}),
     ...(adaptive
       ? {
           '--ui-item-grid-min': `${minColumnWidth}px`,
@@ -260,7 +260,13 @@ export function ItemGrid<T>({
         .filter(Boolean)
         .join(' ')}
       style={gridStyle}
-      data-cols={adaptive && columnsFit > 0 ? columnsFit : undefined}
+      data-cols={
+        adaptive && columnsFit > 0
+          ? columnsFit
+          : layout === 'grid' && columns != null
+            ? columns
+            : undefined
+      }
       data-masonry={masonry ? 'true' : undefined}
     >
       {cells}

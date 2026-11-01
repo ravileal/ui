@@ -62,12 +62,24 @@ describe('ItemGrid', () => {
     expect(list.style.getPropertyValue('--ui-item-grid-gap')).toBe('24px');
   });
 
-  it('defaults the grid to four columns and a 16px gap', () => {
+  it('leaves the column count unset by default so the CSS ladder takes over', () => {
     const { container } = render(<ItemGrid items={SHOWS} renderItem={renderShow} />);
 
     const list = container.querySelector('.ui-item-grid') as HTMLElement;
-    expect(list.style.getPropertyValue('--ui-item-grid-cols')).toBe('4');
+    expect(list.style.getPropertyValue('--ui-item-grid-cols')).toBe('');
     expect(list.style.getPropertyValue('--ui-item-grid-gap')).toBe('16px');
+  });
+
+  it('renders data-cols for an explicit column count', () => {
+    const { container } = render(<ItemGrid items={SHOWS} columns={5} renderItem={renderShow} />);
+
+    expect(container.querySelector('.ui-item-grid')).toHaveAttribute('data-cols', '5');
+  });
+
+  it('omits data-cols when the grid has no explicit column count', () => {
+    const { container } = render(<ItemGrid items={SHOWS} renderItem={renderShow} />);
+
+    expect(container.querySelector('.ui-item-grid')).not.toHaveAttribute('data-cols');
   });
 
   it('puts the minimum column width on the adaptive layout and keeps columns out of it', () => {

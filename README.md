@@ -228,8 +228,10 @@ the title takes the accent and the cover zooms under a scrim on hover, and the
 presentational `badge` chip sits on the cover's top-right corner — it lives
 inside the title anchor, so it must hold an icon or a label, never a control. `ItemGrid` lays those
 items out as `grid` (equal columns that fill every cell), `list`, or `adaptive`
-(any item width, from `minColumnWidth`), and takes `columns`, `gap`, a `loading`
-state that renders skeleton cells and an `empty` slot for no items.
+(any item width, from `minColumnWidth`). `columns` is optional: pass it to pin an
+explicit count, otherwise the `grid` layout follows a responsive 2/3/4/5/6
+ladder as the viewport widens (768, 1024, 1280 and 1536px). It also takes `gap`,
+a `loading` state that renders skeleton cells and an `empty` slot for no items.
 `ViewSwitcher` is the layout menu built on `SegmentedControl`; pass a
 `storageKey` and it remembers the last choice in localStorage. `layouts` is the
 exact set of options it offers: a subset hides the rest, `[]` renders nothing
