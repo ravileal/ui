@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/ravileal/ui/compare/release-1.1.1...release-1.2.0) (2026-11-01)
+
+### Features
+
+* **item-grid:** pack adaptive blocks by their own size ([1fe7043](https://github.com/ravileal/ui/commit/1fe7043971a8422202db016070ba3abf80a3b74e))
+
 ## [1.1.1](https://github.com/ravileal/ui/compare/release-1.1.0...release-1.1.1) (2026-11-01)
 
 ### Bug Fixes
