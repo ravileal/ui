@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/ravileal/ui/compare/release-1.3.0...release-1.4.0) (2026-11-01)
+
+### Features
+
+* **grid:** give the default grid a responsive column ladder ([113140a](https://github.com/ravileal/ui/commit/113140ab162f3bfcbb6f393e8d7b5bb1f24a5b3f))
+
 ## [1.3.0](https://github.com/ravileal/ui/compare/release-1.2.0...release-1.3.0) (2026-11-01)
 
 ### Features
