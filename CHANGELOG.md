@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/ravileal/ui/compare/release-1.2.0...release-1.3.0) (2026-11-01)
+
+### Features
+
+* add the gallery home screen shapes ([d6bff10](https://github.com/ravileal/ui/commit/d6bff10f8c687783b6bc4cd321026514087cfb0e))
+
 ## [1.2.0](https://github.com/ravileal/ui/compare/release-1.1.1...release-1.2.0) (2026-11-01)
 
 ### Features
