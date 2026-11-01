@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from './Button';
-import { Card } from './Card';
-import MediaCard from './MediaCard';
 import MediaThumb from './MediaThumb';
 import MetaList from './MetaList';
 import NumberField from './NumberField';
 import { ResultList, ResultRow } from './ResultList';
-import Switch from './Switch';
 
 const meta: Meta = {
   title: 'Media',
@@ -28,160 +25,6 @@ function ThumbExample() {
       />
       <MediaThumb src="https://placehold.co/300x450/png" initials="FR" size="sm" alt="" />
       <MediaThumb src={null} initials="FR" size="md" />
-    </div>
-  );
-}
-
-function CardExample() {
-  const [monitored, setMonitored] = useState(true);
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-        gap: 12,
-        width: '100%',
-        maxWidth: 390,
-      }}
-    >
-      <Card padding="sm" style={{ minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        <MediaCard
-          coverImage="https://placehold.co/300x450/png"
-          initials="FR"
-          title="Sousou no Frieren"
-          titleHref="/series/frieren"
-          meta="2023 · 28 episodes"
-          footer={
-            <Switch
-              size="sm"
-              checked={monitored}
-              onChange={setMonitored}
-              label="Monitored"
-              ariaLabel="Monitor series"
-            />
-          }
-          style={{ flex: 1 }}
-        />
-      </Card>
-      <Card padding="sm" style={{ minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        <MediaCard
-          coverImage={null}
-          initials="VS"
-          title="Vinland Saga: Farm Arc, Collector's Edition Box Set"
-          titleHref="/series/vinland-saga"
-          meta="2019 · 48 episodes"
-          footer={
-            <Switch
-              size="sm"
-              checked={false}
-              onChange={() => {}}
-              label="Monitored"
-              ariaLabel="Monitor Vinland Saga"
-            />
-          }
-          style={{ flex: 1 }}
-        />
-      </Card>
-    </div>
-  );
-}
-
-function HorizontalCardExample() {
-  return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 390 }}
-    >
-      <MediaCard
-        orientation="horizontal"
-        coverImage="https://placehold.co/300x450/png"
-        initials="FR"
-        title="Sousou no Frieren"
-        titleHref="/series/frieren"
-        meta="2023 · 28 episodes"
-      />
-      <MediaCard
-        orientation="horizontal"
-        coverImage={null}
-        initials="VS"
-        title="Vinland Saga"
-        titleHref="/series/vinland-saga"
-        meta="2019 · 48 episodes"
-      />
-    </div>
-  );
-}
-
-function LoadingCardExample() {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-        gap: 12,
-        width: '100%',
-        maxWidth: 390,
-      }}
-    >
-      <MediaCard
-        coverImage="https://placehold.co/300x450/png"
-        initials="FR"
-        title="Sousou no Frieren"
-        meta="2023 · 28 episodes"
-        loading
-      />
-      <MediaCard
-        coverImage={null}
-        initials="VS"
-        title="Vinland Saga"
-        meta="2019 · 48 episodes"
-        loading
-      />
-    </div>
-  );
-}
-
-function InteractiveCardExample() {
-  return (
-    <div style={{ width: '100%', maxWidth: 190 }}>
-      <MediaCard
-        coverImage="https://placehold.co/300x450/png"
-        initials="FR"
-        title="Sousou no Frieren"
-        titleHref="/series/frieren"
-        meta="2023 · 28 episodes"
-        interactive
-      />
-    </div>
-  );
-}
-
-function SelectedCardExample() {
-  return (
-    <div style={{ width: '100%', maxWidth: 190 }}>
-      <MediaCard
-        coverImage="https://placehold.co/300x450/png"
-        initials="FR"
-        title="Sousou no Frieren"
-        titleHref="/series/frieren"
-        meta="2023 · 28 episodes"
-        interactive
-        selected
-      />
-    </div>
-  );
-}
-
-function TextOnlyCardExample() {
-  return (
-    <div style={{ width: '100%', maxWidth: 190 }}>
-      <MediaCard
-        coverImage={null}
-        initials="FR"
-        fallback="none"
-        title="Sousou no Frieren"
-        titleHref="/series/frieren"
-        meta="2023 · 28 episodes"
-      />
     </div>
   );
 }
@@ -287,36 +130,6 @@ function NumberFieldExample() {
 export const MediaThumbStory: Story = {
   name: 'MediaThumb',
   render: () => <ThumbExample />,
-};
-
-export const MediaCardStory: Story = {
-  name: 'MediaCard',
-  render: () => <CardExample />,
-};
-
-export const MediaCardHorizontalStory: Story = {
-  name: 'MediaCardHorizontal',
-  render: () => <HorizontalCardExample />,
-};
-
-export const MediaCardLoadingStory: Story = {
-  name: 'MediaCardLoading',
-  render: () => <LoadingCardExample />,
-};
-
-export const MediaCardInteractiveStory: Story = {
-  name: 'MediaCardInteractive',
-  render: () => <InteractiveCardExample />,
-};
-
-export const MediaCardSelectedStory: Story = {
-  name: 'MediaCardSelected',
-  render: () => <SelectedCardExample />,
-};
-
-export const MediaCardTextOnlyStory: Story = {
-  name: 'MediaCardTextOnly',
-  render: () => <TextOnlyCardExample />,
 };
 
 export const ResultListStory: Story = {

@@ -209,13 +209,6 @@ export type { VisuallyHiddenProps } from './components/VisuallyHidden';
 export { default as MediaThumb } from './components/MediaThumb';
 export type { MediaThumbFallback, MediaThumbProps, MediaThumbSize } from './components/MediaThumb';
 
-export { default as MediaCard } from './components/MediaCard';
-export type {
-  MediaCardOrientation,
-  MediaCardProps,
-  MediaCardTitleLinkProps,
-} from './components/MediaCard';
-
 export { default as Item } from './components/Item';
 export type {
   ItemLinkRenderProps,

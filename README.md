@@ -138,7 +138,7 @@ export function Example() {
 
 **Media and content**
 
-- `MediaCard`, `MediaThumb`
+- `MediaThumb`
 - `ResultList`, `ResultRow`
 - `MetaList`
 
@@ -202,11 +202,11 @@ shimmer skeleton that keeps the exact height of the real content and sets
 `MediaThumb` renders a cover with an initials fallback and remembers a failed
 URL per source, so a new `src` gets a fresh attempt. `initials` is the default
 fallback; `fallback="none"` renders nothing when there is no usable image — no
-box and no reserved aspect ratio — so an item can be text only. `MediaCard` puts that
-thumbnail next to a title, an optional metadata line and a footer; pass
-`titleHref` plus `renderTitleLink` to render the cover and title as your own
-router link, and know that the footer stays a sibling of that anchor — a
-`Switch` or a button inside a link swallows the navigation. `ResultList` /
+box and no reserved aspect ratio — so an item can be text only. It is the cover
+primitive only: for a cover with a title, a metadata line and a footer use
+`Item` with `mediaPosition="top"`, which keeps `actions` and `footer` outside the
+anchor — a `Switch` or a button inside a link swallows the navigation.
+`ResultList` /
 `ResultRow` are the search-result list (media, primary and secondary text, meta,
 trailing action), and `MetaList` is the compact inline metadata line whose
 separator is a CSS dot, never a stray text node. `NumberField` is the small
