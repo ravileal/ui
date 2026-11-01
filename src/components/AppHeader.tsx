@@ -47,13 +47,15 @@ export default function AppHeader({
       style={style}
       aria-label={ariaLabel}
     >
-      <div className="ui-app-header-brand">{brand}</div>
-      {nav != null && <div className="ui-app-header-nav">{nav}</div>}
-      {/* The spacer keeps the meta/actions cluster against the far edge even
-          when the brand is short. */}
-      <div className="ui-app-header-spacer" aria-hidden="true" />
-      {meta != null && <div className="ui-app-header-meta">{meta}</div>}
-      {actions != null && <div className="ui-app-header-actions">{actions}</div>}
+      <div className="ui-app-header-inner">
+        <div className="ui-app-header-brand">{brand}</div>
+        {nav != null && <div className="ui-app-header-nav">{nav}</div>}
+        {/* The spacer keeps the meta/actions cluster against the far edge even
+            when the brand is short. */}
+        <div className="ui-app-header-spacer" aria-hidden="true" />
+        {meta != null && <div className="ui-app-header-meta">{meta}</div>}
+        {actions != null && <div className="ui-app-header-actions">{actions}</div>}
+      </div>
     </header>
   );
 }

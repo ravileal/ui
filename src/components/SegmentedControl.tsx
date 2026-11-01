@@ -8,6 +8,13 @@ import {
 export interface SegmentedItem {
   value: string;
   label: ReactNode;
+  /**
+   * Accessible name for a segment whose label is an icon. Also becomes the
+   * native `title`, since the icon carries no text of its own.
+   */
+  ariaLabel?: string;
+  /** Narrows the segment to an icon: same height, tighter horizontal padding. */
+  iconOnly?: boolean;
   disabled?: boolean;
 }
 
@@ -75,9 +82,17 @@ export function SegmentedControl({
             type="button"
             role="radio"
             aria-checked={selected}
+            aria-label={item.ariaLabel}
+            title={item.ariaLabel}
             tabIndex={selected ? 0 : -1}
             disabled={item.disabled}
-            className={['ui-segmented-item', selected ? 'is-active' : ''].filter(Boolean).join(' ')}
+            className={[
+              'ui-segmented-item',
+              item.iconOnly ? 'ui-segmented-item--icon' : '',
+              selected ? 'is-active' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
             onClick={() => onChange(item.value)}
           >
             {item.label}

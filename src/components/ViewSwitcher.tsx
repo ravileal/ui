@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from 'react';
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 import { SegmentedControl } from './SegmentedControl';
 import type { ItemGridLayout } from './ItemGrid';
 
@@ -12,6 +12,12 @@ export interface ViewSwitcherProps {
    */
   layouts?: ItemGridLayout[];
   labels?: Partial<Record<ItemGridLayout, string>>;
+  /**
+   * Icon per layout. A layout with an icon renders an icon-only segment whose
+   * accessible name still comes from `labels` (or the default label); a layout
+   * without one keeps the text label.
+   */
+  icons?: Partial<Record<ItemGridLayout, ReactNode>>;
   ariaLabel?: string;
   /** When set, the last choice is remembered in localStorage under this key and restored on mount. */
   storageKey?: string;
@@ -61,6 +67,7 @@ export function ViewSwitcher({
   onChange,
   layouts = DEFAULT_LAYOUTS,
   labels,
+  icons,
   ariaLabel = 'Item layout',
   storageKey,
   className,
@@ -91,6 +98,7 @@ export function ViewSwitcher({
 
   if (layouts.length === 1) {
     const only = layouts[0] as ItemGridLayout;
+    const onlyIcon = icons?.[only];
     return (
       <div
         className={['ui-view-switcher-fixed', className ?? ''].filter(Boolean).join(' ')}
@@ -98,7 +106,13 @@ export function ViewSwitcher({
         data-layout={only}
         title={ariaLabel}
       >
-        {labels?.[only] ?? DEFAULT_LABELS[only]}
+        {onlyIcon != null ? (
+          <span className="ui-view-switcher-icon" aria-hidden="true">
+            {onlyIcon}
+          </span>
+        ) : (
+          (labels?.[only] ?? DEFAULT_LABELS[only])
+        )}
       </div>
     );
   }
@@ -117,10 +131,23 @@ export function ViewSwitcher({
       onChange={handleChange}
       className={className}
       style={style}
-      items={layouts.map((layout) => ({
-        value: layout,
-        label: labels?.[layout] ?? DEFAULT_LABELS[layout],
-      }))}
+      items={layouts.map((layout) => {
+        const label = labels?.[layout] ?? DEFAULT_LABELS[layout];
+        const icon = icons?.[layout];
+        if (icon != null) {
+          return {
+            value: layout,
+            label: (
+              <span className="ui-view-switcher-icon" aria-hidden="true">
+                {icon}
+              </span>
+            ),
+            ariaLabel: label,
+            iconOnly: true,
+          };
+        }
+        return { value: layout, label };
+      })}
     />
   );
 }

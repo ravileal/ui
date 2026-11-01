@@ -96,6 +96,26 @@ describe('SegmentedControl', () => {
     await userEvent.keyboard('{ArrowRight}');
     expect(onChange).toHaveBeenLastCalledWith('month');
   });
+
+  it('names and narrows an icon-only segment', () => {
+    render(
+      <SegmentedControl
+        ariaLabel="Layout"
+        value="grid"
+        onChange={vi.fn()}
+        items={[
+          { value: 'grid', label: <svg />, ariaLabel: 'Grid', iconOnly: true },
+          { value: 'list', label: 'List' },
+        ]}
+      />,
+    );
+
+    const grid = screen.getByRole('radio', { name: 'Grid' });
+    expect(grid).toHaveAttribute('aria-label', 'Grid');
+    expect(grid).toHaveAttribute('title', 'Grid');
+    expect(grid).toHaveClass('ui-segmented-item--icon');
+    expect(screen.getByRole('radio', { name: 'List' })).not.toHaveAttribute('aria-label');
+  });
 });
 
 interface Row {

@@ -241,6 +241,48 @@ describe('Item poster variant', () => {
     expect(container.querySelector('.ui-item-badge')).toBeNull();
   });
 
+  it('renders coverAction outside the anchor, in its own cover slot', () => {
+    const { container } = render(
+      <Item
+        variant="poster"
+        media={{ src: null, initials: 'FR' }}
+        title="Frieren"
+        href="/series/frieren"
+        coverAction={<button type="button">Monitor</button>}
+      />,
+    );
+
+    const link = screen.getByRole('link');
+    const action = screen.getByRole('button', { name: 'Monitor' });
+    expect(link.contains(action)).toBe(false);
+    expect(container.querySelector('.ui-item-cover-action')?.contains(action)).toBe(true);
+
+    action.focus();
+    expect(action).toHaveFocus();
+  });
+
+  it('only renders coverAction on a poster', () => {
+    const { container, rerender } = render(
+      <Item
+        title="Frieren"
+        media={{ src: null, initials: 'FR' }}
+        coverAction={<button type="button">Monitor</button>}
+      />,
+    );
+
+    expect(container.querySelector('.ui-item-cover-action')).toBeNull();
+
+    rerender(
+      <Item
+        variant="poster"
+        media={{ src: null, initials: 'FR' }}
+        title="Frieren"
+        coverAction={<button type="button">Monitor</button>}
+      />,
+    );
+    expect(container.querySelector('.ui-item-cover-action')).not.toBeNull();
+  });
+
   it('keeps the poster text and footer slots inside the card', () => {
     const { container } = render(
       <Item

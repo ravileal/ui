@@ -77,6 +77,28 @@ describe('ViewSwitcher', () => {
     expect(container.querySelector('select')).toBeNull();
   });
 
+  it('renders icon segments with the accessible name and no visible text', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <ViewSwitcher value="grid" onChange={onChange} icons={{ grid: <svg />, list: <svg /> }} />,
+    );
+
+    const grid = screen.getByRole('radio', { name: 'Grid' });
+    const list = screen.getByRole('radio', { name: 'List' });
+    expect(grid).toHaveAttribute('aria-label', 'Grid');
+    expect(grid).toHaveAttribute('title', 'Grid');
+    expect(list).toHaveAttribute('aria-label', 'List');
+    expect(grid.textContent).toBe('');
+    expect(grid.querySelector('.ui-view-switcher-icon')?.getAttribute('aria-hidden')).toBe('true');
+
+    // A layout without an icon keeps the text label.
+    expect(screen.getByRole('radio', { name: 'Adaptive' }).textContent).toBe('Adaptive');
+
+    await user.click(list);
+    expect(onChange).toHaveBeenCalledWith('list');
+  });
+
   it('calls onChange with the clicked layout', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();

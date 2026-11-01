@@ -43,6 +43,12 @@ export interface ItemProps {
    * icon, a label or a `Badge`, never a button.
    */
   badge?: ReactNode;
+  /**
+   * The one real control that belongs on the cover's top-right corner (poster
+   * only): a monitor toggle, a menu trigger, a favourite. Rendered as a sibling
+   * of the lead, never inside the anchor, so it stays focusable and clickable.
+   */
+  coverAction?: ReactNode;
   size?: ItemSize;
   href?: string;
   /** Router-agnostic escape hatch for the title/media link. */
@@ -76,6 +82,7 @@ export default function Item({
   mediaPosition = 'start',
   variant = 'surface',
   badge,
+  coverAction,
   size = 'md',
   href,
   renderLink,
@@ -155,6 +162,7 @@ export default function Item({
     >
       <div className="ui-item-body">
         {lead}
+        {poster && coverAction != null && <div className="ui-item-cover-action">{coverAction}</div>}
         {/* Sibling of the lead: controls inside an <a> would be unreachable. */}
         {actions && <div className="ui-item-actions">{actions}</div>}
       </div>

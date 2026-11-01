@@ -226,7 +226,10 @@ forwarded straight to `Card`. `variant="poster"` is the gallery shape: the cover
 leads the cell at 2/3 with a 12px radius, the surface and the padding are gone,
 the title takes the accent and the cover zooms under a scrim on hover, and the
 presentational `badge` chip sits on the cover's top-right corner — it lives
-inside the title anchor, so it must hold an icon or a label, never a control. `ItemGrid` lays those
+inside the title anchor, so it must hold an icon or a label, never a control.
+`coverAction` is the one real control for that corner (a monitor toggle, a menu
+trigger): it renders as a sibling of the anchor, over the cover's top-right, so
+it stays focusable while the card still navigates. `ItemGrid` lays those
 items out as `grid` (equal columns that fill every cell), `list`, or `adaptive`
 (any item width, from `minColumnWidth`). `columns` is optional: pass it to pin an
 explicit count, otherwise the `grid` layout follows a responsive 2/3/4/5/6
@@ -236,13 +239,17 @@ a `loading` state that renders skeleton cells and an `empty` slot for no items.
 `storageKey` and it remembers the last choice in localStorage. `layouts` is the
 exact set of options it offers: a subset hides the rest, `[]` renders nothing
 for a screen locked to one layout, and a single entry renders that layout as a
-fixed label instead of a radio group nobody can change.
+fixed label instead of a radio group nobody can change. Pass `icons` to render
+icon-only segments: each one keeps `labels` (or the default label) as its
+accessible name and `title`, and a layout without an icon keeps its text label.
 
 `AppHeader` is the bar above the screens: brand, section switcher (`nav`), status
-chips (`meta`) and the primary `actions` on one line, sticky by default. It is
-the sibling of `PageHeader`, which still names the current screen and carries its
-own actions. Below 720px the switcher drops to its own row instead of being
-hidden, so navigation survives on a phone; only the chips go away.
+chips (`meta`) and the primary `actions` on one line, sticky by default. The bar
+is full bleed, but its content sits in a centred measure
+(`--ui-app-header-max`, 1600px by default) so it lines up with the page column.
+It is the sibling of `PageHeader`, which still names the current screen and
+carries its own actions. Below 720px the switcher drops to its own row instead
+of being hidden, so navigation survives on a phone; only the chips go away.
 
 `AppShell` is the frame around a screen: it lays out the sidebar, a `<main>`
 column and an overlay `aside` slot (chat launcher, FAB) for a whole viewport.
@@ -308,8 +315,9 @@ export function Dashboard() {
 `MonthCalendar` also ships the pure date helpers it uses (`buildMonthGrid`,
 `monthGridLabel`, `nextRangeSelection`, `eventColor`, `parseISODate`, `toISO`,
 `isWithinRange`) for consumers that need the same grid math outside React.
-`Button` accepts `variant` (`primary`, `secondary`, `ghost`, `danger`), `size`
-and `loading`.
+`Button` accepts `variant` (`primary`, `secondary`, `ghost`, `danger`, `glass`),
+`size` and `loading`. `glass` is the translucent, blurred control for artwork:
+it has no border in any state and keeps the shared focus ring.
 
 ```tsx
 import { useState } from 'react';

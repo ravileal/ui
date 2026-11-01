@@ -32,6 +32,11 @@ describe('Button', () => {
     );
   });
 
+  it('renders the glass variant for controls on artwork', () => {
+    render(<Button variant="glass">Monitor</Button>);
+    expect(screen.getByRole('button', { name: 'Monitor' })).toHaveClass('ui-button--glass');
+  });
+
   it('disables while loading and renders a status spinner', () => {
     render(<Button loading>Save</Button>);
     const button = screen.getByRole('button', { name: 'Loading Save' });

@@ -765,6 +765,18 @@
 .ui-button--danger:hover:not(:disabled) {
   filter: brightness(1.06);
 }
+/* For controls that sit on artwork: translucent, blurred, no border. */
+.ui-button--glass {
+  background: color-mix(in srgb, var(--ui-bg) 62%, transparent);
+  border-color: transparent;
+  color: var(--ui-text-2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.ui-button--glass:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ui-bg) 85%, transparent);
+  color: var(--ui-text);
+}
 .ui-button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
@@ -2244,15 +2256,28 @@
 }
 
 .ui-segmented {
+  box-sizing: border-box;
   display: inline-flex;
+  align-items: stretch;
   gap: 2px;
   padding: 3px;
   border: 1px solid var(--ui-border);
   border-radius: 9px;
   background: var(--ui-surface-2);
 }
+/* The bar matches the Button height of the same size. */
+.ui-segmented--sm {
+  height: 28px;
+}
+.ui-segmented--md {
+  height: 36px;
+}
 .ui-segmented-item {
-  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 12px;
   border: none;
   border-radius: 6px;
   background: transparent;
@@ -2262,11 +2287,19 @@
   cursor: pointer;
 }
 .ui-segmented--sm .ui-segmented-item {
-  padding: 4px 10px;
-  font-size: 11px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+.ui-segmented--md .ui-segmented-item {
+  padding: 0 16px;
+  font-size: 13px;
+}
+/* Icon-only segment: same height, narrower than a text label. */
+.ui-segmented .ui-segmented-item--icon {
+  padding: 0 9px;
 }
 .ui-segmented-item.is-active {
-  background: color-mix(in srgb, var(--ui-accent) 14%, transparent);
+  background: color-mix(in srgb, var(--ui-accent) 16%, transparent);
   color: var(--ui-accent);
   font-weight: 600;
 }
@@ -4350,19 +4383,27 @@
 
 /* App level bar: brand, section switcher, status chips and the primary
    actions on one line. It never hides the switcher — below 720px the switcher
-   drops to its own row, so navigation survives on a phone. */
+   drops to its own row, so navigation survives on a phone. The bar is full
+   bleed; the inner measure centres its content on the same column as the page. */
 .ui-app-header {
   box-sizing: border-box;
-  display: flex;
   flex-shrink: 0;
+  background: var(--ui-surface);
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.ui-app-header-inner {
+  box-sizing: border-box;
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 16px;
-  min-height: 64px;
+  width: 100%;
+  max-width: var(--ui-app-header-max, 1600px);
+  margin-inline: auto;
   padding: 10px 24px;
   padding-top: max(10px, env(safe-area-inset-top, 0px));
-  background: var(--ui-surface);
-  border-bottom: 1px solid var(--ui-border);
+  min-height: 64px;
 }
 
 /* Clears scrolling content, stays below overlays (drawer 60, modal 100). */
@@ -4423,7 +4464,7 @@
 }
 
 @media (max-width: 720px) {
-  .ui-app-header {
+  .ui-app-header-inner {
     gap: 10px 12px;
     padding-right: 16px;
     padding-left: 16px;
@@ -4447,6 +4488,7 @@
 }
 
 .ui-item--poster .ui-item-body {
+  position: relative;
   padding: 0;
 }
 
@@ -4458,6 +4500,23 @@
 
 .ui-item--poster .ui-item-thumb {
   --ui-media-thumb-radius: 12px;
+}
+
+/* The card is only the wrapper: it never moves or casts a shadow, so the text
+   below the cover stays put while the cover itself lifts. */
+.ui-item--poster.ui-card--interactive {
+  transition: none;
+}
+.ui-item--poster.ui-card--interactive:hover,
+.ui-item--poster.ui-card--interactive:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.ui-item--poster .ui-media-thumb {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .ui-item--poster .ui-item-text {
@@ -4495,21 +4554,27 @@
   }
   .ui-item--poster:hover .ui-item-title {
     color: var(--ui-accent);
+    text-shadow: none;
   }
-  /* More lift than a surface card: there is no border to mark the edge. */
-  .ui-item--poster.ui-card--interactive:hover {
+  /* The lift and the accent-tinted glow belong to the cover alone. */
+  .ui-item--poster:hover .ui-media-thumb {
     transform: translateY(-4px);
-    box-shadow: var(--ui-shadow-lg);
+    box-shadow: 0 16px 30px -16px color-mix(in srgb, var(--ui-accent) 55%, transparent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ui-item--poster .ui-media-thumb-img,
-  .ui-item--poster .ui-media-thumb::after {
+  .ui-item--poster .ui-media-thumb::after,
+  .ui-item--poster .ui-media-thumb {
     transition: none;
   }
   .ui-item--poster:hover .ui-media-thumb-img {
     transform: none;
+  }
+  .ui-item--poster:hover .ui-media-thumb {
+    transform: none;
+    box-shadow: none;
   }
 }
 
@@ -4541,6 +4606,22 @@
   height: 14px;
 }
 
+/* The real control on the cover's corner: a sibling of the anchor, so it can
+   take focus and clicks without swallowing the card navigation. */
+.ui-item-cover-action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.ui-item-cover-action .ui-button {
+  height: 30px;
+  min-width: 34px;
+}
+
 /* A screen locked to one layout says which one; there is no radio group to
    offer, so this is a label, not a control. */
 .ui-view-switcher-fixed {
@@ -4556,4 +4637,14 @@
   font-size: 11px;
   line-height: 1.2;
   cursor: default;
+}
+
+.ui-view-switcher-icon {
+  display: inline-flex;
+}
+
+.ui-view-switcher-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
 }

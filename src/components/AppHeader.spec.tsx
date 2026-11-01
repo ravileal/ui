@@ -20,6 +20,24 @@ describe('AppHeader', () => {
     expect(header.querySelector('.ui-app-header-actions button')?.textContent).toBe('Adicionar');
   });
 
+  it('keeps the five slots inside the centred measure', () => {
+    render(
+      <AppHeader
+        brand={<a href="/">anime-tracker</a>}
+        nav={<nav aria-label="Seções">Biblioteca</nav>}
+        meta={<span>Biblioteca: /animes</span>}
+        actions={<button type="button">Adicionar</button>}
+      />,
+    );
+
+    const header = screen.getByRole('banner', { name: 'Application header' });
+    const inner = header.querySelector('.ui-app-header-inner');
+    expect(inner).not.toBeNull();
+    for (const slot of ['brand', 'nav', 'spacer', 'meta', 'actions']) {
+      expect(inner?.querySelector(`.ui-app-header-${slot}`)).not.toBeNull();
+    }
+  });
+
   it('is sticky by default and honours sticky={false}', () => {
     const { container, rerender } = render(<AppHeader brand="anime-tracker" />);
 
