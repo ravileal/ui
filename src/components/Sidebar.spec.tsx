@@ -83,7 +83,7 @@ describe('Sidebar', () => {
     expect(screen.queryByText('Merchant Aliases')).not.toBeInTheDocument();
   });
 
-  it('hides labels when collapsed, expands the rail on group click and renders the footer slot', async () => {
+  it('keeps the labels mounted but hidden in the rail, expands it on group click and renders the footer slot', async () => {
     const onToggle = vi.fn();
     render(
       <Sidebar
@@ -97,8 +97,10 @@ describe('Sidebar', () => {
       />,
     );
 
-    expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
-    expect(screen.queryByText('App')).not.toBeInTheDocument();
+    // The copy stays mounted so the width transition can animate it, and is
+    // hidden from both the layout and the accessibility tree.
+    expect(screen.getByText('Dashboard').closest('[aria-hidden="true"]')).not.toBeNull();
+    expect(screen.getByText('App').closest('[aria-hidden="true"]')).not.toBeNull();
     expect(screen.getByRole('button', { name: 'Expand sidebar' })).toBeInTheDocument();
     expect(screen.getByTitle('Settings')).toBeInTheDocument();
 
@@ -149,7 +151,7 @@ describe('Sidebar', () => {
       expect(onToggle).toHaveBeenCalledTimes(1);
     });
 
-    it('applies the expanded width and keeps the « glyph', () => {
+    it('applies the expanded width and draws a collapse chevron', () => {
       render(
         <Sidebar
           items={items}
@@ -164,7 +166,37 @@ describe('Sidebar', () => {
       const nav = screen.getByRole('navigation', { name: 'Main navigation' });
       expect(nav).toHaveStyle({ width: '240px' });
       expect(nav).not.toHaveClass('is-collapsed');
-      expect(screen.getByRole('button', { name: 'Collapse sidebar' })).toHaveTextContent('«');
+      const toggle = screen.getByRole('button', { name: 'Collapse sidebar' });
+      expect(toggle.querySelector('svg')).not.toBeNull();
+    });
+
+    it('defaults to a 256px panel and an 80px rail', () => {
+      const { unmount } = render(
+        <Sidebar
+          items={items}
+          activeId="dashboard"
+          onSelect={vi.fn()}
+          collapsed={false}
+          onToggle={vi.fn()}
+        />,
+      );
+      expect(screen.getByRole('navigation', { name: 'Main navigation' })).toHaveStyle({
+        width: '256px',
+      });
+      unmount();
+
+      render(
+        <Sidebar
+          items={items}
+          activeId="dashboard"
+          onSelect={vi.fn()}
+          collapsed
+          onToggle={vi.fn()}
+        />,
+      );
+      expect(screen.getByRole('navigation', { name: 'Main navigation' })).toHaveStyle({
+        width: '80px',
+      });
     });
 
     it('ignores mobileOpen and onMobileClose for selection', async () => {
@@ -210,7 +242,9 @@ describe('Sidebar', () => {
       expect(nav).not.toHaveClass('is-open');
       expect(nav).not.toHaveClass('is-collapsed');
       expect(backdrop()).toBeNull();
-      expect(screen.getByRole('button', { name: 'Close navigation' })).toHaveTextContent('×');
+      expect(
+        screen.getByRole('button', { name: 'Close navigation' }).querySelector('svg'),
+      ).not.toBeNull();
     });
 
     it('derives the open state from collapsed when mobileOpen is omitted', () => {
@@ -252,7 +286,7 @@ describe('Sidebar', () => {
       expect(document.body.style.overflow).toBe('');
     });
 
-    it('closes and reopens an uncontrolled drawer from the × toggle button', async () => {
+    it('closes and reopens an uncontrolled drawer from the close toggle', async () => {
       setViewportWidth(MOBILE_WIDTH);
       const onToggle = vi.fn();
       render(

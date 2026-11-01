@@ -45,12 +45,48 @@ export interface SidebarProps {
   closeLabel?: string;
 }
 
-const DEFAULT_WIDTH = 220;
-const DEFAULT_COLLAPSED_WIDTH = 64;
+// 256/80 keep the rail centred: 12px item padding + 8px row padding leaves a
+// 40px box for the icon, which is the width the rail hugs.
+const DEFAULT_WIDTH = 256;
+const DEFAULT_COLLAPSED_WIDTH = 80;
 const DEFAULT_CLOSE_LABEL = 'Close navigation';
 
 function isItemActive(item: SidebarItem, activeId: string): boolean {
   return item.id === activeId || Boolean(item.children?.some((child) => child.id === activeId));
+}
+
+/**
+ * Chevrons for the collapse toggle, drawn inline: the package ships no icon
+ * dependency, and a glyph character would scale with the consumer's font.
+ */
+function ToggleGlyph({ direction }: { direction: 'left' | 'right' | 'close' }) {
+  if (direction === 'close') {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2.2}
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    );
+  }
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={direction === 'left' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} />
+    </svg>
+  );
 }
 
 /**
@@ -170,7 +206,7 @@ export default function Sidebar({
     onToggle();
   };
 
-  const toggleGlyph = isCompact ? '×' : rail ? '»' : '«';
+  const toggleDirection = isCompact ? 'close' : rail ? 'right' : 'left';
   const toggleLabel = isCompact ? closeLabel : rail ? expandLabel : collapseLabel;
 
   return (
@@ -197,14 +233,14 @@ export default function Sidebar({
           {brand && (
             <div className="ui-sidebar-brand">
               {brand.icon && <div className="ui-sidebar-brand-icon">{brand.icon}</div>}
-              {!rail && (
-                <div className="ui-sidebar-brand-copy">
-                  <div className="ui-sidebar-brand-title">{brand.title}</div>
-                  {brand.subtitle && (
-                    <div className="ui-sidebar-brand-subtitle">{brand.subtitle}</div>
-                  )}
-                </div>
-              )}
+              {/* Kept mounted in the rail so the width transition has something
+                  to animate; `aria-hidden` keeps the name out of the a11y tree. */}
+              <div className="ui-sidebar-brand-copy" aria-hidden={rail ? 'true' : undefined}>
+                <div className="ui-sidebar-brand-title">{brand.title}</div>
+                {brand.subtitle && (
+                  <div className="ui-sidebar-brand-subtitle">{brand.subtitle}</div>
+                )}
+              </div>
             </div>
           )}
           <div className="ui-sidebar-toggle-row">
@@ -215,7 +251,7 @@ export default function Sidebar({
               title={toggleLabel}
               onClick={handleToggleClick}
             >
-              {toggleGlyph}
+              <ToggleGlyph direction={toggleDirection} />
             </button>
           </div>
         </div>
@@ -245,8 +281,8 @@ export default function Sidebar({
                         {item.icon}
                       </span>
                     )}
-                    {!rail && <span className="ui-sidebar-item-label">{item.label}</span>}
-                    {!rail && (
+                    <span className="ui-sidebar-item-copy" aria-hidden={rail ? 'true' : undefined}>
+                      <span className="ui-sidebar-item-label">{item.label}</span>
                       <span
                         className={['ui-sidebar-caret', open ? 'is-open' : '']
                           .filter(Boolean)
@@ -255,7 +291,7 @@ export default function Sidebar({
                       >
                         ▾
                       </span>
-                    )}
+                    </span>
                   </button>
                   {!rail && open && (
                     <div id={submenuId} className="ui-sidebar-subitems">
@@ -299,7 +335,9 @@ export default function Sidebar({
                     {item.icon}
                   </span>
                 )}
-                {!rail && <span className="ui-sidebar-item-label">{item.label}</span>}
+                <span className="ui-sidebar-item-copy" aria-hidden={rail ? 'true' : undefined}>
+                  <span className="ui-sidebar-item-label">{item.label}</span>
+                </span>
               </button>
             );
           })}

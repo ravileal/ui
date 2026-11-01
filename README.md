@@ -239,6 +239,15 @@ drawer's controlled `mobileOpen` / `onMobileClose` props. The shell only owns
 the frame: `children` is never wrapped in a scroller, so screens keep owning
 their own scroll region.
 
+`Sidebar` defaults to a 256px panel that collapses to an 80px rail of icons;
+`width` and `collapsedWidth` override both. The collapse toggle is a 28px button
+on the panel's right edge — it straddles the border, so it stays reachable in
+either state — and the rail keeps the brand and the item labels mounted, moving
+them out with a width/opacity transition and hiding them from the accessibility
+tree, so the collapse reads as one motion instead of the text popping out. The
+active item carries a 3px accent pill on the panel edge, and the whole rail
+honours `prefers-reduced-motion`.
+
 `Drawer` (also exported as `Sheet`) animates only on open: the overlay fades in
 and the panel slides in from its own side, both in under 200ms. Closing stays
 instant — the panel unmounts as soon as `open` becomes false — and
