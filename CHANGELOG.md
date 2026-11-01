@@ -1,3 +1,9 @@
+## [1.6.2](https://github.com/ravileal/ui/compare/release-1.6.1...release-1.6.2) (2026-11-01)
+
+### Bug Fixes
+
+* keep a pressed glass control in the accent colour ([b6baa80](https://github.com/ravileal/ui/commit/b6baa80a9c6a0c54e70d5a7a6f0859a60259e14b))
+
 ## [1.6.1](https://github.com/ravileal/ui/compare/release-1.6.0...release-1.6.1) (2026-11-01)
 
 ### Bug Fixes
