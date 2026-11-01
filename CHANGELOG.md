@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/ravileal/ui/compare/release-1.1.0...release-1.1.1) (2026-11-01)
+
+### Bug Fixes
+
+* **sidebar:** let the item list shrink so the footer stays in the panel ([c994dd3](https://github.com/ravileal/ui/commit/c994dd3fb21697ee416cb4cd651a122b7a2c886f))
+
 ## [1.1.0](https://github.com/ravileal/ui/compare/release-1.0.2...release-1.1.0) (2026-11-01)
 
 ### Features
