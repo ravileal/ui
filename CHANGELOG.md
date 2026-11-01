@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/ravileal/ui/compare/release-1.0.0...release-1.0.1) (2026-11-01)
+
+### Bug Fixes
+
+* **item:** poster scale for a top cover and a footer pinned to the card bottom ([074f2c2](https://github.com/ravileal/ui/commit/074f2c20e1f769b1f98a7ca1311a185b054e692e))
+
 ## [1.0.0](https://github.com/ravileal/ui/compare/release-0.5.0...release-1.0.0) (2026-11-01)
 
 ### ⚠ BREAKING CHANGES
