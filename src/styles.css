@@ -4023,6 +4023,16 @@
   --ui-item-title-size: 16px;
 }
 
+/* The card base wraps its children in .ui-card-content, so the item's column —
+   and the footer's auto margin — has to live on that box, not on the root. */
+.ui-item > .ui-card-content {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .ui-item-body {
   box-sizing: border-box;
   display: flex;
