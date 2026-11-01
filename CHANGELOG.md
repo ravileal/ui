@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/ravileal/ui/compare/release-1.0.1...release-1.0.2) (2026-11-01)
+
+### Bug Fixes
+
+* **item:** stack the item inside the card content wrapper ([39989fa](https://github.com/ravileal/ui/commit/39989faeb19d2095cdab0ee108811fbae6dfff0d))
+
 ## [1.0.1](https://github.com/ravileal/ui/compare/release-1.0.0...release-1.0.1) (2026-11-01)
 
 ### Bug Fixes
