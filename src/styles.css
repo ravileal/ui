@@ -784,6 +784,13 @@
   background: color-mix(in srgb, var(--ui-bg) 85%, transparent);
   color: var(--ui-text);
 }
+/* A glass toggle that reports `aria-pressed="true"` keeps the accent on its glyph, and keeps it
+   while hovered too: the hover above only brightens the backing, it must not wash the state out.
+   That is what makes a monitor/favourite control on artwork read as ON instead of merely darker. */
+.ui-button--glass[aria-pressed='true'],
+.ui-button--glass[aria-pressed='true']:hover:not(:disabled) {
+  color: var(--ui-accent);
+}
 .ui-button:disabled {
   opacity: 0.55;
   cursor: not-allowed;

@@ -333,7 +333,10 @@ export function Dashboard() {
 `isWithinRange`) for consumers that need the same grid math outside React.
 `Button` accepts `variant` (`primary`, `secondary`, `ghost`, `danger`, `glass`),
 `size` and `loading`. `glass` is the translucent, blurred control for artwork:
-it has no border in any state and keeps the shared focus ring.
+it has no border in any state and keeps the shared focus ring. A glass control
+used as a toggle should carry `aria-pressed`: while pressed its glyph stays in
+`--ui-accent` (hover included), so an "on" monitor or favourite reads as the
+accent state instead of merely a brighter chip.
 
 ```tsx
 import { useState } from 'react';
