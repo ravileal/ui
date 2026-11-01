@@ -83,15 +83,51 @@ export const List: Story = {
   ),
 };
 
+/* Adaptive reads its container, not the viewport, so the same six shows at
+   three widths is the honest demo: only the column count changes. */
+const ADAPTIVE_WIDTHS = [420, 640, 1000];
+
 export const Adaptive: Story = {
   render: () => (
-    <ItemGrid
-      items={SHOWS}
-      layout="adaptive"
-      minColumnWidth={180}
-      renderItem={(show) => gridItem(show, 'top')}
-      style={{ maxWidth: 960 }}
-    />
+    <div style={{ display: 'grid', gap: 32 }}>
+      {ADAPTIVE_WIDTHS.map((width) => (
+        <section key={width} style={{ maxWidth: width }}>
+          <div style={{ color: 'var(--ui-text-3)', fontSize: 12, marginBottom: 8 }}>
+            {width}px container
+          </div>
+          <ItemGrid
+            items={SHOWS}
+            layout="adaptive"
+            minColumnWidth={180}
+            renderItem={(show) => gridItem(show, 'top')}
+          />
+        </section>
+      ))}
+    </div>
+  ),
+};
+
+/** Drag the bottom-right corner: a new column appears as soon as one fits. */
+export const AdaptiveResizing: Story = {
+  render: () => (
+    <div
+      style={{
+        width: 420,
+        minWidth: 260,
+        maxWidth: '100%',
+        padding: 12,
+        border: '1px dashed var(--ui-border)',
+        overflow: 'auto',
+        resize: 'horizontal',
+      }}
+    >
+      <ItemGrid
+        items={SHOWS}
+        layout="adaptive"
+        minColumnWidth={180}
+        renderItem={(show) => gridItem(show, 'top')}
+      />
+    </div>
   ),
 };
 
