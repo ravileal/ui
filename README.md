@@ -217,9 +217,12 @@ number input drops the leading minus as you type.
 
 `Item` is the card as an item: the optional media sits beside the text
 (`mediaPosition="start"`) or above it (`"top"`), and `size` (`sm`, `md`, `lg`)
-drives the title, the padding and the thumb. `actions` and `footer` stay outside
-the anchor, so a control inside the card is always reachable, and `interactive`,
-`selected` and `loading` are forwarded straight to `Card`. `ItemGrid` lays those
+drives the title, the padding and the thumb — a cover above the text always
+takes the poster scale. `actions` and `footer` stay outside the anchor, so a
+control inside the card is always reachable, and the footer is pinned to the
+bottom of a card stretched by its grid cell, so the controls of a whole row line
+up whatever the titles wrap to. `interactive`, `selected` and `loading` are
+forwarded straight to `Card`. `ItemGrid` lays those
 items out as `grid` (equal columns that fill every cell), `list`, or `adaptive`
 (any item width, from `minColumnWidth`), and takes `columns`, `gap`, a `loading`
 state that renders skeleton cells and an `empty` slot for no items.

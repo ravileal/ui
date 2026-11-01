@@ -84,7 +84,10 @@ export default function Item({
           src={media.src ?? null}
           alt={media.alt ?? ''}
           initials={media.initials ?? ''}
-          size={media.size ?? THUMB_SIZE[size]}
+          // A cover above the text spans the whole body, so it always takes the
+          // poster scale: the size class still drives the initials' font size
+          // (and only that, since the CSS pins its width to 100%).
+          size={media.size ?? (mediaPosition === 'top' ? 'md' : THUMB_SIZE[size])}
           aspectRatio={media.aspectRatio ?? (mediaPosition === 'top' ? '2 / 3' : undefined)}
           fallback={thumbFallback}
         />

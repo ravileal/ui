@@ -4098,6 +4098,9 @@
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
+  /* A card stretched by its grid cell keeps its footer on the bottom edge, so
+     the controls of every card in a row line up whatever the title wraps to. */
+  margin-top: auto;
   padding: var(--ui-item-pad, 12px);
   border-top: 1px solid var(--ui-border);
 }

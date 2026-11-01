@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from './Button';
 import Item from './Item';
+import Switch from './Switch';
 
 const meta: Meta<typeof Item> = {
   title: 'Item',
@@ -90,4 +92,63 @@ export const Loading: Story = {
     ...ListRow.args,
     loading: true,
   },
+};
+
+/**
+ * The library card: cover above the text, one meta line and the monitored switch
+ * in the footer. Both cards share a grid row, so the footers line up even though
+ * one title wraps to three lines.
+ */
+function LibraryCardExample() {
+  const [monitored, setMonitored] = useState(true);
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gap: 12,
+        width: '100%',
+        maxWidth: 390,
+      }}
+    >
+      <Item
+        media={FREIREN}
+        mediaPosition="top"
+        title="Sousou no Frieren"
+        meta="2023 · 28 episodes"
+        href="/series/frieren"
+        footer={
+          <Switch
+            size="sm"
+            checked={monitored}
+            onChange={setMonitored}
+            label="Monitorado"
+            ariaLabel="Monitorar Sousou no Frieren"
+          />
+        }
+        interactive
+      />
+      <Item
+        media={{ src: null, initials: 'VS' }}
+        mediaPosition="top"
+        title="Vinland Saga: Farm Arc, Collector's Edition Box Set"
+        meta="2019 · 48 episodes"
+        href="/series/vinland-saga"
+        footer={
+          <Switch
+            size="sm"
+            checked={false}
+            onChange={() => {}}
+            label="Monitorado"
+            ariaLabel="Monitorar Vinland Saga"
+          />
+        }
+        interactive
+      />
+    </div>
+  );
+}
+
+export const LibraryCard: Story = {
+  render: () => <LibraryCardExample />,
 };

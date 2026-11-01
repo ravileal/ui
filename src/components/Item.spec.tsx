@@ -57,6 +57,29 @@ describe('Item', () => {
     expect(container.querySelector('.ui-media-thumb')?.className).toContain('ui-media-thumb--xs');
   });
 
+  it('scales the cover above the text as a poster, whatever the item size', () => {
+    const { container } = render(
+      <Item title="Frieren" size="sm" mediaPosition="top" media={{ src: null, initials: 'FR' }} />,
+    );
+
+    // The poster spans the body, so its initials take the md scale; the sm item
+    // still drives the title size.
+    expect(container.querySelector('.ui-media-thumb')?.className).toContain('ui-media-thumb--md');
+    expect(container.querySelector('.ui-item')?.className).toContain('ui-item--sm');
+  });
+
+  it('lets the media size override the poster scale', () => {
+    const { container } = render(
+      <Item
+        title="Frieren"
+        mediaPosition="top"
+        media={{ src: null, initials: 'FR', size: 'xs' }}
+      />,
+    );
+
+    expect(container.querySelector('.ui-media-thumb')?.className).toContain('ui-media-thumb--xs');
+  });
+
   it('applies the media position class and the base card padding none', () => {
     const { container, rerender } = render(
       <Item title="Frieren" mediaPosition="top" media={{ src: null, initials: 'FR' }} />,
