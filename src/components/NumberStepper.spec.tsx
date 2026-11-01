@@ -58,4 +58,19 @@ describe('NumberStepper', () => {
     expect(onChange).toHaveBeenLastCalledWith(255);
     expect(input.value).toBe('255');
   });
+
+  it('accepts a negative number typed in the field', async () => {
+    const onChange = vi.fn();
+    render(
+      <NumberStepper value={30} onChange={onChange} ariaLabel="Weight" min={-100} max={100} />,
+    );
+    const input = screen.getByLabelText('Weight') as HTMLInputElement;
+
+    await userEvent.clear(input);
+    await userEvent.type(input, '-100');
+
+    // One leading minus survives the sanitiser: a weight of -100 is typeable, not silently 100.
+    expect(onChange).toHaveBeenLastCalledWith(-100);
+    expect(input.value).toBe('-100');
+  });
 });

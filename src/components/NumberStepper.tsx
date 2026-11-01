@@ -91,9 +91,13 @@ export function NumberStepper({
         inputMode="numeric"
         value={text}
         onChange={(e) => {
+          // A weight may be negative, so the minus the user types has to survive the filter: one
+          // leading `-` plus the digits, and nothing is emitted until a digit exists (- alone stays
+          // editable). Stripping every non-digit made `-100` silently become `100`.
           const digits = e.target.value.replace(/[^\d]/g, '');
-          setText(digits);
-          if (digits !== '') onChange(clampValue(Number(digits)));
+          const next = e.target.value.trimStart().startsWith('-') ? `-${digits}` : digits;
+          setText(next);
+          if (digits !== '') onChange(clampValue(Number(next)));
         }}
         onBlur={() => {
           const parsed = Number(text);
