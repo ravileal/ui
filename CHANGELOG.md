@@ -1,3 +1,9 @@
+## [1.6.3](https://github.com/ravileal/ui/compare/release-1.6.2...release-1.6.3) (2026-11-01)
+
+### Bug Fixes
+
+* **number-stepper:** let the field take a typed negative ([9f31ead](https://github.com/ravileal/ui/commit/9f31eadb8b007df0e4c07b56265bf783d44357f2))
+
 ## [1.6.2](https://github.com/ravileal/ui/compare/release-1.6.1...release-1.6.2) (2026-11-01)
 
 ### Bug Fixes
