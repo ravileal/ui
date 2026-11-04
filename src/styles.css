@@ -2668,6 +2668,9 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
+  /* A header cell centres by UA default; the kit's default column is left, and
+     `data-align` opts a column out of it. */
+  text-align: left;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -2675,6 +2678,19 @@
   padding: 11px 14px;
   border-bottom: 1px solid var(--ui-border);
   color: var(--ui-text-2);
+}
+/* Column alignment travels as `data-align` rather than an inline style: an
+   inline `text-align` would outrank the stacked-card rules below and leave one
+   card mixing left and centred rows. Both cells read the same attribute, so a
+   header and its column never drift apart, and desktop looks exactly as it did
+   when the value was inline. `left` is the default and carries no attribute. */
+.ui-data-table th[data-align='center'],
+.ui-data-table td[data-align='center'] {
+  text-align: center;
+}
+.ui-data-table th[data-align='right'],
+.ui-data-table td[data-align='right'] {
+  text-align: right;
 }
 .ui-data-table tbody tr:last-child td {
   border-bottom: none;
@@ -3561,6 +3577,15 @@
   }
   .ui-data-table-wrap.is-stacked td:last-child {
     border-bottom: none;
+  }
+  /* A card reads as a single column of rows, so the column's desktop alignment
+     is dropped here: the label and the value both start at the same left edge,
+     whatever `data-align` says. Without this a card whose columns mix centre
+     and left mixes both inside the same card. The empty state keeps its own
+     centring, hence the `:not()`. */
+  .ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty),
+  .ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty)::before {
+    text-align: left;
   }
   /* Column header text is mirrored into the cell markup as data-label. */
   .ui-data-table-wrap.is-stacked td::before {

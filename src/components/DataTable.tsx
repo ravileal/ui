@@ -145,6 +145,16 @@ function columnName<T>(column: DataTableColumn<T>): string {
   return column.key;
 }
 
+/**
+ * Desktop alignment travels as a `data-align` attribute instead of an inline
+ * style. An inline declaration outranks every stylesheet rule, so it would
+ * survive into stacked/card mode and leave one card mixing left and centred
+ * rows. `left` is the default and stays off the markup.
+ */
+function alignAttribute<T>(column: DataTableColumn<T>): 'center' | 'right' | undefined {
+  return column.align === 'center' || column.align === 'right' ? column.align : undefined;
+}
+
 export function DataTable<T>({
   columns,
   rows,
@@ -483,7 +493,8 @@ export function DataTable<T>({
                           ? 'none'
                           : undefined
                   }
-                  style={{ width: column.width, textAlign: column.align ?? 'left' }}
+                  style={{ width: column.width }}
+                  data-align={alignAttribute(column)}
                 >
                   {column.sortable && onSortChange ? (
                     <button
@@ -576,7 +587,7 @@ export function DataTable<T>({
                   <td
                     key={column.key}
                     data-label={cellLabel(column)}
-                    style={{ textAlign: column.align ?? 'left' }}
+                    data-align={alignAttribute(column)}
                   >
                     {column.render
                       ? column.render(row, index)

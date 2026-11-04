@@ -146,6 +146,45 @@ describe('DataTable', () => {
   });
 });
 
+describe('DataTable column alignment', () => {
+  const alignmentColumns: DataTableColumn<Row>[] = [
+    { key: 'name', header: 'Name' },
+    { key: 'amount', header: 'Amount', align: 'center' },
+    { key: 'note', header: 'Note', align: 'right', render: () => 'note' },
+  ];
+
+  it('carries the column alignment on data-align instead of an inline style', () => {
+    const { container } = renderTable({ columns: alignmentColumns, rows: [rows[0]] });
+    const headers = [...container.querySelectorAll('thead th')];
+    const cells = [...container.querySelectorAll('tbody tr')[0].querySelectorAll('td')];
+
+    // `left` is the default: no attribute, and no inline style left behind.
+    expect(headers[0]).not.toHaveAttribute('data-align');
+    expect(headers[0]).not.toHaveAttribute('style');
+    expect(cells[0]).not.toHaveAttribute('data-align');
+    expect(cells[0]).not.toHaveAttribute('style');
+
+    expect(headers[1]).toHaveAttribute('data-align', 'center');
+    expect(headers[2]).toHaveAttribute('data-align', 'right');
+    expect(cells[1]).toHaveAttribute('data-align', 'center');
+    expect(cells[2]).toHaveAttribute('data-align', 'right');
+  });
+
+  it('keeps a centre-aligned column left-aligned inside a stacked card', () => {
+    const { container } = renderTable({ columns: alignmentColumns, rows: [rows[0]] });
+    const wrap = container.firstElementChild as HTMLElement;
+    const cell = container.querySelector('tbody td[data-label="Amount"]') as HTMLElement;
+
+    // jsdom evaluates no media query, so the contract is asserted on the DOM:
+    // the card keeps the attribute (desktop keeps reading it) while the stacked
+    // block in src/styles.css pins the label and the value to text-align: left.
+    // The stylesheet side of that pair lives in mobile-layout.spec.tsx.
+    expect(wrap).toHaveClass('is-stacked');
+    expect(cell).toHaveAttribute('data-align', 'center');
+    expect(cell).toHaveAttribute('data-label', 'Amount');
+  });
+});
+
 describe('DataTable resizable columns', () => {
   const resizeColumns: DataTableColumn<Row>[] = [
     { key: 'name', header: 'Name', width: 120, minWidth: 80 },
