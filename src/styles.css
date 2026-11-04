@@ -1312,6 +1312,11 @@
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+  /* The label is centred in the pill it belongs to. A badge is content-sized
+     most of the time, but a grid or flex parent can stretch it to the whole
+     cell (a stacked DataTable row measured 151px around 102px of text, so 40px
+     of dead space sat on the right); flex-start put the text at that edge. */
+  justify-content: center;
   gap: 5px;
   padding: 2px 8px;
   border: 1px solid transparent;

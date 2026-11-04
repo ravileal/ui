@@ -137,3 +137,14 @@ describe('DataTable column alignment is CSS-owned', () => {
   });
 });
 
+describe('Badge centres its own label', () => {
+  it('sets justify-content without touching padding or the tone recipes', () => {
+    const badge = ruleFor('.ui-badge');
+
+    expect(badge?.body).toMatch(declaration('justify-content', 'center'));
+    // Guard-rail: the pill geometry is not part of this fix.
+    expect(badge?.body).toMatch(declaration('padding', '2px\\s+8px'));
+    expect(badge?.body).toMatch(declaration('display', 'inline-flex'));
+  });
+});
+
