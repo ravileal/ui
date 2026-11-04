@@ -57,6 +57,31 @@ describe('AppHeader', () => {
     expect(container.querySelectorAll('.ui-app-header-spacer')).toHaveLength(1);
   });
 
+  it('keeps the switcher on the bar instead of a row of its own', () => {
+    const { container } = render(
+      <AppHeader
+        brand={<a href="/">anime-tracker</a>}
+        nav={<nav aria-label="Seções">Biblioteca</nav>}
+        actions={<button type="button">Adicionar</button>}
+      />,
+    );
+
+    const inner = container.querySelector('.ui-app-header-inner') as HTMLElement;
+    // One flex row: brand, switcher, spacer and actions are siblings, so the
+    // `flex-wrap` on the bar — not a forced full-width switcher — decides when
+    // the switcher drops to a second row.
+    expect([...inner.children].map((element) => element.className)).toEqual([
+      'ui-app-header-brand',
+      'ui-app-header-nav',
+      'ui-app-header-spacer',
+      'ui-app-header-actions',
+    ]);
+    // Inline does not mean hidden: the switcher and its content stay rendered.
+    const navSlot = inner.querySelector('.ui-app-header-nav') as HTMLElement;
+    expect(navSlot.parentElement).toBe(inner);
+    expect(navSlot.querySelector('nav[aria-label="Seções"]')?.textContent).toBe('Biblioteca');
+  });
+
   it('takes an accessible name for the landmark', () => {
     render(<AppHeader brand="anime-tracker" ariaLabel="Cabeçalho do anime-tracker" />);
 

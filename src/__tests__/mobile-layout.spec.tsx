@@ -148,3 +148,29 @@ describe('Badge centres its own label', () => {
   });
 });
 
+describe('AppHeader keeps the section switcher on the bar', () => {
+  it('lets the bar wrap only when the row overflows', () => {
+    const inner = ruleFor('.ui-app-header-inner');
+
+    expect(inner?.body).toMatch(declaration('flex-wrap', 'wrap'));
+  });
+
+  it('lets the switcher flow inline on a phone instead of claiming a row', () => {
+    const nav = ruleFor('.ui-app-header-nav', inMedia('max-width: 720px'));
+
+    expect(nav, 'the 720px block must style the switcher').toBeDefined();
+    expect(nav?.body).toMatch(declaration('flex', '0\\s+1\\s+auto'));
+    expect(nav?.body).toMatch(declaration('min-width', '0'));
+    // The two declarations that forced the second row at 390px.
+    expect(nav?.body).not.toMatch(/flex-basis/);
+    expect(nav?.body).not.toMatch(declaration('order', '3'));
+  });
+
+  it('compacts the brand and the segment gutters for a 390px phone', () => {
+    const brand = ruleFor('.ui-app-header-brand', inMedia('max-width: 720px'));
+    const item = ruleFor('.ui-segmented--lg .ui-segmented-item', inMedia('max-width: 480px'));
+
+    expect(brand?.body).toMatch(declaration('font-size', '17px'));
+    expect(item?.body).toMatch(declaration('padding', '0\\s+10px'));
+  });
+});
