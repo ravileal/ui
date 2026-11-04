@@ -1312,6 +1312,11 @@
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+  /* The label is centred in the pill it belongs to. A badge is content-sized
+     most of the time, but a grid or flex parent can stretch it to the whole
+     cell (a stacked DataTable row measured 151px around 102px of text, so 40px
+     of dead space sat on the right); flex-start put the text at that edge. */
+  justify-content: center;
   gap: 5px;
   padding: 2px 8px;
   border: 1px solid transparent;
@@ -2668,6 +2673,9 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
+  /* A header cell centres by UA default; the kit's default column is left, and
+     `data-align` opts a column out of it. */
+  text-align: left;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -2675,6 +2683,19 @@
   padding: 11px 14px;
   border-bottom: 1px solid var(--ui-border);
   color: var(--ui-text-2);
+}
+/* Column alignment travels as `data-align` rather than an inline style: an
+   inline `text-align` would outrank the stacked-card rules below and leave one
+   card mixing left and centred rows. Both cells read the same attribute, so a
+   header and its column never drift apart, and desktop looks exactly as it did
+   when the value was inline. `left` is the default and carries no attribute. */
+.ui-data-table th[data-align='center'],
+.ui-data-table td[data-align='center'] {
+  text-align: center;
+}
+.ui-data-table th[data-align='right'],
+.ui-data-table td[data-align='right'] {
+  text-align: right;
 }
 .ui-data-table tbody tr:last-child td {
   border-bottom: none;
@@ -3561,6 +3582,15 @@
   }
   .ui-data-table-wrap.is-stacked td:last-child {
     border-bottom: none;
+  }
+  /* A card reads as a single column of rows, so the column's desktop alignment
+     is dropped here: the label and the value both start at the same left edge,
+     whatever `data-align` says. Without this a card whose columns mix centre
+     and left mixes both inside the same card. The empty state keeps its own
+     centring, hence the `:not()`. */
+  .ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty),
+  .ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty)::before {
+    text-align: left;
   }
   /* Column header text is mirrored into the cell markup as data-label. */
   .ui-data-table-wrap.is-stacked td::before {
@@ -4512,16 +4542,38 @@
 
 @media (max-width: 720px) {
   .ui-app-header-inner {
-    gap: 10px 12px;
+    /* 8px on both axes: the column gap is part of what the brand + switcher
+       pair has to fit into, and 12px was enough to push the (invisible) spacer
+       onto a phantom second row on a 360px phone. */
+    gap: 8px;
     padding-right: 16px;
     padding-left: 16px;
   }
+  /* One step down from 20px: at 17px the brand measures ~100px on a 390px
+     phone, which is what leaves room for the switcher on the same row. */
+  .ui-app-header-brand {
+    font-size: 17px;
+  }
+  /* The switcher keeps its place on the bar: `flex-basis: 100%` used to claim a
+     whole row even when the row had space, so a 390px phone spent 96px of
+     height on 42px of content. `flex: 0 1 auto` lets it sit right after the
+     brand, and the `flex-wrap` on `.ui-app-header-inner` drops it to a second
+     row only when the row genuinely overflows (a 320px phone). */
   .ui-app-header-nav {
-    order: 3;
-    flex-basis: 100%;
+    flex: 0 1 auto;
+    min-width: 0;
     /* Wrap instead of scrolling: a wrapped switcher stays reachable, while a
        sideways bar would need the themed scrollbar to stay legible. */
     flex-wrap: wrap;
+  }
+}
+
+/* Below 480px the segments spend more on gutters than the labels need: 16px
+   each side is 96px across three segments, which is the last thing standing
+   between the bar and a single row at 390px. */
+@media (max-width: 480px) {
+  .ui-segmented--lg .ui-segmented-item {
+    padding: 0 10px;
   }
 }
 
