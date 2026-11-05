@@ -3584,11 +3584,14 @@
     border-bottom: none;
   }
   /* A card reads as a single column of rows, so the column's desktop alignment
-     is dropped here: the label and the value both start at the same left edge,
-     whatever `data-align` says. Without this a card whose columns mix centre
-     and left mixes both inside the same card. The empty state keeps its own
-     centring, hence the `:not()`. */
-  .ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty),
+     is dropped here: the label keeps the left edge and the value takes the right
+     one, so every value in a card ends on the same vertical line whatever
+     `data-align` says. The empty state keeps its own centring, hence the
+     `:not()`. */
+  .ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty) {
+    text-align: right;
+  }
+  /* The label is a grid item of its own, so it does not inherit the value's edge. */
   .ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty)::before {
     text-align: left;
   }
@@ -3603,8 +3606,11 @@
     text-transform: uppercase;
     color: var(--ui-text-2);
   }
+  /* A value can be an element instead of text (a badge, a button, an action
+     cluster): as grid items they need the same right edge the text gets. */
   .ui-data-table-wrap.is-stacked td > * {
     min-width: 0;
+    justify-self: end;
   }
   /* Empty state is a single full-width cell: no label, no value column. */
   .ui-data-table-wrap.is-stacked .ui-data-table-empty {
@@ -4532,11 +4538,32 @@
   gap: 8px;
 }
 
+/* A bar that carries only the brand and the switcher spreads the pair: the menu
+   takes the far edge instead of huddling against the title. The spacer exists to
+   hold the status chips and the actions away from the title, so with neither of
+   them rendered it has nothing to hold and would swallow the free space. */
+.ui-app-header-inner:not(:has(> .ui-app-header-meta)):not(:has(> .ui-app-header-actions))
+  > .ui-app-header-spacer {
+  display: none;
+}
+.ui-app-header-inner:not(:has(> .ui-app-header-meta)):not(:has(> .ui-app-header-actions))
+  > .ui-app-header-nav {
+  margin-left: auto;
+}
+
 @media (max-width: 900px) {
   /* The status chips are the only part that goes away: they report state the
      screen already shows. */
   .ui-app-header-meta {
     display: none;
+  }
+  /* The chips are display:none at this width, so the bar is brand + switcher even
+     when the consumer passed meta: spread them here too. */
+  .ui-app-header-inner:not(:has(> .ui-app-header-actions)) > .ui-app-header-spacer {
+    display: none;
+  }
+  .ui-app-header-inner:not(:has(> .ui-app-header-actions)) > .ui-app-header-nav {
+    margin-left: auto;
   }
 }
 

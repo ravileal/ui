@@ -110,7 +110,7 @@ describe('DataTable column alignment is CSS-owned', () => {
     expect(right?.body).toMatch(declaration('text-align', 'right'));
   });
 
-  it('drops the column alignment inside a stacked card: one card, one edge', () => {
+  it('right-aligns the value inside a stacked card and keeps the label left', () => {
     // The stacked block lives in the 640px media query, the narrowest of the
     // table's breakpoints; 390px is inside it, a tablet is not.
     const card = ruleFor(
@@ -119,12 +119,25 @@ describe('DataTable column alignment is CSS-owned', () => {
     );
 
     expect(card, 'the stacked card must overrule the desktop alignment').toBeDefined();
-    expect(card?.body).toMatch(declaration('text-align', 'left'));
-    // The label is a `::before` grid item, so it needs the same edge: the rule
-    // has to cover both the cell and its label pseudo-element.
-    expect(card?.selectors).toContain(
+    expect(card?.body).toMatch(declaration('text-align', 'right'));
+
+    // The label is a `::before` grid item of its own, so it keeps the left edge.
+    const label = ruleFor(
       '.ui-data-table-wrap.is-stacked td:not(.ui-data-table-empty)::before',
+      inMedia('max-width: 640px'),
     );
+
+    expect(label, 'the stacked label must keep its own left edge').toBeDefined();
+    expect(label?.body).toMatch(declaration('text-align', 'left'));
+
+    // A value can be an element, so the grid item itself has to reach the edge.
+    const value = ruleFor(
+      '.ui-data-table-wrap.is-stacked td > *',
+      inMedia('max-width: 640px'),
+    );
+
+    expect(value, 'an element value must end on the same edge as text').toBeDefined();
+    expect(value?.body).toMatch(declaration('justify-self', 'end'));
   });
 
   it('keeps the empty state centred in a stacked card', () => {
