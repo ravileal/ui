@@ -1,3 +1,9 @@
+## [1.6.5](https://github.com/ravileal/ui/compare/release-1.6.4...release-1.6.5) (2026-11-05)
+
+### Bug Fixes
+
+* **ui:** spread a two-item app header and right-align stacked card values ([87e1e9c](https://github.com/ravileal/ui/commit/87e1e9c9a9936e79b38ba12fd662ce035c5f3586))
+
 ## [1.6.4](https://github.com/ravileal/ui/compare/release-1.6.3...release-1.6.4) (2026-11-05)
 
 ### Bug Fixes
