@@ -1,3 +1,12 @@
+## [1.6.4](https://github.com/ravileal/ui/compare/release-1.6.3...release-1.6.4) (2026-11-05)
+
+### Bug Fixes
+
+* **app-header:** keep the section switcher on the bar ([ec75667](https://github.com/ravileal/ui/commit/ec756673ce3e1bb1734b09fffaa3ab5523306cf5))
+* **badge:** centre the tag's own text ([5ddd59a](https://github.com/ravileal/ui/commit/5ddd59ab0191c8229207f22097356b85178470c8))
+* **datatable:** one alignment inside a stacked card ([50db2fe](https://github.com/ravileal/ui/commit/50db2fe22ab5865f300744d16c34361f25bf2d14))
+* **ui:** align the mobile card layout ([e841d10](https://github.com/ravileal/ui/commit/e841d10dabc1d61f354141a0c15f2b78b7eb1e72))
+
 ## [1.6.3](https://github.com/ravileal/ui/compare/release-1.6.2...release-1.6.3) (2026-11-01)
 
 ### Bug Fixes
