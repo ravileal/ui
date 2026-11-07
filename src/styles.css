@@ -4813,3 +4813,137 @@
   width: 16px;
   height: 16px;
 }
+
+/* ── StatusDot ── */
+/* A bare tone dot: no text, no padding, no border. The tone is the `color`
+   property and the dot paints itself with `currentColor`, so the halo and the
+   pulse ring can both read the same value without a second tone table. */
+.ui-status-dot {
+  --ui-status-dot-size: 9px;
+  --ui-status-dot-halo: -3px;
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: var(--ui-status-dot-size);
+  height: var(--ui-status-dot-size);
+  border-radius: 50%;
+  background: currentColor;
+  color: var(--ui-text-3);
+  vertical-align: middle;
+}
+.ui-status-dot--sm {
+  --ui-status-dot-size: 6px;
+  --ui-status-dot-halo: -2px;
+}
+.ui-status-dot--lg {
+  --ui-status-dot-size: 12px;
+  --ui-status-dot-halo: -4px;
+}
+.ui-status-dot--info {
+  color: var(--ui-blue);
+}
+.ui-status-dot--success {
+  color: var(--ui-green);
+}
+.ui-status-dot--warning {
+  color: var(--ui-amber);
+}
+.ui-status-dot--danger {
+  color: var(--ui-red);
+}
+.ui-status-dot--accent {
+  color: var(--ui-accent);
+}
+.ui-status-dot--purple {
+  color: var(--ui-purple);
+}
+/* Static ring, sized with the dot: a fixed `inset` would swallow a 6px dot. */
+.ui-status-dot--halo::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  inset: var(--ui-status-dot-halo);
+  border-radius: inherit;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}
+/* The ring is a pseudo-element so the dot itself never changes size while it
+   animates — a growing element would drag the row it lives in. */
+.ui-status-dot--pulse::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid currentColor;
+  animation: ui-status-dot-pulse 2.4s ease-out infinite;
+}
+@keyframes ui-status-dot-pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  70% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+/* Without motion the ring still marks the state: it just stops breathing. */
+@media (prefers-reduced-motion: reduce) {
+  .ui-status-dot--pulse::after {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
+/* ── Legend ── */
+/* Dot-and-word pairs. The gap between a dot and its word belongs to the item;
+   the gap between items belongs to the list, so a column legend reuses the
+   same markup. */
+.ui-legend {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  color: var(--ui-text-2);
+}
+.ui-legend-items {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ui-legend--column .ui-legend-items {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.ui-legend-item {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.ui-legend-label {
+  min-width: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+/* Prose, not a caption: it sets under the dots at the muted step and wraps to
+   as many lines as the sentence needs. */
+.ui-legend-note {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ui-text-3);
+}
