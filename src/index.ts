@@ -253,3 +253,16 @@ export { default as ToneText } from './components/ToneText';
 export type { ToneTextProps, ToneTextElement } from './components/ToneText';
 export { default as InlineErrorText } from './components/InlineErrorText';
 export type { InlineErrorTextProps } from './components/InlineErrorText';
+export {
+  default as FreshnessStamp,
+  formatDuration,
+  formatRelative,
+} from './components/FreshnessStamp';
+export type {
+  FreshnessStampLabels,
+  FreshnessStampProps,
+  FreshnessStampTime,
+} from './components/FreshnessStamp';
+
+export { default as FooterNote } from './components/FooterNote';
+export type { FooterNoteProps } from './components/FooterNote';
