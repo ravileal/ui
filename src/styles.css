@@ -4813,3 +4813,97 @@
   width: 16px;
   height: 16px;
 }
+
+/* ── ToneText ── */
+/* A word coloured by state: no surface, no padding. The 12.5px/600 row scale is
+   the default and 11.5px is the subordinate line, so a dashboard can carry both
+   without inventing a third size. */
+.ui-tone-text {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ui-text);
+}
+.ui-tone-text--md {
+  font-size: 12.5px;
+}
+.ui-tone-text--sm {
+  font-size: 11.5px;
+}
+.ui-tone-text--medium {
+  font-weight: 500;
+}
+.ui-tone-text--semibold {
+  font-weight: 600;
+}
+.ui-tone-text--tabular {
+  font-variant-numeric: tabular-nums;
+}
+.ui-tone-text--neutral {
+  color: var(--ui-text);
+}
+.ui-tone-text--info {
+  color: var(--ui-blue);
+}
+.ui-tone-text--success {
+  color: var(--ui-green);
+}
+.ui-tone-text--warning {
+  color: var(--ui-amber);
+}
+.ui-tone-text--danger {
+  color: var(--ui-red);
+}
+.ui-tone-text--accent {
+  color: var(--ui-accent);
+}
+.ui-tone-text--purple {
+  color: var(--ui-purple);
+}
+
+/* ── InlineErrorText ── */
+.ui-inline-error {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+  color: var(--ui-red);
+  font-size: 11.5px;
+  line-height: 1.3;
+}
+.ui-inline-error--block {
+  display: flex;
+  width: 100%;
+}
+/* The message is the part that yields: it ellipsises on one line so the row
+   keeps its height and the retry action keeps its place. */
+.ui-inline-error-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-inline-error-retry {
+  flex: 0 0 auto;
+  padding: 1px 6px;
+  border: 0;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--ui-red) 14%, transparent);
+  color: var(--ui-red);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .ui-inline-error-retry:hover {
+    background: color-mix(in srgb, var(--ui-red) 22%, transparent);
+  }
+}
+.ui-inline-error-retry:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
