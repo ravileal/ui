@@ -243,3 +243,8 @@ export { default as Legend } from './components/Legend';
 export type { LegendItem, LegendProps } from './components/Legend';
 
 export type { Tone } from './internal/tone';
+
+export { default as ToneText } from './components/ToneText';
+export type { ToneTextProps, ToneTextElement } from './components/ToneText';
+export { default as InlineErrorText } from './components/InlineErrorText';
+export type { InlineErrorTextProps } from './components/InlineErrorText';

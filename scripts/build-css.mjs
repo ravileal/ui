@@ -99,6 +99,8 @@ const STEM_GROUPS = [
   ['ViewSwitcher', ['view-switcher']],
   ['StatusDot', ['status-dot']],
   ['Legend', ['legend']],
+  ['ToneText', ['tone-text']],
+  ['InlineErrorText', ['inline-error']],
 ];
 
 /**
