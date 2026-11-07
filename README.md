@@ -36,6 +36,33 @@ The stylesheet does not ship a global reset or a font. Classes are prefixed with
 `ui-` and tokens with `--ui-`, so a consumer reset (`* { margin: 0; padding: 0 }`)
 does not erase component spacing. Add your own typography if needed.
 
+## Per-component styles
+
+If you only use a few primitives, load the base layer once and then one file per
+component instead of the whole sheet:
+
+```ts
+import '@ravileal/ui/css/tokens.css'; // required: tokens, theme, shared utilities
+import '@ravileal/ui/css/components/Button.css';
+import '@ravileal/ui/css/components/Card.css';
+```
+
+`tokens.css` is not optional: it carries `:root`, the light theme block and the
+utilities components compose onto their own elements (`ui-scroll-y`,
+`ui-visually-hidden`, `ui-section-stack`). Component files are named after the
+component and ship every rule whose selector names one of its `ui-*` classes.
+
+Selectors are copied, never rewritten, so a rule that names several components —
+a focus ring shared by `Button`, `Menu` and `DataTable`, a `.ui-card` state used
+by `Item` — is repeated verbatim in each of their files. That duplication is
+intended: each component file stays self-contained. Today 76 of the 701
+component rules are shared, which is why a per-component file is a little larger
+than the rules only it owns.
+
+Sizes, `gzip -9` against the full sheet's 23,458 B: `tokens.css` + `Button.css`
+is 2,615 B (11%), and the eight most used primitives (Button, Card, TextInput,
+Select, Badge, Modal, DataTable, Sidebar) with tokens come to 11,201 B (48%).
+
 ## Theme
 
 All tokens are namespaced with `--ui-*` to avoid collisions:
