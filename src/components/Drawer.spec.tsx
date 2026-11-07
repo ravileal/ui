@@ -110,6 +110,8 @@ describe('Drawer', () => {
     );
 
     await screen.findByRole('dialog');
-    expect(screen.getByRole('button', { name: 'Apply' }).closest('.ui-drawer-footer')).not.toBeNull();
+    expect(
+      screen.getByRole('button', { name: 'Apply' }).closest('.ui-drawer-footer'),
+    ).not.toBeNull();
   });
 });

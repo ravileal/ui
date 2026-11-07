@@ -80,11 +80,7 @@ function formatTiming(offsetMs: number, ms: number | null): string {
 
 function toEpoch(value: TimelineAt): number | null {
   const ms =
-    value instanceof Date
-      ? value.getTime()
-      : typeof value === 'number'
-        ? value
-        : Date.parse(value);
+    value instanceof Date ? value.getTime() : typeof value === 'number' ? value : Date.parse(value);
   return Number.isFinite(ms) ? ms : null;
 }
 
@@ -124,9 +120,7 @@ function resolveWindow(
   const explicit = windowMs != null && windowMs > 0 ? windowMs : null;
   if (explicit != null) return { originMs, spanMs: explicit };
 
-  const endMs = rows.length
-    ? Math.max(...rows.map((row) => row.offsetMs + (row.ms ?? 0)))
-    : 0;
+  const endMs = rows.length ? Math.max(...rows.map((row) => row.offsetMs + (row.ms ?? 0))) : 0;
   const dataSpan = endMs - originMs;
   return { originMs, spanMs: dataSpan > 0 ? dataSpan : 1 };
 }
@@ -193,11 +187,7 @@ export function TimelineRow({
       </div>
       <div className="ui-timeline-track">
         {ms == null ? (
-          <span
-            aria-hidden="true"
-            className="ui-timeline-marker"
-            style={{ left: `${leftPct}%` }}
-          />
+          <span aria-hidden="true" className="ui-timeline-marker" style={{ left: `${leftPct}%` }} />
         ) : (
           <TimelineBar offsetPct={leftPct} widthPct={widthPct} tone={rowTone} />
         )}

@@ -107,9 +107,7 @@ describe('Timeline', () => {
   });
 
   it('keeps the bar out of the accessibility tree and the numbers readable', () => {
-    const { container } = render(
-      <Timeline items={[{ label: 'proxy', offset: 0, ms: 240 }]} />,
-    );
+    const { container } = render(<Timeline items={[{ label: 'proxy', offset: 0, ms: 240 }]} />);
 
     expect(bars(container)[0].getAttribute('aria-hidden')).toBe('true');
     expect(container.querySelector('.ui-timeline-track')?.textContent).toBe('');

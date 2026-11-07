@@ -47,8 +47,8 @@ function DrawerExample() {
         placement="left"
         footer={<Button onClick={() => setOpen(false)}>Apply</Button>}
       >
-        Drawer content. The footer stays pinned to the bottom. A drawer can enter from the left
-        (its placement prop), the right (the default) or the bottom.
+        Drawer content. The footer stays pinned to the bottom. A drawer can enter from the left (its
+        placement prop), the right (the default) or the bottom.
       </Drawer>
     </>
   );
