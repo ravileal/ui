@@ -2,13 +2,23 @@ import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode 
 import { createPortal } from 'react-dom';
 import { useFocusTrap } from '../internal/useFocusTrap';
 
+export type DrawerPlacement = 'left' | 'right' | 'bottom';
+
 export interface DrawerProps {
   open: boolean;
   onClose: () => void;
-  title: string;
+  /** Header content; any node so a title can carry inline markup. */
+  title: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
-  side?: 'left' | 'right';
+  /** Edge the panel is anchored to. Defaults to `"right"`. */
+  placement?: DrawerPlacement;
+  /** Rendered in the header next to the title (e.g. a type badge). */
+  badge?: ReactNode;
+  /** Grab bar above the header. On by default for `"bottom"`, ignored otherwise. */
+  handle?: boolean;
+  /** Max height of a bottom sheet; ignored for side placements. Defaults to `"62vh"`. */
+  height?: number | string;
   width?: number | string;
   closeLabel?: string;
   className?: string;
@@ -22,7 +32,10 @@ export function Drawer({
   title,
   children,
   footer,
-  side = 'right',
+  placement = 'right',
+  badge,
+  handle,
+  height = '62vh',
   width = 420,
   closeLabel = 'Close',
   className,
@@ -32,6 +45,8 @@ export function Drawer({
   const [mounted, setMounted] = useState(false);
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
+  const isBottom = placement === 'bottom';
+  const showHandle = isBottom && handle !== false;
 
   useEffect(() => {
     setMounted(true);
@@ -54,6 +69,13 @@ export function Drawer({
 
   if (!open || !mounted) return null;
 
+  // A bottom sheet is sized by its content up to `height`; the side drawers keep
+  // their fixed `width`. Width/max-width for the sheet come from the stylesheet
+  // so the <= 640px block can take over the full viewport.
+  const panelStyle: CSSProperties = isBottom
+    ? { maxHeight: height, ...style }
+    : { width, maxWidth: '100vw', ...style };
+
   return createPortal(
     <div className="ui-drawer-overlay" onClick={onClose}>
       <div
@@ -62,13 +84,19 @@ export function Drawer({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className={['ui-drawer', `ui-drawer--${side}`, className ?? ''].filter(Boolean).join(' ')}
-        style={{ width, maxWidth: '100vw', ...style }}
+        className={['ui-drawer', `ui-drawer--${placement}`, className ?? '']
+          .filter(Boolean)
+          .join(' ')}
+        style={panelStyle}
         onClick={(event) => event.stopPropagation()}
       >
+        {showHandle && <div className="ui-drawer-handle" aria-hidden="true" />}
         <div className="ui-drawer-header">
-          <div id={titleId} className="ui-drawer-title">
-            {title}
+          <div className="ui-drawer-heading">
+            <div id={titleId} className="ui-drawer-title">
+              {title}
+            </div>
+            {badge && <div className="ui-drawer-badge">{badge}</div>}
           </div>
           <button
             type="button"

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { Badge } from './Badge';
 import Button from './Button';
 import Combobox from './Combobox';
 import { DataTable, type DataTableColumn } from './DataTable';
@@ -43,9 +44,32 @@ function DrawerExample() {
         open={open}
         onClose={() => setOpen(false)}
         title="Filters"
+        placement="left"
         footer={<Button onClick={() => setOpen(false)}>Apply</Button>}
       >
-        Drawer content. The footer stays pinned to the bottom.
+        Drawer content. The footer stays pinned to the bottom. A drawer can enter from the left
+        (its placement prop), the right (the default) or the bottom.
+      </Drawer>
+    </>
+  );
+}
+
+function BottomSheetExample() {
+  const [open, setOpen] = useState(true);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open bottom sheet</Button>
+      <Drawer
+        open={open}
+        onClose={() => setOpen(false)}
+        placement="bottom"
+        title="node-42 — api-gateway"
+        badge={<Badge tone="info">service</Badge>}
+        height="62vh"
+        footer={<Button onClick={() => setOpen(false)}>Done</Button>}
+      >
+        A bottom sheet for node details: it keeps its grab handle, caps at 62vh so the page stays
+        visible, pads for the home indicator and centres itself above 700px.
       </Drawer>
     </>
   );
@@ -239,6 +263,10 @@ function DropzoneExample() {
 
 export const ComboboxStory: Story = { name: 'Combobox', render: () => <ComboboxExample /> };
 export const DrawerStory: Story = { name: 'Drawer', render: () => <DrawerExample /> };
+export const BottomSheetStory: Story = {
+  name: 'Bottom sheet',
+  render: () => <BottomSheetExample />,
+};
 export const SheetStory: Story = { name: 'Sheet', render: () => <SheetExample /> };
 export const DropzoneStory: Story = { name: 'Dropzone', render: () => <DropzoneExample /> };
 export const Table: Story = { render: () => <DataTableExample /> };

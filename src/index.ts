@@ -274,3 +274,4 @@ export type {
   TimelineProps,
   TimelineRowProps,
 } from './components/Timeline';
+export type { DrawerPlacement } from './components/Drawer';
