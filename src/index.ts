@@ -238,3 +238,4 @@ export { default as NumberField } from './components/NumberField';
 export type { NumberFieldProps } from './components/NumberField';
 
 export type { Tone } from './internal/tone';
+export type { DrawerPlacement } from './components/Drawer';

@@ -49,6 +49,41 @@ function ChipsExample() {
   );
 }
 
+function ClickableChipsExample() {
+  const [active, setActive] = useState('node-42');
+  const anchors = ['node-42', 'node-77', 'node-91'];
+  return (
+    <div style={{ display: 'grid', gap: 14 }}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {anchors.map((anchor) => (
+          <Chip
+            key={anchor}
+            tone={active === anchor ? 'accent' : 'neutral'}
+            variant="outline"
+            pressed={active === anchor}
+            onClick={() => setActive(anchor)}
+            title={`Jump to ${anchor}`}
+          >
+            {anchor}
+          </Chip>
+        ))}
+      </div>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+        <Chip href="#trace-1" tone="info" variant="soft">
+          trace 1
+        </Chip>
+        <Chip onClick={() => {}} disabled>
+          disabled
+        </Chip>
+        <Chip onClick={() => {}} onRemove={() => {}} tone="warning">
+          removable trigger
+        </Chip>
+        <span style={{ color: 'var(--ui-text-2)', fontSize: 12 }}>active: {active}</span>
+      </div>
+    </div>
+  );
+}
+
 export const Badges: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 14 }}>
@@ -73,6 +108,11 @@ export const Badges: Story = {
       <ChipsExample />
     </div>
   ),
+};
+
+export const ClickableChips: Story = {
+  name: 'Chips (clickable)',
+  render: () => <ClickableChipsExample />,
 };
 
 export const Empty: Story = {
