@@ -266,3 +266,11 @@ export type {
 
 export { default as FooterNote } from './components/FooterNote';
 export type { FooterNoteProps } from './components/FooterNote';
+export { Timeline, TimelineBar, TimelineRow } from './components/Timeline';
+export type {
+  TimelineAt,
+  TimelineBarProps,
+  TimelineItem,
+  TimelineProps,
+  TimelineRowProps,
+} from './components/Timeline';

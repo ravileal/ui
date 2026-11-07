@@ -105,6 +105,7 @@ const STEM_GROUPS = [
   ['InlineErrorText', ['inline-error']],
   ['KVGrid', ['kv-grid']],
   ['NoteBlock', ['note-block']],
+  ['Timeline', ['timeline']],
 ];
 
 /**
