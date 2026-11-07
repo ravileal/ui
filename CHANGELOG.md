@@ -1,3 +1,18 @@
+## [1.8.0](https://github.com/ravileal/ui/compare/release-1.7.0...release-1.8.0) (2026-11-07)
+
+### Features
+
+* **ui:** add FreshnessStamp and FooterNote primitives ([dd72df1](https://github.com/ravileal/ui/commit/dd72df1333b098564c203c0f5de5f6bd762969e2))
+* **ui:** add KVGrid and NoteBlock primitives ([d2b153b](https://github.com/ravileal/ui/commit/d2b153becf5ed38f5c7e8702624438144f5d723b))
+* **ui:** add StatusDot and Legend primitives ([89a7bec](https://github.com/ravileal/ui/commit/89a7becd17f48974bab9565b2c63fbd82cbcd77b))
+* **ui:** add Timeline, TimelineRow and TimelineBar ([31a3126](https://github.com/ravileal/ui/commit/31a3126bba8c2943a0213eb209d3f389e4236e77))
+* **ui:** add ToneText and InlineErrorText primitives ([83675dc](https://github.com/ravileal/ui/commit/83675dce6ac6744de2bc52eb12fe40a4c693adb4))
+* **ui:** make Chip a trigger and give Drawer a bottom placement ([356953e](https://github.com/ravileal/ui/commit/356953eaaf8a3c8115ac8b7052ad68494b101088))
+
+### Bug Fixes
+
+* **css:** rebuild the stylesheet after merging the six primitive branches ([c71236b](https://github.com/ravileal/ui/commit/c71236bc95063c41ff8a0eeff0de87cff5c8b0ec))
+
 ## [1.7.0](https://github.com/ravileal/ui/compare/release-1.6.5...release-1.7.0) (2026-11-07)
 
 ### Features
