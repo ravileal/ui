@@ -9,7 +9,9 @@ export default defineConfig({
     dts({
       include: ['src'],
       exclude: ['src/**/*.spec.*', 'src/**/*.stories.*', 'src/test-setup.ts'],
-      rollupTypes: true,
+      // Emit one .d.ts per source module (no api-extractor rollup) so that
+      // subpath imports resolve types next to their .js file.
+      bundleTypes: false,
     }),
   ],
   build: {
@@ -21,7 +23,15 @@ export default defineConfig({
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'react-dom/client'],
       output: {
-        banner: "'use client';",
+        // One ESM file per source module, so consumers can deep-import a single
+        // component without relying on namespace analysis of the barrel.
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
+        // The client boundary belongs to the package entry only; repeating it in
+        // every chunk would spam ~60 directives consumers cannot dedupe.
+        banner: (chunk) => (chunk.fileName === 'index.js' ? "'use client';" : ''),
       },
     },
     sourcemap: true,
