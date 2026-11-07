@@ -97,6 +97,8 @@ const STEM_GROUPS = [
   ['ToastViewport', ['toast-viewport']],
   ['Tooltip', ['tooltip']],
   ['ViewSwitcher', ['view-switcher']],
+  ['KVGrid', ['kv-grid']],
+  ['NoteBlock', ['note-block']],
 ];
 
 /**

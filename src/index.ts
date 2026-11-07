@@ -237,4 +237,10 @@ export type { MetaListItem, MetaListProps, MetaListTone } from './components/Met
 export { default as NumberField } from './components/NumberField';
 export type { NumberFieldProps } from './components/NumberField';
 
+export { default as KVGrid } from './components/KVGrid';
+export type { KVGridItem, KVGridProps, KVGridLayout } from './components/KVGrid';
+
+export { default as NoteBlock } from './components/NoteBlock';
+export type { NoteBlockLine, NoteBlockProps } from './components/NoteBlock';
+
 export type { Tone } from './internal/tone';
