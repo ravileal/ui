@@ -112,6 +112,25 @@ export function Example() {
 }
 ```
 
+## Subpath imports
+
+Every component is also published as its own ES module, so you can import exactly one file. The
+barrel stays the default and tree-shakes just as well:
+
+```tsx
+// named import from the barrel (recommended, tree-shakes per component)
+import { Button } from '@ravileal/ui';
+
+// direct subpath import: no barrel, one module on the graph
+import Button from '@ravileal/ui/components/Button';
+```
+
+The path segment after `components/` is the component file name in `src/components/`, so
+`Button` → `@ravileal/ui/components/Button`, `DataTable` → `@ravileal/ui/components/DataTable`.
+Components that have no default export (`ColorPicker`, `InlineEditorCard`, `ListScreen`, …) keep
+their named exports, e.g. `import { ColorPicker } from '@ravileal/ui/components/ColorPicker'`.
+Styles are still global: import `@ravileal/ui/styles.css` once, whichever shape you use.
+
 ## Components
 
 **Actions and feedback**
