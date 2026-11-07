@@ -238,3 +238,17 @@ export { default as NumberField } from './components/NumberField';
 export type { NumberFieldProps } from './components/NumberField';
 
 export type { Tone } from './internal/tone';
+
+export {
+  default as FreshnessStamp,
+  formatDuration,
+  formatRelative,
+} from './components/FreshnessStamp';
+export type {
+  FreshnessStampLabels,
+  FreshnessStampProps,
+  FreshnessStampTime,
+} from './components/FreshnessStamp';
+
+export { default as FooterNote } from './components/FooterNote';
+export type { FooterNoteProps } from './components/FooterNote';

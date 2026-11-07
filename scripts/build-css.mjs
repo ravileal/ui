@@ -59,6 +59,8 @@ const STEM_GROUPS = [
   ['DropdownMenu', ['dropdown-menu']],
   ['EmptyState', ['empty-state']],
   ['FileUpload', ['file-upload']],
+  ['FooterNote', ['footer-note']],
+  ['FreshnessStamp', ['freshness']],
   ['FormField', ['form-field', 'form-label', 'form-hint', 'form-error', 'form-required']],
   ['FormModal', ['form-modal']],
   ['Item', ['item']],

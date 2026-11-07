@@ -4813,3 +4813,97 @@
   width: 16px;
   height: 16px;
 }
+
+/* ── FreshnessStamp ── */
+/* Two lines sharing the right edge of the header: the age of the data on top,
+   the uptime under it. Every number is tabular, so a tick from `12s` to `9s`
+   cannot shuffle the line sideways. */
+.ui-freshness {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+  line-height: 1.25;
+  text-align: right;
+}
+
+.ui-freshness-line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.ui-freshness-label {
+  color: var(--ui-text-3);
+  font-size: 11px;
+}
+
+.ui-freshness-value {
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The second line is a step down from the first: same words, quieter. */
+.ui-freshness-line--uptime {
+  color: var(--ui-text-3);
+  font-size: 11px;
+}
+
+.ui-freshness-value--duration {
+  color: var(--ui-text-3);
+  font-size: 11px;
+}
+
+/* Nothing to count yet: the label keeps the line's height without pretending
+   to be a time. */
+.ui-freshness-value--loading {
+  color: var(--ui-text-3);
+  font-variant-numeric: normal;
+}
+
+/* ── FooterNote ── */
+/* One centred, muted product note over an optional line of build metadata. The
+   hairline is the only chrome it owns. */
+.ui-footer-note {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-top: 16px;
+  padding: 12px 16px 0;
+  border-top: 1px solid var(--ui-border);
+  color: var(--ui-text-3);
+  font-size: 11px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.ui-footer-note-text {
+  min-width: 0;
+}
+
+.ui-footer-note-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  color: var(--ui-text-3);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-footer-note a {
+  color: var(--ui-text-2);
+  text-decoration: none;
+}
+
+.ui-footer-note a:hover {
+  color: var(--ui-text);
+  text-decoration: underline;
+}
