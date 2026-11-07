@@ -97,6 +97,7 @@ const STEM_GROUPS = [
   ['ToastViewport', ['toast-viewport']],
   ['Tooltip', ['tooltip']],
   ['ViewSwitcher', ['view-switcher']],
+  ['Timeline', ['timeline']],
 ];
 
 /**

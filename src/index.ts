@@ -238,3 +238,12 @@ export { default as NumberField } from './components/NumberField';
 export type { NumberFieldProps } from './components/NumberField';
 
 export type { Tone } from './internal/tone';
+
+export { Timeline, TimelineBar, TimelineRow } from './components/Timeline';
+export type {
+  TimelineAt,
+  TimelineBarProps,
+  TimelineItem,
+  TimelineProps,
+  TimelineRowProps,
+} from './components/Timeline';

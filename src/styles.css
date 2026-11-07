@@ -4813,3 +4813,177 @@
   width: 16px;
   height: 16px;
 }
+
+/* ── Timeline ── */
+.ui-timeline {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* One row owns its tint: the local token reaches the tag chip, the segment and
+   the marker by inheritance, so a tone is declared once instead of per part.
+   The segment falls back to accent when used on its own, outside a row. */
+.ui-timeline-row {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  --ui-timeline-tone: var(--ui-accent);
+}
+
+.ui-timeline-row--neutral,
+.ui-timeline-bar--neutral {
+  --ui-timeline-tone: var(--ui-text-2);
+}
+
+.ui-timeline-row--info,
+.ui-timeline-bar--info {
+  --ui-timeline-tone: var(--ui-blue);
+}
+
+.ui-timeline-row--success,
+.ui-timeline-bar--success {
+  --ui-timeline-tone: var(--ui-green);
+}
+
+.ui-timeline-row--warning,
+.ui-timeline-bar--warning {
+  --ui-timeline-tone: var(--ui-amber);
+}
+
+.ui-timeline-row--purple,
+.ui-timeline-bar--purple {
+  --ui-timeline-tone: var(--ui-purple);
+}
+
+/* The failed hop is the one row the eye must find first: a tinted plate plus a
+   red border, and the numbers stop being muted. */
+.ui-timeline-row--danger,
+.ui-timeline-bar--danger {
+  --ui-timeline-tone: var(--ui-red);
+}
+
+.ui-timeline-row--danger {
+  border-color: color-mix(in srgb, var(--ui-red) 30%, transparent);
+  background: color-mix(in srgb, var(--ui-red) 8%, transparent);
+}
+
+.ui-timeline-head {
+  box-sizing: border-box;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ui-timeline-source {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 1px 6px;
+  border-radius: 7px;
+  background: color-mix(
+    in srgb,
+    var(--ui-timeline-tone, var(--ui-accent)) 12%,
+    var(--ui-surface-2)
+  );
+  color: color-mix(in srgb, var(--ui-timeline-tone, var(--ui-accent)) 72%, var(--ui-text));
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* The label yields before the numbers do: in a narrow panel the row stays one
+   line and the hop name ellipsises. */
+.ui-timeline-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ui-text);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-timeline-time {
+  flex: 0 0 auto;
+  color: var(--ui-text-3);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ui-timeline-row--danger .ui-timeline-time {
+  color: var(--ui-red);
+}
+
+.ui-timeline-track {
+  box-sizing: border-box;
+  position: relative;
+  height: 8px;
+  border-radius: 7px;
+  background: var(--ui-surface-2);
+}
+
+/* Only the left edge and the width are inline: a trace that grows keeps its
+   geometry in one place, and the transition makes a re-measured window glide
+   instead of jumping. The minimum width keeps a 1 ms hop visible. */
+.ui-timeline-bar {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 2px;
+  border-radius: 7px;
+  background: var(--ui-timeline-tone, var(--ui-accent));
+  transition:
+    left 0.2s ease,
+    width 0.2s ease;
+}
+
+/* A hop with no duration is an instant, not a zero-width segment: a dot
+   centred on its offset. */
+.ui-timeline-marker {
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ui-timeline-tone, var(--ui-accent));
+  transform: translate(-50%, -50%);
+  transition: left 0.2s ease;
+}
+
+.ui-timeline-detail {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ui-text-3);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-timeline-empty {
+  margin: 0;
+  padding: 8px 0;
+  color: var(--ui-text-3);
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-timeline-bar,
+  .ui-timeline-marker {
+    transition: none;
+  }
+}
