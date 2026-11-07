@@ -1,6 +1,6 @@
 {
   "name": "@ravileal/ui",
-  "version": "1.6.5",
+  "version": "1.7.0",
   "description": "Reusable React UI primitives with themeable CSS variables",
   "type": "module",
   "license": "ISC",

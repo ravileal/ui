@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/ravileal/ui/compare/release-1.6.5...release-1.7.0) (2026-11-07)
+
+### Features
+
+* **build:** ship per-component entry points ([59046b3](https://github.com/ravileal/ui/commit/59046b3cf866dc23608626555829539fda80e294))
+* **build:** split the stylesheet into tokens and per-component files ([e2f7abf](https://github.com/ravileal/ui/commit/e2f7abfe79282f1179424a83dcd429c81cf404ab))
+
 ## [1.6.5](https://github.com/ravileal/ui/compare/release-1.6.4...release-1.6.5) (2026-11-05)
 
 ### Bug Fixes
