@@ -101,6 +101,8 @@ const STEM_GROUPS = [
   ['Legend', ['legend']],
   ['ToneText', ['tone-text']],
   ['InlineErrorText', ['inline-error']],
+  ['KVGrid', ['kv-grid']],
+  ['NoteBlock', ['note-block']],
 ];
 
 /**

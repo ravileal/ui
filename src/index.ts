@@ -241,6 +241,11 @@ export { default as StatusDot } from './components/StatusDot';
 export type { StatusDotProps, StatusDotSize, StatusDotTone } from './components/StatusDot';
 export { default as Legend } from './components/Legend';
 export type { LegendItem, LegendProps } from './components/Legend';
+export { default as KVGrid } from './components/KVGrid';
+export type { KVGridItem, KVGridProps, KVGridLayout } from './components/KVGrid';
+
+export { default as NoteBlock } from './components/NoteBlock';
+export type { NoteBlockLine, NoteBlockProps } from './components/NoteBlock';
 
 export type { Tone } from './internal/tone';
 

@@ -4905,6 +4905,112 @@
    the gap between items belongs to the list, so a column legend reuses the
    same markup. */
 .ui-legend {
+/* ── KVGrid ── */
+.ui-kv-grid {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px 12px;
+  margin: 0;
+  min-width: 0;
+}
+
+.ui-kv-grid--cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ui-kv-grid--cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ui-kv-grid-row {
+  box-sizing: border-box;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* Inline rows read like settings: key on the left, value taking the rest. */
+.ui-kv-grid--inline .ui-kv-grid-row {
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 8px;
+}
+
+.ui-kv-grid-key {
+  min-width: 0;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ui-text-3);
+}
+
+.ui-kv-grid--inline .ui-kv-grid-key {
+  font-size: 12px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.ui-kv-grid-value {
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ui-text);
+  overflow-wrap: anywhere;
+}
+
+.ui-kv-grid--align-end .ui-kv-grid-value {
+  text-align: right;
+}
+
+.ui-kv-grid-value--empty {
+  color: var(--ui-text-3);
+}
+
+.ui-kv-grid-value--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.ui-kv-grid-value--info {
+  color: var(--ui-blue);
+}
+
+.ui-kv-grid-value--success {
+  color: var(--ui-green);
+}
+
+.ui-kv-grid-value--warning {
+  color: var(--ui-amber);
+}
+
+.ui-kv-grid-value--danger {
+  color: var(--ui-red);
+}
+
+.ui-kv-grid-value--accent {
+  color: var(--ui-accent);
+}
+
+.ui-kv-grid-value--purple {
+  color: var(--ui-purple);
+}
+
+.ui-kv-grid--divided .ui-kv-grid-row {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.ui-kv-grid--divided .ui-kv-grid-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* ── NoteBlock ── */
+.ui-note-block {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -5035,3 +5141,89 @@
   outline: 2px solid var(--ui-accent);
   outline-offset: 2px;
 }
+  color: var(--ui-text-3);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ui-note-block-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ui-text-3);
+}
+
+/* The note is prose but may quote a URL, so it breaks anywhere rather than
+   overflowing a narrow sheet. */
+.ui-note-block-note {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ui-note-block-note--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+}
+
+.ui-note-block-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  list-style: none;
+}
+
+.ui-note-block-line {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--ui-text-2);
+}
+
+.ui-note-block-line-label {
+  color: var(--ui-text-3);
+}
+
+/* Raw values (webhook targets, probe details, error bodies) have no break
+   opportunities: without break-all one long token widens the whole sheet. */
+.ui-note-block-line-value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.ui-note-block-line-value--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.ui-note-block--info {
+  color: var(--ui-blue);
+}
+
+.ui-note-block--success {
+  color: var(--ui-green);
+}
+
+.ui-note-block--warning {
+  color: var(--ui-amber);
+}
+
+.ui-note-block--danger {
+  color: var(--ui-red);
+}
+
+.ui-note-block--accent {
+  color: var(--ui-accent);
+}
+
+.ui-note-block--purple {
+  color: var(--ui-purple);
+}
+
