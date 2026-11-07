@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Avatar from './Avatar';
 import { InlineEditorCard } from './InlineEditorCard';
-import { ListCard, ListEmptyState, ListRow, ListScreen } from './ListScreen';
+import { ListCard, ListEmptyState, ListRow, ListScreen, ListSearch } from './ListScreen';
 import { RowActions } from './RowActions';
 import { ListCardSkeleton, PageSkeleton } from './ScreenSkeleton';
 import Skeleton from './Skeleton';
@@ -60,6 +60,37 @@ export const ListScreenStory: Story = {
       </ListScreen>
     </div>
   ),
+};
+
+function ListSearchExample() {
+  const [query, setQuery] = useState('');
+  const aliases = ['Groceries · Food', 'Uber · Transport', 'Rent · Home', 'Coffee · Food'];
+  const visible = aliases.filter((alias) => alias.toLowerCase().includes(query.toLowerCase()));
+  return (
+    <div style={{ width: 420 }}>
+      <ListSearch
+        ariaLabel="Search aliases"
+        placeholder="Search aliases…"
+        value={query}
+        onChange={setQuery}
+      />
+      <ListCard>
+        {visible.map((alias, index) => (
+          <ListRow key={alias} borderBottom={index < visible.length - 1}>
+            {alias}
+          </ListRow>
+        ))}
+        {visible.length === 0 && (
+          <ListEmptyState>No alias matches “{query}”</ListEmptyState>
+        )}
+      </ListCard>
+    </div>
+  );
+}
+
+export const ListSearchStory: Story = {
+  name: 'ListSearch',
+  render: () => <ListSearchExample />,
 };
 
 export const RowActionsStory: Story = {

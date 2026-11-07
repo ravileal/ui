@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Button from './Button';
 import Combobox from './Combobox';
 import { DataTable, type DataTableColumn } from './DataTable';
-import { Drawer } from './Drawer';
-import { FileUpload, type FileRejection } from './FileUpload';
+import { Drawer, Sheet } from './Drawer';
+import { Dropzone, FileUpload, type FileRejection } from './FileUpload';
 
 const meta: Meta = {
   title: 'Advanced',
@@ -201,8 +201,46 @@ function FileUploadFreeExample() {
   );
 }
 
+function SheetExample() {
+  const [open, setOpen] = useState(true);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open sheet</Button>
+      <Sheet
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Filters"
+        footer={<Button onClick={() => setOpen(false)}>Apply</Button>}
+      >
+        Sheet is the Drawer export under its other name: same panel, same footer, same focus trap.
+      </Sheet>
+    </>
+  );
+}
+
+function DropzoneExample() {
+  const [files, setFiles] = useState<string[]>([]);
+  return (
+    <div style={{ display: 'grid', gap: 10, width: 360 }}>
+      <Dropzone
+        multiple
+        maxSize={2097152}
+        onFiles={(selected) => setFiles(selected.map((file) => file.name))}
+        hint="Dropzone is the FileUpload export under its other name"
+      />
+      {files.map((file) => (
+        <div key={file} style={{ color: 'var(--ui-text-2)', fontSize: 12 }}>
+          {file}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export const ComboboxStory: Story = { name: 'Combobox', render: () => <ComboboxExample /> };
 export const DrawerStory: Story = { name: 'Drawer', render: () => <DrawerExample /> };
+export const SheetStory: Story = { name: 'Sheet', render: () => <SheetExample /> };
+export const DropzoneStory: Story = { name: 'Dropzone', render: () => <DropzoneExample /> };
 export const Table: Story = { render: () => <DataTableExample /> };
 export const TableControls: Story = {
   name: 'Table controls',

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import ConfirmModal from './ConfirmModal';
 import CopyValue from './CopyValue';
+import { ModalFooter } from './FormModal';
 import Modal from './Modal';
 import Tooltip from './Tooltip';
 
@@ -38,6 +39,45 @@ function ConfirmModalExample() {
   );
 }
 
+function ModalFooterExample() {
+  const [open, setOpen] = useState(true);
+  const [mode, setMode] = useState<'idle' | 'busy' | 'danger'>('idle');
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)}>
+        Open form
+      </button>
+      <Modal open={open} title="Edit alias" onClose={() => setOpen(false)}>
+        <p style={{ marginBottom: 14 }}>
+          The footer owns the Cancel/Confirm pair and a slot on the left for extra controls.
+        </p>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {(['idle', 'busy', 'danger'] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={mode === option}
+              onClick={() => setMode(option)}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+        <ModalFooter
+          extra={
+            <span style={{ color: 'var(--ui-text-2)', fontSize: 12 }}>Draft saved 2 min ago</span>
+          }
+          onCancel={() => setOpen(false)}
+          onConfirm={() => setOpen(false)}
+          confirmLabel={mode === 'danger' ? 'Delete alias' : 'Save'}
+          danger={mode === 'danger'}
+          busy={mode === 'busy'}
+        />
+      </Modal>
+    </>
+  );
+}
+
 const meta: Meta = {
   title: 'Overlays',
 };
@@ -53,6 +93,11 @@ export const ModalStory: Story = {
 export const ConfirmModalStory: Story = {
   name: 'ConfirmModal',
   render: () => <ConfirmModalExample />,
+};
+
+export const ModalFooterStory: Story = {
+  name: 'ModalFooter',
+  render: () => <ModalFooterExample />,
 };
 
 export const TooltipStory: Story = {
