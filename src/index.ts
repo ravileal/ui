@@ -237,4 +237,9 @@ export type { MetaListItem, MetaListProps, MetaListTone } from './components/Met
 export { default as NumberField } from './components/NumberField';
 export type { NumberFieldProps } from './components/NumberField';
 
+export { default as StatusDot } from './components/StatusDot';
+export type { StatusDotProps, StatusDotSize, StatusDotTone } from './components/StatusDot';
+export { default as Legend } from './components/Legend';
+export type { LegendItem, LegendProps } from './components/Legend';
+
 export type { Tone } from './internal/tone';
